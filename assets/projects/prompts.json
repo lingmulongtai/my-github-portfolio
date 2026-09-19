@@ -1,136 +1,137 @@
 {
   "generator": "ChatGPT built-in image_gen",
-  "commonPrompt": "Use case: stylized-concept.\nAsset type: original landscape background artwork for a software project card in a blue-and-acid-yellow developer portfolio, approximately 3:2 landscape.\nStyle/medium: premium editorial 3D illustration with tactile materials, crisp sculptural forms, controlled cinematic light, subtle grain. Rich cobalt and deep midnight blue environment, small electric lime and cool cyan highlights. Each object has a clear recognizable silhouette, not generic abstract decoration.\nComposition/framing: focus the main subject in the upper middle of the image, keep it within the central 65 percent so both wide and nearly-square crops work; bottom third fades into quiet dark blue negative space for white HTML project title and description. Fill the frame, no border.\nConstraints: a conceptual illustration, not an app screenshot. Absolutely no text, letters, numbers, logos, watermarks or readable UI. No collage, no split panels, no human faces. Generate ONE complete image.\nSubject: ",
+  "referenceImage": "assets/portrait.webp",
+  "commonPrompt": "Use case: illustration-story. Asset type: one original landscape illustration for a personal software project card, 3:2 aspect ratio. The supplied portrait is a STYLE REFERENCE ONLY. Create the different subject described below, not a portrait or a person. Match the reference's expressive irregular charcoal-black ink outlines, dry-brush felt-tip shading and relaxed hand-drawn editorial character. Mostly white paper and charcoal, with only a few muted teal strokes and warm mustard-yellow accents, light pale-mint washes if useful. Friendly, thoughtful and clean. A small coherent vignette, not a busy scene. Place the complete recognizable main subject in the upper center, inside the middle 65 percent horizontally and upper 65 percent vertically; retain wide breathing room and keep the bottom 30 percent almost white for separate HTML text. Very light paper texture, clean white background edge to edge. No border, no text, letters, numerals, logos, watermarks, frames around the whole artwork, collage or split panels. No dark environment, neon, glowing lights, photorealism, polished vector art or 3D render. Produce ONE complete illustration. Subject: ",
   "images": [
     {
       "slug": "aerogrid-3d",
       "path": "assets/projects/aerogrid-3d.webp",
-      "subject": "A small passenger aircraft glides above a tilted three-dimensional terrain map, with delicate glowing altitude arcs, a thin geographic grid and wisps of weather clouds. A layered blue globe-like topography fills the scene. No satellites."
+      "subject": "A passenger airplane flying above a gently folded topographic map with two small weather clouds and a hand-drawn teal flight route. Clear recognizable aircraft silhouette, simple map contour lines, no satellites."
     },
     {
       "slug": "keylume",
       "path": "assets/projects/keylume.webp",
-      "subject": "A close oblique view of a beautifully modeled unbranded MIDI keyboard, white and black piano keys sweeping diagonally through the upper center, square drum pads glowing lime and cyan, a few subtle floating musical light trails. This represents creative keyboard lighting and music practice."
+      "subject": "An unbranded compact MIDI piano keyboard viewed at a gentle diagonal, with black and white keys and a cluster of square drum pads picked out in mustard and teal, plus two loose rhythmic brush strokes."
     },
     {
       "slug": "codexbar-android",
       "path": "assets/projects/codexbar-android.webp",
-      "subject": "An unbranded dark smartphone floating at a slight angle, its screen holding three sculptural glowing quota rings and small stacked usage bars without any text; tiny modular data blocks surround it. Emphasize mobile AI usage monitoring."
+      "subject": "An upright smartphone tilted slightly beside three small usage-meter rings and a few stacked progress bars on its screen. All screen contents are simple hand-drawn shapes without text. Mobile AI usage monitoring."
     },
     {
       "slug": "instaframe",
       "path": "assets/projects/instaframe.webp",
-      "subject": "Three beautifully matted photographic prints float at a slight angle over a blue studio surface, one mountain landscape, one architectural detail, one quiet seascape. Thick ivory frames and finely ruled but completely blank metadata bands evoke customizable EXIF photo borders."
+      "subject": "Three overlapping small photographic prints with generous blank white borders: a mountain, a simple building and a quiet sea. Draw the images too in the reference's ink style, with sparse teal and mustard accents. A tiny blank metadata strip under each print."
     },
     {
       "slug": "glyphray",
       "path": "assets/projects/glyphray.webp",
-      "subject": "A stylus draws one luminous cyan stroke across a floating pen tablet; behind it a larger thin desktop display mirrors that exact stroke. A refined arc of light connects the two screens, showing remote display and pen input. No generic charts."
+      "subject": "A stylus poised over a small pen tablet drawing a single teal curve, with a desktop screen behind it showing the same curve. A loose hand-drawn connector stroke ties the two displays together."
     },
     {
       "slug": "winai-usage-bar",
       "path": "assets/projects/winai-usage-bar.webp",
-      "subject": "A wide floating desktop monitor with a slender row of lime segmented resource gauges along its lower edge, plus a few compact detached widget tiles with abstract ring meters. Dark cobalt glass and brushed metal evoke a desktop tray utility, with no text."
+      "subject": "A desktop monitor with a slender row of simple resource gauges along the bottom of its mostly blank screen, and two small floating usage widgets. Black ink monitor outlines, teal and mustard meter accents, no branding."
     },
     {
       "slug": "dimtooff-windows",
       "path": "assets/projects/dimtooff-windows.webp",
-      "subject": "A half-open modern laptop in a deep blue quiet workspace, its screen completely dark while a small illuminated status light and faint flowing data trail continue beneath it. A fine crescent of light suggests the display fading to off without stopping the computer."
+      "subject": "A half-open laptop whose screen is filled with dry charcoal brush shading; a tiny mustard status light remains on. A small crescent moon and a continuing teal line suggest the display resting while the computer keeps working."
     },
     {
       "slug": "pdf-local-unlocker",
       "path": "assets/projects/pdf-local-unlocker.webp",
-      "subject": "A stack of ivory document sheets with folded corners beside an elegant open padlock, all contained inside a softly glowing translucent local-computer enclosure. The upper sheet has abstract diagram lines only, no lettering. Calm secure document-processing symbolism, no hacking imagery."
+      "subject": "A neat stack of document pages with folded corners beside an open padlock and a tiny simple laptop. Documents have a few abstract diagram strokes, no writing. A friendly metaphor for local PDF processing."
     },
     {
       "slug": "kuas-reception",
       "path": "assets/projects/kuas-reception.webp",
-      "subject": "An elegant miniature university entrance and reception desk, a small check-in kiosk beside it, and an orderly sequence of simple abstract visitor tokens following softly glowing routing paths. Architectural scale model, no identifiable people or logos."
+      "subject": "A welcoming miniature university entrance with a reception desk and small check-in tablet. Three simple round visitor tokens follow a curved teal line toward orderly seat markers. No people or labels."
     },
     {
       "slug": "kuas-fall-2026",
       "path": "assets/projects/kuas-fall-2026.webp",
-      "subject": "A sculptural weekly timetable made from seven translucent upright columns and neatly arranged ivory course blocks, with an open notebook and a few subtle golden autumn leaves. Academic planning made tangible, absolutely no calendar numerals or text."
+      "subject": "An open weekly planner with an unlabeled grid and a few teal course blocks, a pencil resting across the page, and two small mustard autumn leaves. A friendly academic planning vignette."
     },
     {
       "slug": "github-clendar-connector",
       "path": "assets/projects/github-clendar-connector.webp",
-      "subject": "Small glowing contribution-grid cubes flow along a curved connection into a physical desk calendar made of an unlabeled square grid. One side resembles a dense mosaic of activity tiles, the other a clean monthly calendar, bridged by one elegant lime data ribbon."
+      "subject": "A cluster of little activity-grid squares on the left flowing along one loose teal connector into a small standing desk calendar on the right. The calendar is an unlabeled grid, with a few mustard marked cells."
     },
     {
       "slug": "github-dna-visualizer",
       "path": "assets/projects/github-dna-visualizer.webp",
-      "subject": "A precise double helix constructed from tiny glowing contribution-grid blocks and colored code-like segments, suspended above a dark circular pedestal; subtle branching timeline arcs around the helix. A metaphor for a developer activity profile, no scientific labels."
+      "subject": "A loose ink double helix made from tiny contribution-grid squares, accompanied by a small hand-drawn branching timeline. Teal and mustard squares among charcoal lines, airy and clearly readable as a coding-activity metaphor."
     },
     {
       "slug": "ai-home-energy-assistant",
       "path": "assets/projects/ai-home-energy-assistant.webp",
-      "subject": "A beautifully crafted cutaway miniature home with roof solar panels, a portable battery beside it and a few connected appliances, linked by clear cyan and lime energy-flow lines. Dawn light, blue architectural model, a tangible household energy simulation."
+      "subject": "A small house with solar panels on the roof and a battery beside it. A cheerful mustard sun above and a single teal energy-flow loop connect the panels, battery and home. Simple architectural ink drawing."
     },
     {
       "slug": "skycopilot",
       "path": "assets/projects/skycopilot.webp",
-      "subject": "A small floating voxel island with a tree and tiny fantasy workshop in a deep blue sky, accompanied by a friendly faceted chat-orb companion and a handful of blank speech bubbles. Block-based game assistance metaphor, no branded characters or logos."
+      "subject": "A tiny floating block-shaped island with a tree and little workshop, accompanied by a simple friendly chat-bubble companion. Hand-drawn block geometry with irregular black ink, sparse teal foliage and mustard accents, no branded game characters."
     },
     {
       "slug": "cadence",
       "path": "assets/projects/cadence.webp",
-      "subject": "A floating portrait phone with a calm blank dark screen, symmetrical glowing motion dots arranged along both screen edges, and elegant curved trajectory lines echoing gentle movement behind it. Minimal precise rhythm, no medical symbolism."
+      "subject": "An upright phone with a mostly blank screen and evenly spaced teal and mustard motion dots along both screen edges. Two loose curved movement strokes around the device suggest rhythm and gentle movement."
     },
     {
       "slug": "bandwidth-burner",
       "path": "assets/projects/bandwidth-burner.webp",
-      "subject": "A thick transparent fiber-optic cable curves dynamically through the upper center, filled with racing lime and cyan data pulses, crossing a sculptural speed-gauge arc without numbers. High-speed network throughput with physical depth, no fire."
+      "subject": "A neatly coiled network cable releasing a flowing stream of tiny teal and mustard dots through a simple speed-gauge arc. Airy hand-drawn marks evoke fast data transfer, no fire or numerals."
     },
     {
       "slug": "photography-club-website",
       "path": "assets/projects/photography-club-website.webp",
-      "subject": "An unbranded mirrorless camera seen in a dramatic three-quarter angle, encircled by floating viewfinder corners and a few small photographic prints of campus architecture and street light. Energetic photo-walk gallery mood, rich cobalt studio background."
+      "subject": "A mirrorless camera in a three-quarter view beside two little campus and street photo prints. A few loose teal viewfinder corner marks and mustard light rays suggest a friendly student photo walk."
     },
     {
       "slug": "my-portfolio",
       "path": "assets/projects/my-portfolio.webp",
-      "subject": "A quiet contemporary photographic gallery with three large floating framed prints showing a misty mountain, a coastal horizon and an architectural shadow, arranged in layered perspective under soft blue spotlights. Personal photography portfolio, refined and spacious."
+      "subject": "Three small framed ink drawings arranged as a quiet gallery: a mountain, a coast and architectural shadows. Thin charcoal frames, sparse teal sea and mustard sunshine, a restrained photographic portfolio vignette."
     },
     {
       "slug": "holiday-hand-magic",
       "path": "assets/projects/holiday-hand-magic.webp",
-      "subject": "A gracefully posed single human hand in silhouette guides a swirling constellation of tiny cyan and lime particles into a luminous winter tree, with a small particle snowman nearby. Magical interactive gesture art, anatomically natural five fingers, no holiday text."
+      "subject": "One naturally drawn hand gently guides scattered teal and mustard dots into the shape of a small winter tree and a tiny snowman. Relaxed brush-pen gesture illustration, anatomically plausible five fingers, no text."
     },
     {
       "slug": "spectralens-pbr",
       "path": "assets/projects/spectralens-pbr.webp",
-      "subject": "A trio of precisely rendered material spheres, brushed metal, frosted glass and matte ceramic, lit by a sharp beam passing through a prismatic lens. Strong physical shadows and subtle reflected color on a blue studio ground evoke experimental PBR shaders."
+      "subject": "Three small material study spheres and a triangular prism catching a mustard light ray. Show different material impressions through loose charcoal hatching and sparse teal washes, with simple drawn shadows. Clearly ink illustration, never realistic rendering."
     },
     {
       "slug": "spaceapps-concept",
       "path": "assets/projects/spaceapps-concept.webp",
-      "subject": "A luminous layered Earth globe above a dark orbital map plane, with thin data paths connecting small unlabeled catalog tiles and time-marker beads. Space-data exploration concept, dramatic atmospheric rim light, no rockets or NASA branding."
+      "subject": "A small hand-drawn Earth globe with loose continental outlines and two orbit-like teal paths connecting a few blank map tiles. Mustard data dots and tiny ink stars create an airy space-data exploration vignette, no rocket or agency logo."
     },
     {
       "slug": "pre-makaizo-project",
       "path": "assets/projects/pre-makaizo-project.webp",
-      "subject": "An inventive small kinetic machine: a miniature motor, an exposed microcontroller board, a partly ejected optical-disc tray and neatly routed wires, arranged as a carefully built tabletop mechanical performance prototype. Cobalt metal, lime status lights, no labels."
+      "subject": "A playful maker prototype on a tabletop: a tiny motor, microcontroller board, partly open optical-disc tray and a few neatly curving wires. Loose charcoal technical sketch with sparse mustard and teal details, no writing."
     },
     {
       "slug": "ip1",
       "path": "assets/projects/ip1.webp",
-      "subject": "An elegant physical programming study model: ordered stacks of small geometric blocks, a looping pathway and branching routes on a blue grid plane, beside a slim open notebook with only blank ruled lines. Introductory algorithms, loops and sorting made tangible."
+      "subject": "A small open study notebook beside stacks of geometric sorting blocks and a branching arrow path. A pencil and two looping teal strokes evoke introductory programming and algorithms. No code, letters or numbers."
     },
     {
       "slug": "kuas-photography-club",
       "path": "assets/projects/kuas-photography-club.webp",
-      "subject": "A shared photography field notebook, two unbranded camera lenses and a tidy fan of campus photo prints on a deep blue tabletop, with small connected lime membership tokens suggesting a welcoming student creative club. Documentary club resources, no names."
+      "subject": "A shared field notebook, two camera lenses and a tidy fan of small campus photo prints. A loose teal line links the objects like a welcoming student club, with tiny mustard accents and blank notebook pages."
     },
     {
       "slug": "my-github-portfolio",
       "path": "assets/projects/my-github-portfolio.webp",
-      "subject": "A sculptural gallery of small project tiles floating in a six-column-inspired modular arrangement, each holding a different tiny geometric artifact, connected by subtle branching code-history lines. One coherent cobalt portfolio system with lime accents, no lettering or miniature screenshots."
+      "subject": "A small collection of six hand-drawn project tiles, each with a different simple maker symbol, connected by loose branching ink lines. One tile has a camera, one a circuit, one a plane, others simple geometric tools. No text or miniature UI."
     },
     {
       "slug": "lingmulongtai",
       "path": "assets/projects/lingmulongtai.webp",
-      "subject": "A carefully composed maker's still life: a tiny circuit board, a camera lens, an elegant code bracket sculpture and a small connected AI node cluster on a deep cobalt desk. A personal creative-technology identity represented through tools, no human portrait or text."
+      "subject": "A maker's still life of a small circuit board, camera lens, pencil and an open blank notebook, connected by a loose teal brush stroke and a few mustard accent rays. A personal creative-technology identity represented by tools, no human portrait."
     }
   ]
 }
