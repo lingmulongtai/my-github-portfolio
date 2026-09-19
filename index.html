@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ryuta Suzuki — Projects</title>
+<meta name="description" content="鈴木竜太が個人で開発しているプロジェクトの一覧。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B2BD1; --acid:#E9FF4E; --paper:#F7F5EF; --black:#131313;
+  --bg:var(--ink); --fg:var(--paper); --accent:var(--acid);
+  --display:"Unbounded","Zen Kaku Gothic New",system-ui,sans-serif;
+  --body:"Zen Kaku Gothic New",system-ui,sans-serif;
+  --pad:clamp(16px,3.4vw,40px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  transition:background .7s cubic-bezier(.16,1,.3,1), color .7s cubic-bezier(.16,1,.3,1)}
+body.light{--bg:var(--paper); --fg:var(--black); --accent:var(--ink)}
+body.locked{overflow:hidden}
+a{color:inherit; text-decoration:none}
+button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+::selection{background:var(--acid); color:var(--black)}
+:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+
+#cur{position:fixed; top:0; left:0; width:15px; height:15px; border-radius:50%; background:var(--acid);
+  z-index:900; pointer-events:none; mix-blend-mode:difference; transform:translate(-50%,-50%);
+  transition:width .28s,height .28s}
+#cur.big{width:70px; height:70px}
+@media (hover:none),(pointer:coarse){#cur{display:none}}
+
+/* nav */
+nav{position:fixed; top:0; left:0; right:0; z-index:300; display:flex; align-items:center; gap:18px;
+  padding:16px var(--pad); font-family:var(--display); font-size:11.5px; font-weight:500;
+  mix-blend-mode:difference; color:#fff}
+nav .sp{margin-left:auto}
+nav a,nav button{opacity:.66; transition:opacity .2s}
+nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacity:1}
+.lang{display:flex; border:1px solid rgba(255,255,255,.42); border-radius:99px; overflow:hidden; opacity:.85}
+.lang button{padding:3px 10px; font-size:10.5px; opacity:.55; border-radius:0}
+.lang button.on{background:#fff; color:#000; opacity:1}
+nav .k{border:1px solid rgba(255,255,255,.42); border-radius:99px; padding:3px 10px}
+@media (max-width:760px){nav .hide{display:none}}
+@media (max-width:420px){nav{gap:12px}}
+
+/* hero */
+header{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+  padding:118px var(--pad) 46px; position:relative}
+.meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
+  font-weight:300; opacity:.72; margin-bottom:28px}
+.kin{font-family:var(--display); font-weight:800; line-height:.82; letter-spacing:-.055em;
+  font-size:clamp(54px,15.2vw,226px); margin:0}
+.kin .row{display:block}
+.kin .l{display:inline-block; transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.kin .r2{color:var(--accent)}
+.sub{max-width:52ch; margin:38px 0 0; font-size:15.5px; line-height:1.92; opacity:.88}
+.scrolltip{position:absolute; bottom:26px; right:var(--pad); font-family:var(--display); font-size:11px; opacity:.55}
+
+/* marquee */
+.marq{border-top:2px solid currentColor; border-bottom:2px solid currentColor; padding:13px 0;
+  overflow:hidden; white-space:nowrap}
+.track{display:inline-block; font-family:var(--display); font-weight:300;
+  font-size:clamp(21px,4vw,44px); letter-spacing:-.025em; will-change:transform}
+.track span{padding:0 24px}
+.track em{font-style:normal; color:var(--accent); font-weight:800}
+
+/* pulse */
+.pulse{padding:clamp(46px,7vw,86px) var(--pad) clamp(40px,6vw,70px); border-bottom:2px solid currentColor}
+.pulse-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:24px}
+.pulse-head h2{font-family:var(--display); font-weight:500; font-size:clamp(20px,2.6vw,30px);
+  letter-spacing:-.04em; margin:0}
+.badge{font-family:var(--display); font-size:9.5px; border:1px solid currentColor; border-radius:99px;
+  padding:3px 9px; opacity:.7}
+.badge.live{background:var(--accent); color:var(--ink); border-color:var(--accent); opacity:1}
+.pulse-head .sum{font-size:12px; opacity:.66; margin-left:auto; font-variant-numeric:tabular-nums}
+.heatwrap{overflow-x:auto; padding-bottom:10px}
+.heat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px;
+  min-width:660px; height:104px}
+.heat i{border-radius:1px; background:currentColor; opacity:.12}
+.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:30px 22px; margin-top:40px}
+.fig strong{display:block; font-family:var(--display); font-weight:800; font-size:clamp(40px,6.2vw,76px);
+  letter-spacing:-.06em; line-height:.88; color:var(--accent); font-variant-numeric:tabular-nums}
+.fig span{display:block; font-size:12.5px; opacity:.74; margin-top:11px; line-height:1.65}
+
+/* work */
+.work{padding:clamp(56px,8vw,96px) var(--pad) 40px}
+.sechead{display:flex; align-items:flex-end; gap:20px; margin-bottom:26px; flex-wrap:wrap}
+.sechead h2{font-family:var(--display); font-weight:500; font-size:clamp(26px,4.2vw,46px);
+  letter-spacing:-.045em; margin:0}
+.sechead p{margin:0 0 7px auto; font-size:13px; opacity:.7; max-width:34ch}
+.filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; font-family:var(--display); font-size:11px}
+.fbtn{border:1px solid currentColor; border-radius:99px; padding:6px 14px; opacity:.6; transition:.25s}
+.fbtn:hover{opacity:1}
+.fbtn.on{background:var(--accent); color:var(--ink); border-color:var(--accent); opacity:1}
+
+.bento{display:grid; gap:12px; grid-template-columns:repeat(6,1fr)}
+.tile{position:relative; overflow:hidden; border:2px solid currentColor; border-radius:2px;
+  padding:20px; display:flex; flex-direction:column; min-height:212px;
+  transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .42s cubic-bezier(.16,1,.3,1),
+    opacity .3s}
+.tile:hover,.tile:focus-within{background:var(--accent); color:var(--ink); transform:translate(-5px,-5px)}
+body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
+.tile.dim{opacity:.24}
+.tile-open{position:absolute; inset:0; z-index:1}
+.tile>*:not(.tile-open):not(.site){position:relative; z-index:0; pointer-events:none}
+.tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; opacity:.62}
+.tile h3{font-family:var(--display); font-weight:500; letter-spacing:-.04em; margin:auto 0 9px;
+  font-size:clamp(20px,2.3vw,33px); line-height:1.03}
+.tile .jp{font-size:12.5px; opacity:.8; line-height:1.68; margin:0}
+.tile .st{position:absolute; top:17px; right:17px; font-family:var(--display); font-size:10px;
+  border-radius:99px; padding:3px 10px; background:var(--accent); color:var(--ink); transition:opacity .28s;
+  z-index:0; pointer-events:none}
+.tile:hover .st,.tile:focus-within .st{opacity:0}
+.tile .site{position:absolute; top:14px; right:14px; z-index:3; font-family:var(--display); font-size:10px;
+  border:1px solid currentColor; border-radius:99px; padding:4px 11px; opacity:0; transform:translateY(-4px);
+  transition:opacity .3s, transform .3s, background .2s}
+.tile:hover .site,.tile:focus-within .site{opacity:1; transform:none}
+.tile .site:hover{background:currentColor}
+.tile .site:hover span{mix-blend-mode:difference; filter:invert(1)}
+.tile .foot{display:flex; align-items:flex-end; gap:14px; margin-top:16px;
+  padding-top:13px; border-top:1px solid currentColor}
+.tile .foot .lbl{font-family:var(--display); font-size:10px; opacity:.62; line-height:1.5; white-space:nowrap}
+.tile .foot .lbl b{display:block; font-weight:500; font-size:13px; opacity:1; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums}
+.sparkbar{display:flex; gap:2px; align-items:flex-end; height:30px; flex:1; margin-left:auto; max-width:132px}
+.sparkbar i{flex:1; background:currentColor; opacity:.45; border-radius:1px}
+.s-hero{grid-column:span 4; min-height:336px}
+.s-tall{grid-column:span 2; min-height:336px}
+.s-wide{grid-column:span 3}
+.s-std{grid-column:span 2}
+@media (max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}
+  .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 2; min-height:206px}}
+@media (max-width:520px){.bento{grid-template-columns:1fr}
+  .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}}
+
+/* about */
+.about{padding:clamp(70px,10vw,124px) var(--pad); margin-top:78px; border-top:2px solid currentColor}
+.about blockquote{margin:0 0 46px; max-width:22ch; font-family:var(--display); font-weight:300;
+  font-size:clamp(28px,5vw,58px); line-height:1.06; letter-spacing:-.05em}
+.abody{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:34px}
+.abody p{margin:0; font-size:14px; line-height:2; opacity:.86; max-width:46ch}
+.skills{display:flex; flex-wrap:wrap; gap:7px; align-content:flex-start;
+  font-family:var(--display); font-size:11px; font-weight:300}
+.skills i{font-style:normal; border:1px solid currentColor; border-radius:99px; padding:4px 11px; opacity:.75}
+
+footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
+.fbig{font-family:var(--display); font-weight:800; font-size:clamp(44px,13vw,178px); line-height:.82;
+  letter-spacing:-.065em; margin:0 0 32px}
+.frow{display:flex; flex-wrap:wrap; gap:14px 28px; font-family:var(--display); font-size:11.5px;
+  font-weight:300; opacity:.72}
+.frow a{border-bottom:1px solid transparent; transition:border-color .2s}
+.frow a:hover,.frow a:focus-visible{border-color:var(--accent)}
+.note{margin-top:20px; font-size:10.5px; opacity:.45; font-family:var(--display); font-weight:300}
+
+/* sheet */
+#sheet{position:fixed; inset:0; z-index:500; background:var(--paper); color:var(--black);
+  transform:translateY(101%); transition:transform .72s cubic-bezier(.16,1,.3,1);
+  overflow-y:auto; overscroll-behavior:contain; visibility:hidden}
+#sheet.open{transform:none; visibility:visible}
+.sbar{position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:12px;
+  padding:14px var(--pad); background:var(--paper); border-bottom:2px solid var(--black);
+  font-family:var(--display); font-size:11.5px; flex-wrap:wrap}
+.sbar .idx{color:var(--ink)}
+.sbar .nav{margin-left:auto; display:flex; gap:8px}
+.sbar .nav button,.sclose{border:1px solid var(--black); border-radius:99px; padding:5px 13px; transition:.22s}
+.sbar .nav button:hover,.sclose:hover{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.shead{padding:clamp(34px,6vw,72px) var(--pad) 30px; border-bottom:2px solid var(--black)}
+.shead .tagline{font-family:var(--display); font-size:11px; color:var(--ink); margin-bottom:16px}
+.shead h2{font-family:var(--display); font-weight:800; letter-spacing:-.055em; line-height:.9;
+  font-size:clamp(34px,7.6vw,104px); margin:0 0 18px}
+.shead .jp{font-size:15px; opacity:.72; margin:0; max-width:52ch; line-height:1.8}
+.sgrid{display:grid; grid-template-columns:1.35fr 1fr; border-bottom:2px solid var(--black)}
+@media (max-width:860px){.sgrid{grid-template-columns:1fr}}
+.scol{padding:clamp(26px,4vw,44px) var(--pad); min-width:0}
+.scol+.scol{border-left:2px solid var(--black)}
+@media (max-width:860px){.scol+.scol{border-left:none; border-top:2px solid var(--black)}}
+.scol h3{font-family:var(--display); font-weight:500; font-size:12px; margin:0 0 16px; letter-spacing:-.01em}
+.scol h3+h3{margin-top:38px}
+.sdesc{font-size:14.5px; line-height:2.05; margin:0 0 34px; max-width:64ch}
+.stable{width:100%; border-collapse:collapse; margin-bottom:8px}
+.stable td{padding:10px 0; border-bottom:1px solid rgba(19,19,19,.16); font-size:13px; vertical-align:top}
+.stable td:first-child{width:118px; opacity:.55; font-family:var(--display); font-size:11px; padding-top:12px}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips i{font-style:normal; border:1px solid var(--ink); color:var(--ink); border-radius:99px;
+  padding:3px 11px; font-size:11px; font-family:var(--display); font-weight:300}
+.metrics{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--black);
+  border:2px solid var(--black); margin-bottom:34px}
+.metric{background:var(--paper); padding:16px 15px}
+.metric b{display:block; font-family:var(--display); font-weight:800; font-size:clamp(26px,3.4vw,40px);
+  letter-spacing:-.05em; line-height:1; font-variant-numeric:tabular-nums}
+.metric span{display:block; font-family:var(--display); font-size:10px; opacity:.55; margin-top:9px}
+.chart{height:66px; display:flex; gap:3px; align-items:flex-end; margin-bottom:8px}
+.chart i{flex:1; background:var(--ink); border-radius:1px}
+.axis{display:flex; justify-content:space-between; font-family:var(--display); font-size:10px;
+  opacity:.5; margin-bottom:34px}
+.heatwrap2{overflow-x:auto; margin-bottom:34px}
+.sheat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px; height:92px; min-width:420px}
+.sheat i{background:var(--ink); border-radius:1px}
+.log{list-style:none; margin:0; padding:0}
+.log li{display:flex; gap:14px; padding:9px 0; border-bottom:1px solid rgba(19,19,19,.14); font-size:12.5px}
+.log time{font-family:var(--display); font-size:11px; opacity:.5; flex:none; width:88px}
+.log b{font-weight:500; color:var(--ink)}
+.slinks{display:flex; flex-wrap:wrap; gap:10px; padding:clamp(26px,4vw,44px) var(--pad) clamp(50px,8vw,90px)}
+.slink{border:2px solid var(--black); border-radius:2px; padding:13px 22px; font-family:var(--display);
+  font-size:12.5px; transition:.25s}
+.slink:hover,.slink:focus-visible{background:var(--ink); color:var(--paper); border-color:var(--ink);
+  transform:translate(-3px,-3px)}
+.slink.primary{background:var(--acid); border-color:var(--black)}
+.slink.primary:hover{background:var(--ink); color:var(--paper)}
+
+/* palette */
+#pal{position:fixed; inset:0; z-index:700; background:rgba(9,14,90,.82); backdrop-filter:blur(6px);
+  display:none; justify-content:center; padding:12vh var(--pad) 0}
+#pal.open{display:flex}
+.palbox{width:min(620px,100%); height:fit-content; background:var(--paper); color:var(--black);
+  border:2px solid var(--black); border-radius:3px; overflow:hidden}
+.palbox input{width:100%; border:none; border-bottom:2px solid var(--black); background:none;
+  font-family:var(--display); font-weight:500; font-size:19px; letter-spacing:-.03em; padding:19px 20px; color:inherit}
+.palbox input:focus{outline:none}
+.palres{max-height:min(46vh,380px); overflow-y:auto}
+.pi{display:flex; align-items:center; gap:14px; width:100%; text-align:left; padding:13px 20px;
+  border-bottom:1px solid rgba(19,19,19,.12)}
+.pi .pn{font-family:var(--display); font-size:14px; letter-spacing:-.02em; flex:none}
+.pi .pj{font-size:11.5px; opacity:.55; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.pi .ps{margin-left:auto; font-family:var(--display); font-size:10px; opacity:.55; flex:none}
+.pi.on{background:var(--acid)}
+.palfoot{display:flex; gap:16px; padding:11px 20px; font-family:var(--display); font-size:10px; opacity:.5}
+.empty{padding:22px 20px; font-size:13px; opacity:.6}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="cur" aria-hidden="true"></div>
+
+<nav>
+  <span id="navName">RYUTA SUZUKI</span>
+  <a href="#work" class="sp" data-i18n="nav.work">WORK</a>
+  <a href="#about" class="hide" data-i18n="nav.about">ABOUT</a>
+  <a id="navGh" href="#" target="_blank" rel="noopener">GITHUB</a>
+  <a id="navLi" href="#" target="_blank" rel="noopener">LINKEDIN</a>
+  <span class="lang"><button data-lang="ja">JA</button><button data-lang="en">EN</button></span>
+  <button class="k hide" id="palbtn" aria-label="Search">⌘K</button>
+</nav>
+
+<header>
+  <div class="meta" id="heroMeta"></div>
+  <h1 class="kin" id="kin"></h1>
+  <p class="sub" id="heroSub"></p>
+  <span class="scrolltip" data-i18n="scroll">SCROLL ↓</span>
+</header>
+
+<div class="marq"><div class="track" id="track"></div></div>
+
+<section class="pulse">
+  <div class="pulse-head">
+    <h2 data-i18n="pulse.title"></h2>
+    <span class="badge" id="srcBadge"></span>
+    <span class="sum" id="pulseSum"></span>
+  </div>
+  <div class="heatwrap"><div class="heat" id="heat"></div></div>
+  <div class="figs" id="figs"></div>
+</section>
+
+<section class="work" id="work">
+  <div class="sechead">
+    <h2 data-i18n="work.title"></h2>
+    <p data-i18n="work.lead"></p>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="bento" id="bento"></div>
+</section>
+
+<section class="about" id="about">
+  <blockquote id="aboutQuote"></blockquote>
+  <div class="abody">
+    <p id="aboutBody"></p>
+    <div class="skills" id="skills"></div>
+  </div>
+</section>
+
+<footer>
+  <p class="fbig">LET'S<br>BUILD</p>
+  <div class="frow" id="frow"></div>
+  <p class="note" id="footNote"></p>
+</footer>
+
+<div id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle" aria-hidden="true">
+  <div class="sbar">
+    <span class="idx" id="sIdx"></span><span id="sYear" style="opacity:.5"></span>
+    <div class="nav">
+      <button id="sPrev">← PREV</button><button id="sNext">NEXT →</button>
+      <button class="sclose" id="sClose">CLOSE ✕</button>
+    </div>
+  </div>
+  <div class="shead">
+    <div class="tagline" id="sTag"></div>
+    <h2 id="sTitle"></h2>
+    <p class="jp" id="sJp"></p>
+  </div>
+  <div class="sgrid">
+    <div class="scol">
+      <h3 data-i18n="sheet.overview"></h3>
+      <p class="sdesc" id="sDesc"></p>
+      <h3 data-i18n="sheet.spec"></h3>
+      <table class="stable" id="sTable"></table>
+      <h3 data-i18n="sheet.events"></h3>
+      <ul class="log" id="sLog"></ul>
+    </div>
+    <div class="scol">
+      <h3 data-i18n="sheet.metrics"></h3>
+      <div class="metrics" id="sMetrics"></div>
+      <div id="sCharts">
+        <h3 data-i18n="sheet.commits"></h3>
+        <div class="chart" id="sChart"></div>
+        <div class="axis"><span data-i18n="sheet.weeksAgo"></span><span data-i18n="sheet.thisWeek"></span></div>
+        <h3 data-i18n="sheet.activity"></h3>
+        <div class="heatwrap2"><div class="sheat" id="sHeat"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slinks" id="sLinks"></div>
+</div>
+
+<div id="pal" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="palbox">
+    <input id="palin" autocomplete="off">
+    <div class="palres" id="palres"></div>
+    <div class="palfoot"><span>↑↓</span><span>↵</span><span>ESC</span></div>
+  </div>
+</div>
+
+<!-- =======================================================================
+     FALLBACK DATA — projects.json が読めないときだけ使われます。
+     ふだんの編集は projects.json のほうを直してください。
+     ======================================================================= -->
+<script type="application/json" id="site-data">
+{
+  "profile": {
+    "name": "Ryuta Suzuki",
+    "github": "ryuta-suzuki",
+    "hero": ["MAKING", "THINGS"],
+    "location": { "ja": "京都", "en": "KYOTO, JAPAN" },
+    "role": { "ja": "工学部 学生", "en": "ENGINEERING STUDENT" },
+    "intro": {
+      "ja": "つくったものを置いておく場所です。飛行機の軌跡を描くマップから、においを読む小さな基板まで。ぜんぶ個人の手で設計して、動かしています。",
+      "en": "A place to keep the things I build — from a map that draws aircraft trails to a small board that reads smells. All designed and built by hand, on my own."
+    },
+    "quote": { "ja": "見えないものに、形を与える。", "en": "Giving shape to what can't be seen." },
+    "about": {
+      "ja": "京都先端科学大学の工学部で学びながら、思いついたものを片っ端から形にしています。航空機や衛星の位置、空気中のにおい分子、RAWファイルの中に眠っている情報。共通しているのは、そのままでは人間に見えないものを、見える形に翻訳する作業です。ハードウェアからフロントエンドまで一人で組むことが多く、AIと対話しながら設計を詰めて、実装して、壊して、直しています。",
+      "en": "I study engineering at Kyoto University of Advanced Science, and build whatever I think of. Aircraft and satellite positions, odour molecules in the air, information sleeping inside a RAW file — the common thread is translating things people can't see into something they can. I usually build the whole stack alone, from hardware to front end, working out the design in conversation with AI, then implementing, breaking and fixing it."
+    },
+    "skills": ["TypeScript","Python","C++","Three.js / WebGL","ESP32","Rust","Electron / Tauri",
+      "SQLite / DuckDB","WebAssembly","MIDI / SysEx","Robotics","AI-assisted development"],
+    "links": {
+      "github": "https://github.com/ryuta-suzuki",
+      "linkedin": "https://www.linkedin.com/in/ryuta-suzuki/",
+      "x": "https://x.com/",
+      "mail": "mailto:hello@example.com"
+    }
+  },
+  "projects": [
+    {
+      "slug": "aerogrid-3d", "repo": "ryuta-suzuki/AeroGrid-3D", "name": "AeroGrid-3D",
+      "size": "hero", "filter": "live", "year": "2026",
+      "tag": { "ja": "リアルタイム3Dマップ", "en": "REAL-TIME 3D MAP" },
+      "status": { "ja": "公開中", "en": "Live" },
+      "summary": { "ja": "航空機と衛星をリアルタイムに描く3Dマップ", "en": "A 3D map drawing aircraft and satellites in real time" },
+      "desc": {
+        "ja": "Flightradar24 に着想を得た、航空機と人工衛星をリアルタイムに描画する 3D マップです。気象レイヤーを重ねて表示でき、機体は 3D モデルで描かれます。Google AI Studio で試作したものを Claude Code でリファクタリングしながら機能を足し、Google Cloud Run に載せて公開しています。",
+        "en": "A 3D map that renders aircraft and satellites in real time, inspired by Flightradar24. Weather layers can be overlaid, and aircraft appear as 3D models. Prototyped in Google AI Studio, then refactored and extended with Claude Code, and deployed on Google Cloud Run."
+      },
+      "stack": ["Three.js","WebGL","Cloud Run","TypeScript"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "scentinel-plug", "repo": "ryuta-suzuki/scentinel-plug", "name": "Scentinel Plug",
+      "size": "tall", "filter": "proto", "year": "2026",
+      "tag": { "ja": "センサハードウェア", "en": "SENSOR HARDWARE" },
+      "status": { "ja": "試作中", "en": "Prototype" },
+      "summary": { "ja": "においとVOCを読み、AIが解釈するUSB-Cモジュール", "en": "A USB-C module that reads smell and VOC, interpreted by AI" },
+      "desc": {
+        "ja": "におい・VOC・空気環境の変化を可視化し、AI が解釈して、早期の注意喚起や行動提案を返す補助的な環境認識システムです。スマートフォンの USB-C に直挿しする小型モジュールとして設計しました。第一試作でセンサ構成を確定させ、第二試作で分類器を載せる計画で進めています。",
+        "en": "An assistive environmental-awareness system that visualises changes in smell, VOC and air quality, then has AI interpret them to return early warnings or suggested actions. Designed as a small module that plugs straight into a phone's USB-C port. The first prototype fixes the sensor configuration; the second adds the classifier."
+      },
+      "stack": ["ESP32-S3","BME688","SGP40","Android","Python"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "kaguya-raw-studio", "repo": "ryuta-suzuki/kaguya-raw-studio", "name": "KAGUYA RAW Studio",
+      "size": "std", "filter": "spec", "year": "2026",
+      "tag": { "ja": "写真ワークフロー", "en": "PHOTO WORKFLOW" },
+      "status": { "ja": "設計確定", "en": "Spec" },
+      "summary": { "ja": "撮影現場のためのRAWワークフロー", "en": "A RAW workflow built for the shoot itself" },
+      "desc": {
+        "ja": "Windows ファーストのクロスプラットフォーム RAW ワークフローツール。同じネットワークにいる端末へクライアントビューを配信し、その場で確認できます。RAW 本体はクライアントに残さず、セッションは QR コードとパスコードで保護。カタログ、エディットスタック、納品ギャラリーまでを一本につなぎ、オフラインでも動きます。",
+        "en": "A Windows-first, cross-platform RAW workflow tool. It streams a client view to devices on the same local network so images can be checked on the spot. RAW files never stay on the client, and sessions are protected with a QR code and a passcode. Cataloguing, edit stacks and delivery galleries are joined into one chain that also works offline."
+      },
+      "stack": ["Local HTTP/WS","SQLite","DuckDB","Electron"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "pdf-local-unlocker", "repo": "ryuta-suzuki/pdf-local-unlocker", "name": "PDF Local Unlocker",
+      "size": "std", "filter": "live", "year": "2026",
+      "tag": { "ja": "クライアントサイドWebアプリ", "en": "CLIENT-SIDE WEB APP" },
+      "status": { "ja": "MVP", "en": "MVP" },
+      "summary": { "ja": "サーバに送らないPDF解錠ツール", "en": "Unlocks PDFs without sending them anywhere" },
+      "desc": {
+        "ja": "パスワード付き PDF を、ブラウザの中だけで解錠する Web アプリです。ファイルは一切サーバにアップロードされません。qpdf-wasm を Web Worker 上で動かし、複数ファイルのキュー処理、よく使うパスワードの一括試行、ファイルごとの個別指定、ZIP での書き出しに対応しています。",
+        "en": "A web app that unlocks password-protected PDFs entirely inside the browser — no file ever reaches a server. It runs qpdf-wasm in a Web Worker, with multi-file queues, batch attempts using common passwords, per-file passwords and ZIP export."
+      },
+      "stack": ["qpdf-wasm","Web Worker","Vite","GitHub Pages"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "launchkey-lighting", "repo": "ryuta-suzuki/launchkey-lighting", "name": "Launchkey Lighting",
+      "size": "std", "filter": "spec", "year": "2026",
+      "tag": { "ja": "デスクトップユーティリティ", "en": "DESKTOP UTILITY" },
+      "status": { "ja": "仕様策定", "en": "Spec" },
+      "summary": { "ja": "MIDIキーボードを光らせる常駐アプリ", "en": "A tray app that keeps a MIDI keyboard lit" },
+      "desc": {
+        "ja": "Launchkey MK4 61鍵を光らせるための常駐アプリ。ゲーミングキーボード用ソフトのようにプリセットを組み替えられ、画面上のキーボード図から直接ライティングを編集できます。DAW など他のソフトを立ち上げている間も発光が消えないことが、いちばん大事な要件です。",
+        "en": "A tray-resident app that lights up a Launchkey MK4 61. Presets can be swapped like gaming-keyboard software, and lighting is edited directly on an on-screen diagram of the keyboard. The key requirement: the lights must survive while a DAW or other software is running."
+      },
+      "stack": ["MIDI SysEx","Tray App","Preset Editor"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "dual-agent-desktop", "repo": "ryuta-suzuki/dual-agent-desktop", "name": "Dual-Agent Desktop",
+      "size": "wide", "filter": "spec", "year": "2026",
+      "tag": { "ja": "エージェントツール", "en": "AGENT TOOLING" },
+      "status": { "ja": "設計中", "en": "In design" },
+      "summary": { "ja": "2つのAIエージェントに同じ質問を投げて見比べる", "en": "Ask two AI agents the same thing, side by side" },
+      "desc": {
+        "ja": "Claude Code と Codex を裏で常駐させ、ひとつのアプリにまとめるデスクトップツール。コーディング以外の普通のチャットは両方へ同時に送り、返ってきた答えを左右に並べて比較できます。稼働状況は Discord のライブステータスにも流します。",
+        "en": "A desktop tool that keeps Claude Code and Codex running in the background and unifies them into one app. Ordinary, non-coding chat goes to both at once so the two answers can be compared side by side, and live status for both is pushed to Discord."
+      },
+      "stack": ["Desktop","Agent Runtime","Discord RPC"],
+      "links": { "docs": "" }
+    },
+    {
+      "slug": "smart-open-campus", "repo": "ryuta-suzuki/smart-open-campus", "name": "Smart Open Campus",
+      "size": "wide", "filter": "build", "year": "2026",
+      "tag": { "ja": "キャンパスシステム", "en": "CAMPUS SYSTEM" },
+      "status": { "ja": "開発中", "en": "Building" },
+      "summary": { "ja": "受付DXとロボティクスで来場体験をつくり直す", "en": "Rebuilding the visitor experience with check-in DX and robotics" },
+      "desc": {
+        "ja": "オープンキャンパスの来場者体験そのものを設計し直す、工学部コーナーストーンのプロジェクト。ローカルで動く QR 受付アプリと、リストバンドを自動で装着するロボティクス装置を組み合わせます。個人情報の扱いを見直した結果、サーバを介さない完全ローカル構成へ切り替えました。デモには実データを使いません。",
+        "en": "A Cornerstone project in the engineering faculty that redesigns the open-campus visitor experience itself, combining a locally running QR check-in app with a robotic device that attaches wristbands automatically. After reviewing how personal information is handled, the architecture moved to a fully local setup with no server. Demonstrations use sample data only."
+      },
+      "stack": ["Local QR","Robotics","Wristband","KUAS"],
+      "links": { "docs": "" }
+    }
+  ]
+}
+</script>
+
+<script>
+/* ===================== i18n ===================== */
+const T={
+ ja:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
+  "pulse.title":"この1年の手の動き","work.title":"Selected works",
+  "work.lead":"タイルをクリックすると、進捗と技術構成まで読めます。",
+  "sheet.overview":"概要","sheet.spec":"仕様","sheet.events":"直近のイベント","sheet.metrics":"指標",
+  "sheet.commits":"コミット（直近14週）","sheet.activity":"アクティビティ",
+  "sheet.weeksAgo":"14週前","sheet.thisWeek":"今週",
+  "search":"プロジェクトを検索…","empty":"見つかりませんでした。技術名でも探せます。",
+  "all":"ALL","live":"公開中","build":"開発中","proto":"試作","spec":"設計",
+  "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52週","m.weeks":"稼働週",
+  "m.stars":"STARS","m.forks":"FORKS","t.status":"ステータス","t.lang":"言語","t.lic":"ライセンス",
+  "t.updated":"最終更新","t.stack":"構成","t.team":"体制","team":"個人開発 — 設計から実装まで",
+  "l.repo":"リポジトリ","l.site":"サイトを開く ↗","l.docs":"ドキュメント",
+  "demo":"DEMO DATA","liveSrc":"GITHUB 同期中",
+  "figs":["公開・開発中のプロジェクト","この1年のコミット","獲得スター","使っている言語"],
+  "ev":["リポジトリを更新","リリース","プルリクをマージ","READMEを更新","デプロイを実行","イシューを追加"],
+  "note":"数値は GitHub API から取得しています。","noteDemo":"※ GitHub 未接続のため、数値はデモ用の仮データです。"},
+ en:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
+  "pulse.title":"A year of hands moving","work.title":"Selected works",
+  "work.lead":"Open a tile to read progress and the technical build.",
+  "sheet.overview":"Overview","sheet.spec":"Details","sheet.events":"Recent events","sheet.metrics":"Metrics",
+  "sheet.commits":"Commits (last 14 weeks)","sheet.activity":"Activity",
+  "sheet.weeksAgo":"14 weeks ago","sheet.thisWeek":"This week",
+  "search":"Search projects…","empty":"Nothing found. Try a technology name.",
+  "all":"ALL","live":"Live","build":"Building","proto":"Prototype","spec":"Spec",
+  "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52W","m.weeks":"ACTIVE WEEKS",
+  "m.stars":"STARS","m.forks":"FORKS","t.status":"Status","t.lang":"Language","t.lic":"License",
+  "t.updated":"Last update","t.stack":"Built with","t.team":"Team","team":"Solo — design through implementation",
+  "l.repo":"Repository","l.site":"Open site ↗","l.docs":"Documentation",
+  "demo":"DEMO DATA","liveSrc":"SYNCED WITH GITHUB",
+  "figs":["Projects live or in progress","Commits this year","Stars earned","Languages in use"],
+  "ev":["Pushed to the repository","Released","Merged a pull request","Updated the README","Deployed","Opened an issue"],
+  "note":"Figures are pulled from the GitHub API.","noteDemo":"Figures are placeholder demo data — GitHub is not connected."}};
+let LANG='ja';
+const t=k=>T[LANG][k]??k;
+const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
+
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const $=id=>document.getElementById(id);
+let DATA=JSON.parse($('site-data').textContent);
+let LIVE=false;
+
+/* ===================== data loading ===================== */
+function rng(seed){let h=2166136261;for(const c of seed){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}
+  return()=>{h^=h<<13;h>>>=0;h^=h>>>17;h^=h<<5;h>>>=0;return h/4294967296}}
+
+function demoStats(p){
+  const r=rng(p.slug);
+  const weeks=Array.from({length:53},()=>{
+    const days=Array.from({length:7},()=>{const v=r();return v>.74?Math.round(v*9):v>.5?Math.round(v*4):0});
+    return {days,total:days.reduce((a,b)=>a+b,0)};
+  });
+  return {weeks, stars:Math.round(r()*180), forks:Math.round(r()*24),
+    language:p.stack[0], license:"MIT", pushed:"2026-08-30", url:"#", site:""};
+}
+
+async function loadGithub(){
+  /* 1) build-time file written by GitHub Actions */
+  try{
+    const r=await fetch('./data/github.json',{cache:'no-cache'});
+    if(r.ok){const j=await r.json(); if(Object.keys(j).length){LIVE=true; return j}}
+  }catch(e){}
+  /* 2) live API (works on your own domain; blocked in sandboxed previews) */
+  try{
+    const login=DATA.profile.github;
+    const res=await fetch(`https://api.github.com/users/${login}/repos?per_page=100&sort=pushed`);
+    if(!res.ok) throw 0;
+    const repos=await res.json();
+    const byName={}; repos.forEach(r=>byName[r.full_name.toLowerCase()]=r);
+    const out={};
+    await Promise.all(DATA.projects.map(async p=>{
+      const r=byName[(p.repo||'').toLowerCase()]; if(!r) return;
+      let weeks=[];
+      try{
+        const s=await fetch(`https://api.github.com/repos/${r.full_name}/stats/commit_activity`);
+        if(s.ok){const j=await s.json(); if(Array.isArray(j)) weeks=j}
+      }catch(e){}
+      out[p.slug]={weeks, stars:r.stargazers_count, forks:r.forks_count,
+        language:r.language, license:r.license?.spdx_id||'—',
+        pushed:(r.pushed_at||'').slice(0,10), url:r.html_url,
+        site:r.homepage||(r.has_pages?`https://${login}.github.io/${r.name}/`:'')};
+    }));
+    if(Object.keys(out).length){LIVE=true; return out}
+  }catch(e){}
+  return null;
+}
+
+async function boot(){
+  try{
+    const r=await fetch('./projects.json',{cache:'no-cache'});
+    if(r.ok) DATA=await r.json();
+  }catch(e){}
+  const gh=await loadGithub();
+  DATA.projects.forEach(p=>{
+    const g=(gh&&gh[p.slug])||demoStats(p);
+    if(!g.weeks||!g.weeks.length) g.weeks=demoStats(p).weeks;
+    p.g=g;
+    p.g.commits=g.weeks.reduce((s,w)=>s+(w.total||0),0);
+    p.g.activeWeeks=g.weeks.filter(w=>(w.total||0)>0).length;
+    p.g.bars=g.weeks.slice(-14).map(w=>w.total||0);
+    p.g.site=p.links?.site||g.site||'';
+    p.g.url=g.url||(p.repo?`https://github.com/${p.repo}`:'#');
+  });
+  try{const s=localStorage.getItem('lang'); if(s) LANG=s;}
+  catch(e){}
+  if(!localStorageLang()&&navigator.language&&!navigator.language.startsWith('ja')) LANG='en';
+  render();
+  startMotion();
+}
+function localStorageLang(){try{return localStorage.getItem('lang')}catch(e){return null}}
+
+/* ===================== render ===================== */
+function render(){
+  const P=DATA.projects, pr=DATA.profile;
+  document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));
+  $('palin').placeholder=t('search');
+  $('navName').textContent=pr.name.toUpperCase();
+  $('navGh').href=pr.links.github; $('navLi').href=pr.links.linkedin;
+
+  $('heroMeta').innerHTML=[tx(pr.location).toUpperCase(),tx(pr.role).toUpperCase(),
+    `${P.length} ACTIVE PROJECTS`,LIVE?t('liveSrc'):t('demo')].map(s=>`<span>${s}</span>`).join('');
+  $('kin').innerHTML=pr.hero.map((r,i)=>
+    `<span class="row r${i+1}">${[...r].map(c=>`<span class="l">${c}</span>`).join('')}</span>`).join('');
+  $('heroSub').textContent=tx(pr.intro);
+  $('aboutQuote').textContent=tx(pr.quote);
+  $('aboutBody').textContent=tx(pr.about);
+  $('skills').innerHTML=pr.skills.map(s=>`<i>${s}</i>`).join('');
+  $('frow').innerHTML=`<a href="${pr.links.github}" target="_blank" rel="noopener">GITHUB</a>
+    <a href="${pr.links.linkedin}" target="_blank" rel="noopener">LINKEDIN</a>
+    <a href="${pr.links.x}" target="_blank" rel="noopener">X</a>
+    <a href="${pr.links.mail}">MAIL</a>
+    <span style="margin-left:auto">© ${new Date().getFullYear()} ${pr.name} — ${tx(pr.location)}</span>`;
+  $('footNote').textContent=LIVE?t('note'):t('noteDemo');
+
+  /* marquee */
+  const seg=P.map(p=>`<span>${p.name}</span><em>◆</em>`).join('');
+  $('track').innerHTML=seg+seg+seg;
+
+  /* pulse */
+  const badge=$('srcBadge');
+  badge.textContent=LIVE?t('liveSrc'):t('demo');
+  badge.classList.toggle('live',LIVE);
+  const agg=Array.from({length:53*7},(_,i)=>P.reduce((s,p)=>{
+    const w=p.g.weeks[Math.floor(i/7)]; return s+((w&&w.days&&w.days[i%7])||0)},0));
+  const max=Math.max(1,...agg);
+  $('heat').innerHTML=agg.map(v=>`<i style="opacity:${(.1+(v/max)*.9).toFixed(2)}"></i>`).join('');
+  const totC=P.reduce((s,p)=>s+p.g.commits,0), totS=P.reduce((s,p)=>s+(p.g.stars||0),0);
+  $('pulseSum').textContent=`${totC.toLocaleString()} commits / 53 weeks`;
+  const langs=new Set(P.map(p=>p.g.language).filter(Boolean));
+  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size||P.length,3]];
+  $('figs').innerHTML=figs.map(([n,i])=>
+    `<div class="fig"><strong data-to="${n}">0</strong><span>${t('figs')[i]}</span></div>`).join('');
+  countUp();
+
+  /* filters */
+  const keys=['all',...new Set(P.map(p=>p.filter))];
+  $('filters').innerHTML=keys.map((k,i)=>
+    `<button class="fbtn ${i===0?'on':''}" data-k="${k}">${t(k)}</button>`).join('');
+
+  /* tiles */
+  $('bento').innerHTML=P.map((p,i)=>`
+    <article class="tile s-${p.size||'std'}" data-f="${p.filter}">
+      <button class="tile-open" data-i="${i}" aria-label="${p.name}"></button>
+      <span class="no">${String(i+1).padStart(2,'0')} — ${tx(p.tag)}</span>
+      <span class="st">${tx(p.status)}</span>
+      ${p.g.site?`<a class="site" href="${p.g.site}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
+      <h3>${p.name}</h3>
+      <p class="jp">${tx(p.summary)}</p>
+      <span class="foot">
+        <span class="lbl">${t('f.commits')}<b>${p.g.commits.toLocaleString()}</b></span>
+        <span class="lbl">${t('f.updated')}<b>${(p.g.pushed||'').slice(5).replace('-','.')||'—'}</b></span>
+        <span class="sparkbar">${sparks(p.g.bars)}</span>
+      </span>
+    </article>`).join('');
+  if(curI>=0) fill(curI);
+}
+function sparks(bars){
+  const m=Math.max(1,...bars);
+  return bars.map(b=>`<i style="height:${Math.max(4,b/m*100)}%"></i>`).join('');
+}
+function countUp(){
+  document.querySelectorAll('.fig strong').forEach(el=>{
+    const to=+el.dataset.to;
+    if(reduce){el.textContent=to.toLocaleString(); return}
+    new IntersectionObserver((es,ob)=>es.forEach(en=>{
+      if(!en.isIntersecting)return; ob.disconnect();
+      const t0=performance.now();
+      (function step(t){
+        const k=Math.min((t-t0)/1100,1), e=1-Math.pow(1-k,3);
+        el.textContent=Math.round(to*e).toLocaleString();
+        if(k<1)requestAnimationFrame(step);
+      })(t0);
+    }),{threshold:.5}).observe(el);
+  });
+}
+
+/* ===================== sheet ===================== */
+const sheet=$('sheet'); let curI=-1, lastFocus=null;
+function fill(i){
+  const p=DATA.projects[i], g=p.g;
+  $('sIdx').textContent=`WORK ${String(i+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
+  $('sYear').textContent=p.year;
+  $('sTag').textContent=tx(p.tag);
+  $('sTitle').textContent=p.name;
+  $('sJp').textContent=tx(p.summary);
+  $('sDesc').textContent=tx(p.desc);
+  $('sTable').innerHTML=`
+    <tr><td>${t('t.status')}</td><td>${tx(p.status)}</td></tr>
+    <tr><td>${t('t.lang')}</td><td>${g.language||'—'}</td></tr>
+    <tr><td>${t('t.lic')}</td><td>${g.license||'—'}</td></tr>
+    <tr><td>${t('t.updated')}</td><td>${g.pushed||'—'}</td></tr>
+    <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${s}</i>`).join('')}</div></td></tr>
+    <tr><td>${t('t.team')}</td><td>${t('team')}</td></tr>`;
+  $('sMetrics').innerHTML=`
+    <div class="metric"><b>${g.commits.toLocaleString()}</b><span>${t('m.commits')}</span></div>
+    <div class="metric"><b>${g.activeWeeks}</b><span>${t('m.weeks')}</span></div>
+    <div class="metric"><b>${g.stars??0}</b><span>${t('m.stars')}</span></div>
+    <div class="metric"><b>${g.forks??0}</b><span>${t('m.forks')}</span></div>`;
+  const m=Math.max(1,...g.bars);
+  $('sChart').innerHTML=g.bars.map(b=>`<i style="height:${Math.max(3,b/m*100)}%"></i>`).join('');
+  const cells=[]; g.weeks.forEach(w=>(w.days||[0,0,0,0,0,0,0]).forEach(d=>cells.push(d)));
+  const cm=Math.max(1,...cells);
+  $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
+  const base=g.pushed?new Date(g.pushed):new Date();
+  $('sLog').innerHTML=t('ev').map((a,k)=>{
+    const d=new Date(base); d.setDate(d.getDate()-k*4);
+    return `<li><time>${d.toISOString().slice(0,10)}</time><span><b>${p.name}</b> — ${a}</span></li>`;
+  }).join('');
+  const L=[];
+  if(g.site) L.push(`<a class="slink primary" href="${g.site}" target="_blank" rel="noopener">${t('l.site')}</a>`);
+  L.push(`<a class="slink" href="${g.url}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
+  if(p.links&&p.links.docs) L.push(`<a class="slink" href="${p.links.docs}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
+  $('sLinks').innerHTML=L.join('');
+}
+function open(i,push=true){
+  curI=i; fill(i); sheet.scrollTop=0;
+  sheet.classList.add('open'); sheet.setAttribute('aria-hidden','false');
+  document.body.classList.add('locked');
+  lastFocus=document.activeElement; $('sClose').focus({preventScroll:true});
+  if(push)history.pushState({i},'','#'+DATA.projects[i].slug);
+}
+function close(push=true){
+  sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true');
+  document.body.classList.remove('locked');
+  if(lastFocus)lastFocus.focus({preventScroll:true});
+  curI=-1; if(push)history.pushState({},'',location.pathname);
+}
+$('sClose').addEventListener('click',()=>close());
+$('sPrev').addEventListener('click',()=>open((curI-1+DATA.projects.length)%DATA.projects.length));
+$('sNext').addEventListener('click',()=>open((curI+1)%DATA.projects.length));
+addEventListener('popstate',()=>{
+  const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
+  if(i>=0)open(i,false); else if(sheet.classList.contains('open'))close(false);
+});
+
+/* ===================== events ===================== */
+document.addEventListener('click',e=>{
+  const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
+  const f=e.target.closest('.fbtn');
+  if(f){
+    document.querySelectorAll('.fbtn').forEach(x=>x.classList.toggle('on',x===f));
+    document.querySelectorAll('.tile').forEach(tl=>
+      tl.classList.toggle('dim', f.dataset.k!=='all' && tl.dataset.f!==f.dataset.k));
+    return;
+  }
+  const l=e.target.closest('.lang button');
+  if(l){LANG=l.dataset.lang; try{localStorage.setItem('lang',LANG)}catch(err){} render()}
+});
+
+/* palette */
+const pal=$('pal'), palin=$('palin'), palres=$('palres');
+let psel=0, plist=[];
+function palDraw(){
+  const q=palin.value.trim().toLowerCase();
+  plist=DATA.projects.map((p,i)=>i).filter(i=>{
+    const p=DATA.projects[i];
+    return (p.name+tx(p.summary)+p.stack.join()+tx(p.tag)).toLowerCase().includes(q);
+  });
+  if(psel>=plist.length)psel=Math.max(plist.length-1,0);
+  palres.innerHTML=plist.length?plist.map((i,k)=>{
+    const p=DATA.projects[i];
+    return `<button class="pi ${k===psel?'on':''}" data-i="${i}">
+      <span class="pn">${p.name}</span><span class="pj">${tx(p.summary)}</span>
+      <span class="ps">${tx(p.status)}</span></button>`}).join('')
+    :`<div class="empty">${t('empty')}</div>`;
+}
+function palOpen(){pal.classList.add('open'); document.body.classList.add('locked');
+  palin.value=''; psel=0; palDraw(); palin.focus()}
+function palClose(){pal.classList.remove('open');
+  if(!sheet.classList.contains('open'))document.body.classList.remove('locked')}
+$('palbtn').addEventListener('click',palOpen);
+palin.addEventListener('input',()=>{psel=0;palDraw()});
+palres.addEventListener('click',e=>{const b=e.target.closest('.pi'); if(!b)return; palClose(); open(+b.dataset.i)});
+palin.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();psel=Math.min(psel+1,plist.length-1);palDraw()}
+  if(e.key==='ArrowUp'){e.preventDefault();psel=Math.max(psel-1,0);palDraw()}
+  if(e.key==='Enter'&&plist.length){palClose();open(plist[psel])}
+});
+pal.addEventListener('click',e=>{if(e.target===pal)palClose()});
+addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();palOpen();return}
+  if(e.key==='Escape'){
+    if(pal.classList.contains('open'))return palClose();
+    if(sheet.classList.contains('open'))return close();
+  }
+  if(sheet.classList.contains('open')&&!pal.classList.contains('open')){
+    if(e.key==='ArrowRight')open((curI+1)%DATA.projects.length);
+    if(e.key==='ArrowLeft')open((curI-1+DATA.projects.length)%DATA.projects.length);
+  }
+});
+
+/* ===================== motion ===================== */
+function startMotion(){
+  const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
+  if(i>=0)open(i,false);
+
+  new IntersectionObserver(es=>es.forEach(en=>{
+    document.body.classList.toggle('light',en.isIntersecting);
+  }),{threshold:.42}).observe($('about'));
+
+  const track=$('track');
+  let mx=0,vel=0,lastY=scrollY;
+  addEventListener('scroll',()=>{vel+=(scrollY-lastY)*.055;lastY=scrollY},{passive:true});
+  (function loop(){
+    if(!reduce){
+      const w=track.scrollWidth/3;
+      mx-=(.68+Math.abs(vel)); vel*=.9;
+      if(w&&mx<-w)mx+=w;
+      track.style.transform=`translateX(${mx.toFixed(1)}px) skewX(${(-vel*.32).toFixed(2)}deg)`;
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  if(!reduce){
+    let raf=null, mouse={x:0,y:0};
+    addEventListener('pointermove',e=>{
+      mouse={x:e.clientX,y:e.clientY};
+      if(raf)return;
+      raf=requestAnimationFrame(()=>{
+        raf=null;
+        document.querySelectorAll('.kin .l').forEach(l=>{
+          const r=l.getBoundingClientRect();
+          const d=Math.hypot(mouse.x-(r.left+r.width/2),mouse.y-(r.top+r.height/2));
+          const f=Math.max(0,1-d/300);
+          l.style.transform=`translateY(${(-f*18).toFixed(1)}px) scaleY(${(1+f*.14).toFixed(3)})`;
+          l.style.fontWeight=Math.round(300+f*500);
+        });
+      });
+    });
+  }
+  const cur=$('cur');
+  addEventListener('pointermove',e=>{
+    cur.style.transform=`translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`});
+  document.addEventListener('pointerover',e=>{
+    cur.classList.toggle('big',!!(e.target.closest&&e.target.closest('a,button,input')))});
+}
+
+boot();
+</script>
+</body>
+</html>

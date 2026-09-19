@@ -1,0 +1,282 @@
+{
+  "profile": {
+    "name": "Ryuta Suzuki",
+    "github": "ryuta-suzuki",
+    "hero": [
+      "MAKING",
+      "THINGS"
+    ],
+    "location": {
+      "ja": "京都",
+      "en": "KYOTO, JAPAN"
+    },
+    "role": {
+      "ja": "工学部 学生",
+      "en": "ENGINEERING STUDENT"
+    },
+    "intro": {
+      "ja": "つくったものを置いておく場所です。飛行機の軌跡を描くマップから、においを読む小さな基板まで。ぜんぶ個人の手で設計して、動かしています。",
+      "en": "A place to keep the things I build — from a map that draws aircraft trails to a small board that reads smells. All designed and built by hand, on my own."
+    },
+    "quote": {
+      "ja": "見えないものに、形を与える。",
+      "en": "Giving shape to what can't be seen."
+    },
+    "about": {
+      "ja": "京都先端科学大学の工学部で学びながら、思いついたものを片っ端から形にしています。航空機や衛星の位置、空気中のにおい分子、RAWファイルの中に眠っている情報。共通しているのは、そのままでは人間に見えないものを、見える形に翻訳する作業です。ハードウェアからフロントエンドまで一人で組むことが多く、AIと対話しながら設計を詰めて、実装して、壊して、直しています。",
+      "en": "I study engineering at Kyoto University of Advanced Science, and build whatever I think of. Aircraft and satellite positions, odour molecules in the air, information sleeping inside a RAW file — the common thread is translating things people can't see into something they can. I usually build the whole stack alone, from hardware to front end, working out the design in conversation with AI, then implementing, breaking and fixing it."
+    },
+    "skills": [
+      "TypeScript",
+      "Python",
+      "C++",
+      "Three.js / WebGL",
+      "ESP32",
+      "Rust",
+      "Electron / Tauri",
+      "SQLite / DuckDB",
+      "WebAssembly",
+      "MIDI / SysEx",
+      "Robotics",
+      "AI-assisted development"
+    ],
+    "links": {
+      "github": "https://github.com/ryuta-suzuki",
+      "linkedin": "https://www.linkedin.com/in/ryuta-suzuki/",
+      "x": "https://x.com/",
+      "mail": "mailto:hello@example.com"
+    }
+  },
+  "projects": [
+    {
+      "slug": "aerogrid-3d",
+      "repo": "ryuta-suzuki/AeroGrid-3D",
+      "name": "AeroGrid-3D",
+      "size": "hero",
+      "filter": "live",
+      "year": "2026",
+      "tag": {
+        "ja": "リアルタイム3Dマップ",
+        "en": "REAL-TIME 3D MAP"
+      },
+      "status": {
+        "ja": "公開中",
+        "en": "Live"
+      },
+      "summary": {
+        "ja": "航空機と衛星をリアルタイムに描く3Dマップ",
+        "en": "A 3D map drawing aircraft and satellites in real time"
+      },
+      "desc": {
+        "ja": "Flightradar24 に着想を得た、航空機と人工衛星をリアルタイムに描画する 3D マップです。気象レイヤーを重ねて表示でき、機体は 3D モデルで描かれます。Google AI Studio で試作したものを Claude Code でリファクタリングしながら機能を足し、Google Cloud Run に載せて公開しています。",
+        "en": "A 3D map that renders aircraft and satellites in real time, inspired by Flightradar24. Weather layers can be overlaid, and aircraft appear as 3D models. Prototyped in Google AI Studio, then refactored and extended with Claude Code, and deployed on Google Cloud Run."
+      },
+      "stack": [
+        "Three.js",
+        "WebGL",
+        "Cloud Run",
+        "TypeScript"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "scentinel-plug",
+      "repo": "ryuta-suzuki/scentinel-plug",
+      "name": "Scentinel Plug",
+      "size": "tall",
+      "filter": "proto",
+      "year": "2026",
+      "tag": {
+        "ja": "センサハードウェア",
+        "en": "SENSOR HARDWARE"
+      },
+      "status": {
+        "ja": "試作中",
+        "en": "Prototype"
+      },
+      "summary": {
+        "ja": "においとVOCを読み、AIが解釈するUSB-Cモジュール",
+        "en": "A USB-C module that reads smell and VOC, interpreted by AI"
+      },
+      "desc": {
+        "ja": "におい・VOC・空気環境の変化を可視化し、AI が解釈して、早期の注意喚起や行動提案を返す補助的な環境認識システムです。スマートフォンの USB-C に直挿しする小型モジュールとして設計しました。第一試作でセンサ構成を確定させ、第二試作で分類器を載せる計画で進めています。",
+        "en": "An assistive environmental-awareness system that visualises changes in smell, VOC and air quality, then has AI interpret them to return early warnings or suggested actions. Designed as a small module that plugs straight into a phone's USB-C port. The first prototype fixes the sensor configuration; the second adds the classifier."
+      },
+      "stack": [
+        "ESP32-S3",
+        "BME688",
+        "SGP40",
+        "Android",
+        "Python"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "kaguya-raw-studio",
+      "repo": "ryuta-suzuki/kaguya-raw-studio",
+      "name": "KAGUYA RAW Studio",
+      "size": "std",
+      "filter": "spec",
+      "year": "2026",
+      "tag": {
+        "ja": "写真ワークフロー",
+        "en": "PHOTO WORKFLOW"
+      },
+      "status": {
+        "ja": "設計確定",
+        "en": "Spec"
+      },
+      "summary": {
+        "ja": "撮影現場のためのRAWワークフロー",
+        "en": "A RAW workflow built for the shoot itself"
+      },
+      "desc": {
+        "ja": "Windows ファーストのクロスプラットフォーム RAW ワークフローツール。同じネットワークにいる端末へクライアントビューを配信し、その場で確認できます。RAW 本体はクライアントに残さず、セッションは QR コードとパスコードで保護。カタログ、エディットスタック、納品ギャラリーまでを一本につなぎ、オフラインでも動きます。",
+        "en": "A Windows-first, cross-platform RAW workflow tool. It streams a client view to devices on the same local network so images can be checked on the spot. RAW files never stay on the client, and sessions are protected with a QR code and a passcode. Cataloguing, edit stacks and delivery galleries are joined into one chain that also works offline."
+      },
+      "stack": [
+        "Local HTTP/WS",
+        "SQLite",
+        "DuckDB",
+        "Electron"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "pdf-local-unlocker",
+      "repo": "ryuta-suzuki/pdf-local-unlocker",
+      "name": "PDF Local Unlocker",
+      "size": "std",
+      "filter": "live",
+      "year": "2026",
+      "tag": {
+        "ja": "クライアントサイドWebアプリ",
+        "en": "CLIENT-SIDE WEB APP"
+      },
+      "status": {
+        "ja": "MVP",
+        "en": "MVP"
+      },
+      "summary": {
+        "ja": "サーバに送らないPDF解錠ツール",
+        "en": "Unlocks PDFs without sending them anywhere"
+      },
+      "desc": {
+        "ja": "パスワード付き PDF を、ブラウザの中だけで解錠する Web アプリです。ファイルは一切サーバにアップロードされません。qpdf-wasm を Web Worker 上で動かし、複数ファイルのキュー処理、よく使うパスワードの一括試行、ファイルごとの個別指定、ZIP での書き出しに対応しています。",
+        "en": "A web app that unlocks password-protected PDFs entirely inside the browser — no file ever reaches a server. It runs qpdf-wasm in a Web Worker, with multi-file queues, batch attempts using common passwords, per-file passwords and ZIP export."
+      },
+      "stack": [
+        "qpdf-wasm",
+        "Web Worker",
+        "Vite",
+        "GitHub Pages"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "launchkey-lighting",
+      "repo": "ryuta-suzuki/launchkey-lighting",
+      "name": "Launchkey Lighting",
+      "size": "std",
+      "filter": "spec",
+      "year": "2026",
+      "tag": {
+        "ja": "デスクトップユーティリティ",
+        "en": "DESKTOP UTILITY"
+      },
+      "status": {
+        "ja": "仕様策定",
+        "en": "Spec"
+      },
+      "summary": {
+        "ja": "MIDIキーボードを光らせる常駐アプリ",
+        "en": "A tray app that keeps a MIDI keyboard lit"
+      },
+      "desc": {
+        "ja": "Launchkey MK4 61鍵を光らせるための常駐アプリ。ゲーミングキーボード用ソフトのようにプリセットを組み替えられ、画面上のキーボード図から直接ライティングを編集できます。DAW など他のソフトを立ち上げている間も発光が消えないことが、いちばん大事な要件です。",
+        "en": "A tray-resident app that lights up a Launchkey MK4 61. Presets can be swapped like gaming-keyboard software, and lighting is edited directly on an on-screen diagram of the keyboard. The key requirement: the lights must survive while a DAW or other software is running."
+      },
+      "stack": [
+        "MIDI SysEx",
+        "Tray App",
+        "Preset Editor"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "dual-agent-desktop",
+      "repo": "ryuta-suzuki/dual-agent-desktop",
+      "name": "Dual-Agent Desktop",
+      "size": "wide",
+      "filter": "spec",
+      "year": "2026",
+      "tag": {
+        "ja": "エージェントツール",
+        "en": "AGENT TOOLING"
+      },
+      "status": {
+        "ja": "設計中",
+        "en": "In design"
+      },
+      "summary": {
+        "ja": "2つのAIエージェントに同じ質問を投げて見比べる",
+        "en": "Ask two AI agents the same thing, side by side"
+      },
+      "desc": {
+        "ja": "Claude Code と Codex を裏で常駐させ、ひとつのアプリにまとめるデスクトップツール。コーディング以外の普通のチャットは両方へ同時に送り、返ってきた答えを左右に並べて比較できます。稼働状況は Discord のライブステータスにも流します。",
+        "en": "A desktop tool that keeps Claude Code and Codex running in the background and unifies them into one app. Ordinary, non-coding chat goes to both at once so the two answers can be compared side by side, and live status for both is pushed to Discord."
+      },
+      "stack": [
+        "Desktop",
+        "Agent Runtime",
+        "Discord RPC"
+      ],
+      "links": {
+        "docs": ""
+      }
+    },
+    {
+      "slug": "smart-open-campus",
+      "repo": "ryuta-suzuki/smart-open-campus",
+      "name": "Smart Open Campus",
+      "size": "wide",
+      "filter": "build",
+      "year": "2026",
+      "tag": {
+        "ja": "キャンパスシステム",
+        "en": "CAMPUS SYSTEM"
+      },
+      "status": {
+        "ja": "開発中",
+        "en": "Building"
+      },
+      "summary": {
+        "ja": "受付DXとロボティクスで来場体験をつくり直す",
+        "en": "Rebuilding the visitor experience with check-in DX and robotics"
+      },
+      "desc": {
+        "ja": "オープンキャンパスの来場者体験そのものを設計し直す、工学部コーナーストーンのプロジェクト。ローカルで動く QR 受付アプリと、リストバンドを自動で装着するロボティクス装置を組み合わせます。個人情報の扱いを見直した結果、サーバを介さない完全ローカル構成へ切り替えました。デモには実データを使いません。",
+        "en": "A Cornerstone project in the engineering faculty that redesigns the open-campus visitor experience itself, combining a locally running QR check-in app with a robotic device that attaches wristbands automatically. After reviewing how personal information is handled, the architecture moved to a fully local setup with no server. Demonstrations use sample data only."
+      },
+      "stack": [
+        "Local QR",
+        "Robotics",
+        "Wristband",
+        "KUAS"
+      ],
+      "links": {
+        "docs": ""
+      }
+    }
+  ]
+}
