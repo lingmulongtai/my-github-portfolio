@@ -145,6 +145,7 @@ body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 .tile .tile-art{position:absolute; inset:0; z-index:-2; width:100%; height:100%;
   object-fit:cover; object-position:50% 35%; pointer-events:none;
   transition:transform .65s cubic-bezier(.16,1,.3,1)}
+.tile.s-hero .tile-art{object-position:50% 0}
 .tile.has-image::before{content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
   background:linear-gradient(180deg,rgba(5,13,46,.68) 0%,rgba(5,13,46,.12) 30%,
     rgba(5,13,46,.58) 48%,rgba(5,13,46,.94) 72%,#050d2e 100%)}
