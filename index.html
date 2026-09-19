@@ -477,42 +477,46 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
 /* ===================== i18n ===================== */
 const T={
  ja:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
-  "pulse.title":"この1年の手の動き","work.title":"Selected works",
+  "pulse.title":"リポジトリのアクティビティ","work.title":"全プロジェクト",
   "work.lead":"タイルをクリックすると、進捗と技術構成まで読めます。",
   "sheet.overview":"概要","sheet.spec":"仕様","sheet.events":"直近のイベント","sheet.metrics":"指標",
   "sheet.commits":"コミット（直近14週）","sheet.activity":"アクティビティ",
   "sheet.weeksAgo":"14週前","sheet.thisWeek":"今週",
   "search":"プロジェクトを検索…","empty":"見つかりませんでした。技術名でも探せます。",
-  "all":"ALL","live":"公開中","build":"開発中","proto":"試作","spec":"設計",
+  "all":"ALL","web":"Web","desktop":"デスクトップ","mobile":"モバイル","hardware":"ハードウェア",
+  "research":"実験・学習","tools":"開発ツール","docs":"ドキュメント","other":"その他",
   "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52週","m.weeks":"稼働週",
   "m.stars":"STARS","m.forks":"FORKS","t.status":"ステータス","t.lang":"言語","t.lic":"ライセンス",
-  "t.updated":"最終更新","t.stack":"構成","t.team":"体制","team":"個人開発 — 設計から実装まで",
+  "t.updated":"最終更新","t.stack":"構成","t.team":"管理アカウント",
   "l.repo":"リポジトリ","l.site":"サイトを開く ↗","l.docs":"ドキュメント",
-  "demo":"DEMO DATA","liveSrc":"GITHUB 同期中",
-  "figs":["公開・開発中のプロジェクト","この1年のコミット","獲得スター","使っている言語"],
+  "demo":"GITHUB データ未取得","liveSrc":"GITHUB 同期済み",
+  "figs":["公開リポジトリ","取得済みの年間コミット","リポジトリのスター","使っている言語"],
   "ev":["リポジトリを更新","リリース","プルリクをマージ","READMEを更新","デプロイを実行","イシューを追加"],
   "noEvents":"公開データを取得できません。",
-  "note":"数値は公開リポジトリから取得しています。未取得の指標は — で表示します。","noteDemo":"※ GitHub 未接続のため、数値はデモ用の仮データです。"},
+  "note":"フォークを含む全公開リポジトリの数値です。未取得の指標は — で表示します。","noteDemo":"GitHubの数値を取得できませんでした。未取得の指標は — で表示します。"},
  en:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
-  "pulse.title":"A year of hands moving","work.title":"Selected works",
+  "pulse.title":"Repository activity","work.title":"All projects",
   "work.lead":"Open a tile to read progress and the technical build.",
   "sheet.overview":"Overview","sheet.spec":"Details","sheet.events":"Recent events","sheet.metrics":"Metrics",
   "sheet.commits":"Commits (last 14 weeks)","sheet.activity":"Activity",
   "sheet.weeksAgo":"14 weeks ago","sheet.thisWeek":"This week",
   "search":"Search projects…","empty":"Nothing found. Try a technology name.",
-  "all":"ALL","live":"Live","build":"Building","proto":"Prototype","spec":"Spec",
+  "all":"ALL","web":"Web","desktop":"Desktop","mobile":"Mobile","hardware":"Hardware",
+  "research":"Experiments & learning","tools":"Developer tools","docs":"Documentation","other":"Other",
   "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52W","m.weeks":"ACTIVE WEEKS",
   "m.stars":"STARS","m.forks":"FORKS","t.status":"Status","t.lang":"Language","t.lic":"License",
-  "t.updated":"Last update","t.stack":"Built with","t.team":"Team","team":"Solo — design through implementation",
+  "t.updated":"Last update","t.stack":"Built with","t.team":"Repository owner",
   "l.repo":"Repository","l.site":"Open site ↗","l.docs":"Documentation",
-  "demo":"DEMO DATA","liveSrc":"SYNCED WITH GITHUB",
-  "figs":["Projects live or in progress","Commits this year","Stars earned","Languages in use"],
+  "demo":"GITHUB DATA UNAVAILABLE","liveSrc":"SYNCED WITH GITHUB",
+  "figs":["Public repositories","Available annual commits","Repository stars","Languages in use"],
   "ev":["Pushed to the repository","Released","Merged a pull request","Updated the README","Deployed","Opened an issue"],
   "noEvents":"Public data is unavailable.",
-  "note":"Figures come from public repositories. Unavailable metrics are shown as —.","noteDemo":"Figures are placeholder demo data — GitHub is not connected."}};
+  "note":"Figures cover all public repositories, including forks. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 const t=k=>T[LANG][k]??k;
 const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const $=id=>document.getElementById(id);
@@ -520,46 +524,48 @@ let DATA=JSON.parse($('site-data').textContent);
 let LIVE=false;
 
 /* ===================== data loading ===================== */
-function rng(seed){let h=2166136261;for(const c of seed){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}
-  return()=>{h^=h<<13;h>>>=0;h^=h>>>17;h^=h<<5;h>>>=0;return h/4294967296}}
-
-function demoStats(p){
-  const r=rng(p.slug);
-  const weeks=Array.from({length:53},()=>{
-    const days=Array.from({length:7},()=>{const v=r();return v>.74?Math.round(v*9):v>.5?Math.round(v*4):0});
-    return {days,total:days.reduce((a,b)=>a+b,0)};
-  });
-  return {weeks, stars:Math.round(r()*180), forks:Math.round(r()*24),
-    language:p.stack[0], license:"MIT", pushed:"2026-08-30", url:"#", site:""};
-}
-
 async function loadGithub(){
   /* 1) build-time file written by GitHub Actions */
   try{
     const r=await fetch('./data/github.json',{cache:'no-cache'});
-    if(r.ok){const j=await r.json(); if(Object.keys(j).length){LIVE=true; return j}}
+    if(r.ok){
+      const j=await r.json();
+      if(j.owner===DATA.profile.github&&Array.isArray(j.projects)&&j.projects.length&&j.stats){
+        DATA.projects=j.projects; LIVE=true; return j.stats;
+      }
+    }
   }catch(e){}
   /* 2) live API (works on your own domain; blocked in sandboxed previews) */
   try{
     const login=DATA.profile.github;
-    const res=await fetch(`https://api.github.com/users/${login}/repos?per_page=100&sort=pushed`);
-    if(!res.ok) throw 0;
-    const repos=await res.json();
-    const byName={}; repos.forEach(r=>byName[r.full_name.toLowerCase()]=r);
+    const repos=[];
+    for(let page=1;;page++){
+      const res=await fetch(`https://api.github.com/users/${encodeURIComponent(login)}/repos?type=owner&per_page=100&sort=pushed&direction=desc&page=${page}`,{signal:AbortSignal.timeout(10000)});
+      if(!res.ok) throw new Error('Repository list unavailable');
+      const batch=await res.json();
+      if(!Array.isArray(batch)) throw new Error('Invalid repository list');
+      repos.push(...batch.filter(r=>r.private===false&&r.owner?.login.toLowerCase()===login.toLowerCase()));
+      if(batch.length<100)break;
+    }
+    if(!repos.length)return null;
+    const known=new Map(DATA.projects.map((p,index)=>[p.repo.toLowerCase(),{p,index}]));
+    repos.sort((a,b)=>(known.get(a.full_name.toLowerCase())?.index??Infinity)-(known.get(b.full_name.toLowerCase())?.index??Infinity)||b.pushed_at.localeCompare(a.pushed_at));
+    const projects=repos.map(r=>{
+      const p=known.get(r.full_name.toLowerCase())?.p;
+      const description={ja:r.description||'GitHubで公開しているプロジェクト',en:r.description||'A public project on GitHub'};
+      return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
+        year:r.created_at.slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
+        status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
+        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},fork:r.fork};
+    });
     const out={};
-    await Promise.all(DATA.projects.map(async p=>{
-      const r=byName[(p.repo||'').toLowerCase()]; if(!r) return;
-      let weeks=[];
-      try{
-        const s=await fetch(`https://api.github.com/repos/${r.full_name}/stats/commit_activity`);
-        if(s.ok){const j=await s.json(); if(Array.isArray(j)) weeks=j}
-      }catch(e){}
-      out[p.slug]={weeks, stars:r.stargazers_count, forks:r.forks_count,
+    repos.forEach((r,index)=>{
+      out[projects[index].slug]={weeks:[], stars:r.stargazers_count, forks:r.forks_count,
         language:r.language, license:r.license?.spdx_id||'—',
         pushed:(r.pushed_at||'').slice(0,10), url:r.html_url,
-        site:r.homepage||(r.has_pages?`https://${login}.github.io/${r.name}/`:'')};
-    }));
-    if(Object.keys(out).length){LIVE=true; return out}
+        site:webUrl(r.homepage)||(r.has_pages?`https://${login}.github.io/${r.name.toLowerCase()===`${login.toLowerCase()}.github.io`?'':`${r.name}/`}`:'')};
+    });
+    DATA.projects=projects; LIVE=true; return out;
   }catch(e){}
   return null;
 }
@@ -571,14 +577,14 @@ async function boot(){
   }catch(e){}
   const gh=await loadGithub();
   DATA.projects.forEach(p=>{
-    const g=(gh&&gh[p.slug])||(LIVE?{weeks:[]}:demoStats(p));
+    const g=(gh&&gh[p.slug])||{weeks:[]};
     if(!g.weeks) g.weeks=[];
     p.g=g;
     p.g.commits=g.weeks.length?g.weeks.reduce((s,w)=>s+(w.total||0),0):null;
     p.g.activeWeeks=g.weeks.length?g.weeks.filter(w=>(w.total||0)>0).length:null;
     p.g.bars=g.weeks.slice(-14).map(w=>w.total||0);
-    p.g.site=p.links?.site||g.site||'';
-    p.g.url=g.url||(!LIVE&&p.repo?`https://github.com/${p.repo}`:'');
+    p.g.site=webUrl(p.links?.site)||webUrl(g.site);
+    p.g.url=webUrl(g.url)||(p.repo?`https://github.com/${p.repo}`:'');
   });
   try{const s=localStorage.getItem('lang'); if(s) LANG=s;}
   catch(e){}
@@ -599,7 +605,7 @@ function render(){
   $('navGh').href=pr.links.github; $('navLi').href=pr.links.linkedin;
 
   $('heroMeta').innerHTML=[tx(pr.location).toUpperCase(),tx(pr.role).toUpperCase(),
-    `${P.length} ACTIVE PROJECTS`,LIVE?t('liveSrc'):t('demo')].map(s=>`<span>${s}</span>`).join('');
+    `${P.length} PUBLIC PROJECTS`,LIVE?t('liveSrc'):t('demo')].map(s=>`<span>${esc(s)}</span>`).join('');
   $('kin').innerHTML=pr.hero.map((r,i)=>
     `<span class="row r${i+1}">${[...r].map(c=>`<span class="l">${c}</span>`).join('')}</span>`).join('');
   $('heroSub').textContent=tx(pr.intro);
@@ -614,39 +620,41 @@ function render(){
   $('footNote').textContent=LIVE?t('note'):t('noteDemo');
 
   /* marquee */
-  const seg=P.map(p=>`<span>${p.name}</span><em>◆</em>`).join('');
+  const seg=P.map(p=>`<span>${esc(p.name)}</span><em>◆</em>`).join('');
   $('track').innerHTML=seg+seg+seg;
 
   /* pulse */
   const badge=$('srcBadge');
   badge.textContent=LIVE?t('liveSrc'):t('demo');
   badge.classList.toggle('live',LIVE);
-  const agg=Array.from({length:53*7},(_,i)=>P.reduce((s,p)=>{
+  const weekCount=Math.max(0,...P.map(p=>p.g.weeks.length))||52;
+  const agg=Array.from({length:weekCount*7},(_,i)=>P.reduce((s,p)=>{
     const w=p.g.weeks[Math.floor(i/7)]; return s+((w&&w.days&&w.days[i%7])||0)},0));
   const max=Math.max(1,...agg);
   $('heat').innerHTML=agg.map(v=>`<i style="opacity:${(.1+(v/max)*.9).toFixed(2)}"></i>`).join('');
-  const totC=P.reduce((s,p)=>s+(p.g.commits||0),0), totS=P.reduce((s,p)=>s+(p.g.stars||0),0);
-  $('pulseSum').textContent=`${totC.toLocaleString()} commits / 53 weeks`;
+  const totC=P.some(p=>p.g.commits!==null)?P.reduce((s,p)=>s+(p.g.commits||0),0):null;
+  const totS=P.some(p=>p.g.stars!==undefined)?P.reduce((s,p)=>s+(p.g.stars||0),0):null;
+  $('pulseSum').textContent=`${totC?.toLocaleString()??'—'} commits / ${weekCount} weeks`;
   const langs=new Set(P.map(p=>p.g.language).filter(Boolean));
-  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size,3]];
+  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size||null,3]];
   $('figs').innerHTML=figs.map(([n,i])=>
-    `<div class="fig"><strong data-to="${n}">0</strong><span>${t('figs')[i]}</span></div>`).join('');
+    `<div class="fig"><strong${n===null?'':` data-to="${n}"`}>${n===null?'—':'0'}</strong><span>${t('figs')[i]}</span></div>`).join('');
   countUp();
 
   /* filters */
   const keys=['all',...new Set(P.map(p=>p.filter))];
   $('filters').innerHTML=keys.map((k,i)=>
-    `<button class="fbtn ${i===0?'on':''}" data-k="${k}">${t(k)}</button>`).join('');
+    `<button class="fbtn ${i===0?'on':''}" data-k="${esc(k)}">${esc(t(k))}</button>`).join('');
 
   /* tiles */
   $('bento').innerHTML=P.map((p,i)=>`
-    <article class="tile s-${p.size||'std'}" data-f="${p.filter}">
-      <button class="tile-open" data-i="${i}" aria-label="${p.name}"></button>
-      <span class="no">${String(i+1).padStart(2,'0')} — ${tx(p.tag)}</span>
-      <span class="st">${tx(p.status)}</span>
-      ${p.g.site?`<a class="site" href="${p.g.site}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
-      <h3>${p.name}</h3>
-      <p class="jp">${tx(p.summary)}</p>
+    <article class="tile s-${esc(p.size||'std')}" data-f="${esc(p.filter)}">
+      <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
+      <span class="no">${String(i+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
+      <span class="st">${esc(tx(p.status))}</span>
+      ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
+      <h3>${esc(p.name)}</h3>
+      <p class="jp">${esc(tx(p.summary))}</p>
       <span class="foot">
         <span class="lbl">${t('f.commits')}<b>${p.g.commits?.toLocaleString()??'—'}</b></span>
         <span class="lbl">${t('f.updated')}<b>${(p.g.pushed||'').slice(5).replace('-','.')||'—'}</b></span>
@@ -660,7 +668,7 @@ function sparks(bars){
   return bars.map(b=>`<i style="height:${Math.max(4,b/m*100)}%"></i>`).join('');
 }
 function countUp(){
-  document.querySelectorAll('.fig strong').forEach(el=>{
+  document.querySelectorAll('.fig strong[data-to]').forEach(el=>{
     const to=+el.dataset.to;
     if(reduce){el.textContent=to.toLocaleString(); return}
     new IntersectionObserver((es,ob)=>es.forEach(en=>{
@@ -686,12 +694,12 @@ function fill(i){
   $('sJp').textContent=tx(p.summary);
   $('sDesc').textContent=tx(p.desc);
   $('sTable').innerHTML=`
-    <tr><td>${t('t.status')}</td><td>${tx(p.status)}</td></tr>
-    <tr><td>${t('t.lang')}</td><td>${g.language||'—'}</td></tr>
-    <tr><td>${t('t.lic')}</td><td>${g.license||'—'}</td></tr>
+    <tr><td>${t('t.status')}</td><td>${esc(tx(p.status))}</td></tr>
+    <tr><td>${t('t.lang')}</td><td>${esc(g.language||'—')}</td></tr>
+    <tr><td>${t('t.lic')}</td><td>${esc(g.license||'—')}</td></tr>
     <tr><td>${t('t.updated')}</td><td>${g.pushed||'—'}</td></tr>
-    <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${s}</i>`).join('')}</div></td></tr>
-    <tr><td>${t('t.team')}</td><td>${t('team')}</td></tr>`;
+    <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${esc(s)}</i>`).join('')}</div></td></tr>
+    <tr><td>${t('t.team')}</td><td>${esc(DATA.profile.github)}</td></tr>`;
   $('sMetrics').innerHTML=`
     <div class="metric"><b>${g.commits?.toLocaleString()??'—'}</b><span>${t('m.commits')}</span></div>
     <div class="metric"><b>${g.activeWeeks??'—'}</b><span>${t('m.weeks')}</span></div>
@@ -702,15 +710,11 @@ function fill(i){
   const cells=[]; g.weeks.forEach(w=>(w.days||[0,0,0,0,0,0,0]).forEach(d=>cells.push(d)));
   const cm=Math.max(1,...cells);
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
-  const base=g.pushed?new Date(g.pushed):new Date();
-  $('sLog').innerHTML=LIVE?(g.pushed?`<li><time>${g.pushed}</time><span><b>${p.name}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`):t('ev').map((a,k)=>{
-    const d=new Date(base); d.setDate(d.getDate()-k*4);
-    return `<li><time>${d.toISOString().slice(0,10)}</time><span><b>${p.name}</b> — ${a}</span></li>`;
-  }).join('');
+  $('sLog').innerHTML=g.pushed?`<li><time>${esc(g.pushed)}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
   const L=[];
-  if(g.site) L.push(`<a class="slink primary" href="${g.site}" target="_blank" rel="noopener">${t('l.site')}</a>`);
-  if(g.url) L.push(`<a class="slink" href="${g.url}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
-  if(p.links&&p.links.docs) L.push(`<a class="slink" href="${p.links.docs}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
+  if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener">${t('l.site')}</a>`);
+  if(g.url) L.push(`<a class="slink" href="${esc(g.url)}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
+  if(webUrl(p.links?.docs)) L.push(`<a class="slink" href="${esc(webUrl(p.links.docs))}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
   $('sLinks').innerHTML=L.join('');
 }
 function open(i,push=true){
@@ -761,8 +765,8 @@ function palDraw(){
   palres.innerHTML=plist.length?plist.map((i,k)=>{
     const p=DATA.projects[i];
     return `<button class="pi ${k===psel?'on':''}" data-i="${i}">
-      <span class="pn">${p.name}</span><span class="pj">${tx(p.summary)}</span>
-      <span class="ps">${tx(p.status)}</span></button>`}).join('')
+      <span class="pn">${esc(p.name)}</span><span class="pj">${esc(tx(p.summary))}</span>
+      <span class="ps">${esc(tx(p.status))}</span></button>`}).join('')
     :`<div class="empty">${t('empty')}</div>`;
 }
 function palOpen(){pal.classList.add('open'); document.body.classList.add('locked');
