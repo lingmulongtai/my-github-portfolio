@@ -139,3 +139,21 @@ test("Tab and Shift+Tab wrap inside the topmost dialog", () => {
   ui.events.get("keydown")({ key: "Tab", preventDefault() {} });
   assert.equal(ui.document.activeElement, input);
 });
+
+test("browser Back from Search leaves only the restored project modal open", () => {
+  const ui = setup();
+  ui.open(0);
+  ui.close();
+  ui.palOpen();
+  ui.context.location.hash = "#" + config.projects[0].slug;
+  const routeCount = ui.routes.length;
+  ui.events.get("popstate")();
+  assert.equal(ui.node("pal").open, false);
+  assert.equal(ui.node("sheet").open, true);
+  assert.equal(ui.document.activeElement, ui.node("sClose"));
+  assert.equal(ui.routes.length, routeCount);
+  ui.events.get("keydown")({ key: "ArrowRight" });
+  assert.equal(ui.node("sTitle").textContent, config.projects[1].name);
+  ui.close();
+  assert.equal(ui.document.body.classList.contains("locked"), false);
+});

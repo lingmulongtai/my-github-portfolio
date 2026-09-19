@@ -1702,6 +1702,7 @@ function outsideDialog(e,dialog){
 $('sPrev').addEventListener('click',()=>open((curI-1+DATA.projects.length)%DATA.projects.length));
 $('sNext').addEventListener('click',()=>open((curI+1)%DATA.projects.length));
 addEventListener('popstate',()=>{
+  if(pal.open)palClose();
   const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
   if(i>=0)open(i,false); else if(sheet.classList.contains('open'))close(false);
 });
