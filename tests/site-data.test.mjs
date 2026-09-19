@@ -36,7 +36,7 @@ async function boot(snapshot, apiRepos) {
 test("the page JavaScript parses and fallback project identifiers match", () => {
   new Script(code);
   const fallback = JSON.parse(html.match(/<script type="application\/json" id="site-data">([\s\S]*?)<\/script>/)[1]);
-  assert.deepEqual(fallback.projects.map(p => p.repo), config.projects.map(p => p.repo));
+  assert.deepEqual(fallback, config);
   assert.equal(new Set(config.projects.map(p => p.slug)).size, config.projects.length);
 });
 
@@ -50,10 +50,20 @@ test("the generated catalog controls membership and escapes remote descriptions"
   assert.equal(result.data.projects[0].g.commits, null);
   assert.equal(result.data.projects[0].g.site, "");
   const cards = result.nodes.get("bento").innerHTML;
-  assert.ok(!cards.includes("<img"));
+  assert.ok(!cards.includes("<img src=x"));
   assert.match(cards, /&lt;img/);
   assert.match(cards, /&quot;title&quot;/);
+  assert.match(cards, /class="tile-art"/);
+  assert.match(cards, /alt="" aria-hidden="true" loading="lazy"/);
   assert.match(result.nodes.get("pulseSum").textContent, /^— commits/);
+});
+
+test("project artwork is restricted to local assets", async () => {
+  const project = { ...config.projects[0], image: 'https://external.example/tracker.png' };
+  const result = await boot({ owner: config.profile.github, projects: [project], stats: {} });
+  const cards = result.nodes.get("bento").innerHTML;
+  assert.ok(!cards.includes("tile-art"));
+  assert.ok(!cards.includes("external.example"));
 });
 
 test("offline mode preserves real project descriptions without invented statistics", async () => {

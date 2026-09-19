@@ -83,7 +83,8 @@
         "docs": "https://github.com/lingmulongtai/AeroGrid-3D/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/aerogrid-3d.webp"
     },
     {
       "slug": "keylume",
@@ -119,7 +120,8 @@
         "docs": "https://github.com/lingmulongtai/Keylume/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/keylume.webp"
     },
     {
       "slug": "codexbar-android",
@@ -154,7 +156,8 @@
         "docs": "https://github.com/lingmulongtai/CodexBar-android/blob/main/README.md",
         "site": ""
       },
-      "fork": true
+      "fork": true,
+      "image": "assets/projects/codexbar-android.webp"
     },
     {
       "slug": "instaframe",
@@ -191,7 +194,8 @@
         "docs": "https://github.com/lingmulongtai/InstaFrame/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/instaframe.webp"
     },
     {
       "slug": "glyphray",
@@ -228,7 +232,8 @@
         "docs": "https://github.com/lingmulongtai/GlyphRay/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/glyphray.webp"
     },
     {
       "slug": "winai-usage-bar",
@@ -263,7 +268,8 @@
         "docs": "https://github.com/lingmulongtai/WinAI-Usage-Bar/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/winai-usage-bar.webp"
     },
     {
       "slug": "dimtooff-windows",
@@ -299,7 +305,8 @@
         "docs": "https://github.com/lingmulongtai/DimToOff-windows/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/dimtooff-windows.webp"
     },
     {
       "slug": "pdf-local-unlocker",
@@ -336,7 +343,8 @@
         "docs": "https://github.com/lingmulongtai/PDF-Local-Unlocker/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/pdf-local-unlocker.webp"
     },
     {
       "slug": "kuas-reception",
@@ -373,7 +381,8 @@
         "docs": "https://github.com/lingmulongtai/KUAS-reception/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-reception.webp"
     },
     {
       "slug": "kuas-fall-2026",
@@ -407,7 +416,8 @@
         "docs": "https://github.com/lingmulongtai/kuas-fall-2026/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-fall-2026.webp"
     },
     {
       "slug": "github-clendar-connector",
@@ -442,7 +452,8 @@
         "docs": "https://github.com/lingmulongtai/Github-Clendar-Connector/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/github-clendar-connector.webp"
     },
     {
       "slug": "github-dna-visualizer",
@@ -479,7 +490,8 @@
         "docs": "https://github.com/lingmulongtai/GitHub-DNA-Visualizer/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/github-dna-visualizer.webp"
     },
     {
       "slug": "ai-home-energy-assistant",
@@ -515,7 +527,8 @@
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/ai-home-energy-assistant.webp"
     },
     {
       "slug": "skycopilot",
@@ -551,7 +564,8 @@
         "docs": "https://github.com/lingmulongtai/SkyCopilot/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/skycopilot.webp"
     },
     {
       "slug": "cadence",
@@ -587,7 +601,8 @@
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/cadence.webp"
     },
     {
       "slug": "bandwidth-burner",
@@ -622,7 +637,8 @@
         "docs": "https://github.com/lingmulongtai/bandwidth-burner/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/bandwidth-burner.webp"
     },
     {
       "slug": "photography-club-website",
@@ -656,7 +672,8 @@
         "docs": "https://github.com/lingmulongtai/Photography-Club-Website/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/photography-club-website.webp"
     },
     {
       "slug": "my-portfolio",
@@ -691,7 +708,8 @@
         "docs": "https://github.com/lingmulongtai/My-Portfolio/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/my-portfolio.webp"
     },
     {
       "slug": "holiday-hand-magic",
@@ -727,7 +745,8 @@
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/holiday-hand-magic.webp"
     },
     {
       "slug": "spectralens-pbr",
@@ -759,7 +778,8 @@
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/spectralens-pbr.webp"
     },
     {
       "slug": "spaceapps-concept",
@@ -796,7 +816,8 @@
         "docs": "https://github.com/lingmulongtai/Spaceapps-concept/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/spaceapps-concept.webp"
     },
     {
       "slug": "pre-makaizo-project",
@@ -832,7 +853,8 @@
         "docs": "https://github.com/lingmulongtai/pre-makaizo-project/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/pre-makaizo-project.webp"
     },
     {
       "slug": "ip1",
@@ -864,7 +886,8 @@
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/ip1.webp"
     },
     {
       "slug": "kuas-photography-club",
@@ -896,7 +919,8 @@
         "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-photography-club.webp"
     },
     {
       "slug": "my-github-portfolio",
@@ -932,7 +956,8 @@
         "docs": "https://github.com/lingmulongtai/my-github-portfolio/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/my-github-portfolio.webp"
     },
     {
       "slug": "lingmulongtai",
@@ -965,7 +990,8 @@
         "docs": "https://github.com/lingmulongtai/lingmulongtai/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/lingmulongtai.webp"
     }
   ]
 }
