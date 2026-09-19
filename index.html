@@ -18,7 +18,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth; scroll-padding-top:110px}
 body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body);
   overflow-x:hidden; -webkit-font-smoothing:antialiased;
   transition:background .7s cubic-bezier(.16,1,.3,1), color .7s cubic-bezier(.16,1,.3,1)}
@@ -38,15 +38,22 @@ button{font:inherit; color:inherit; background:none; border:none; cursor:pointer
 /* nav */
 nav{position:fixed; top:0; left:0; right:0; z-index:300; display:flex; align-items:center; gap:18px;
   padding:16px var(--pad); font-family:var(--display); font-size:11.5px; font-weight:500;
-  mix-blend-mode:difference; color:#fff}
+  background:var(--ink); color:var(--paper); border-bottom:1px solid rgba(247,245,239,.3)}
 nav .sp{margin-left:auto}
-nav a,nav button{opacity:.66; transition:opacity .2s}
+nav a,nav button{opacity:.9; transition:opacity .2s}
 nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacity:1}
-.lang{display:flex; border:1px solid rgba(255,255,255,.42); border-radius:99px; overflow:hidden; opacity:.85}
-.lang button{padding:3px 10px; font-size:10.5px; opacity:.55; border-radius:0}
-.lang button.on{background:#fff; color:#000; opacity:1}
+.lang{display:flex; border:1px solid rgba(255,255,255,.6); border-radius:99px; overflow:hidden}
+.lang button{padding:3px 10px; font-size:10.5px; opacity:.9; border-radius:0}
+.lang button.on{background:var(--acid); color:var(--ink); opacity:1}
 nav .k{border:1px solid rgba(255,255,255,.42); border-radius:99px; padding:3px 10px}
-@media (max-width:760px){nav .hide{display:none}}
+@media (max-width:760px){
+  nav{flex-wrap:wrap; gap:10px 14px}
+  nav .hide{display:none}
+  #navName{flex:1 1 calc(100% - 100px)}
+  nav .lang{order:1}
+  nav a{order:2}
+  nav .sp{margin-left:0}
+}
 @media (max-width:420px){nav{gap:12px}}
 
 /* hero */
@@ -77,7 +84,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   letter-spacing:-.04em; margin:0}
 .badge{font-family:var(--display); font-size:9.5px; border:1px solid currentColor; border-radius:99px;
   padding:3px 9px; opacity:.7}
-.badge.live{background:var(--accent); color:var(--ink); border-color:var(--accent); opacity:1}
+.badge.live{background:var(--accent); color:var(--bg); border-color:var(--accent); opacity:1}
 .pulse-head .sum{font-size:12px; opacity:.66; margin-left:auto; font-variant-numeric:tabular-nums}
 .heatwrap{overflow-x:auto; padding-bottom:10px}
 .heat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px;
@@ -97,30 +104,31 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; font-family:var(--display); font-size:11px}
 .fbtn{border:1px solid currentColor; border-radius:99px; padding:6px 14px; opacity:.6; transition:.25s}
 .fbtn:hover{opacity:1}
-.fbtn.on{background:var(--accent); color:var(--ink); border-color:var(--accent); opacity:1}
+.fbtn.on{background:var(--accent); color:var(--bg); border-color:var(--accent); opacity:1}
 
-.bento{display:grid; gap:12px; grid-template-columns:repeat(6,1fr)}
+.bento{display:grid; gap:12px; grid-template-columns:repeat(6,minmax(0,1fr))}
 .tile{position:relative; overflow:hidden; border:2px solid currentColor; border-radius:2px;
-  padding:20px; display:flex; flex-direction:column; min-height:212px;
+  padding:20px; display:flex; flex-direction:column; min-width:0; min-height:250px;
   transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .42s cubic-bezier(.16,1,.3,1),
     opacity .3s}
 .tile:hover,.tile:focus-within{background:var(--accent); color:var(--ink); transform:translate(-5px,-5px)}
 body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 .tile.dim{opacity:.24}
 .tile-open{position:absolute; inset:0; z-index:1}
-.tile>*:not(.tile-open):not(.site){position:relative; z-index:0; pointer-events:none}
-.tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; opacity:.62}
+.tile>:where(:not(.tile-open):not(.site)){position:relative; z-index:0; pointer-events:none}
+.tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; line-height:1.55;
+  padding-right:76px; opacity:.75; overflow-wrap:anywhere}
 .tile h3{font-family:var(--display); font-weight:500; letter-spacing:-.04em; margin:auto 0 9px;
-  font-size:clamp(20px,2.3vw,33px); line-height:1.03}
+  font-size:clamp(20px,2.3vw,33px); line-height:1.16; overflow-wrap:anywhere}
 .tile .jp{font-size:12.5px; opacity:.8; line-height:1.68; margin:0}
-.tile .st{position:absolute; top:17px; right:17px; font-family:var(--display); font-size:10px;
-  border-radius:99px; padding:3px 10px; background:var(--accent); color:var(--ink); transition:opacity .28s;
+.tile .st{position:static; align-self:flex-start; max-width:100%; margin:12px 0 24px;
+  font-family:var(--display); font-size:10px; line-height:1.4;
+  border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--accent); color:var(--bg);
   z-index:0; pointer-events:none}
-.tile:hover .st,.tile:focus-within .st{opacity:0}
+.tile:hover .st,.tile:focus-within .st{border-color:currentColor}
 .tile .site{position:absolute; top:14px; right:14px; z-index:3; font-family:var(--display); font-size:10px;
-  border:1px solid currentColor; border-radius:99px; padding:4px 11px; opacity:0; transform:translateY(-4px);
-  transition:opacity .3s, transform .3s, background .2s}
-.tile:hover .site,.tile:focus-within .site{opacity:1; transform:none}
+  border:1px solid currentColor; border-radius:99px; padding:4px 11px;
+  transition:background .2s}
 .tile .site:hover{background:currentColor}
 .tile .site:hover span{mix-blend-mode:difference; filter:invert(1)}
 .tile .foot{display:flex; align-items:flex-end; gap:14px; margin-top:16px;
@@ -172,8 +180,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
 .sbar .nav button:hover,.sclose:hover{background:var(--ink); color:var(--paper); border-color:var(--ink)}
 .shead{padding:clamp(34px,6vw,72px) var(--pad) 30px; border-bottom:2px solid var(--black)}
 .shead .tagline{font-family:var(--display); font-size:11px; color:var(--ink); margin-bottom:16px}
-.shead h2{font-family:var(--display); font-weight:800; letter-spacing:-.055em; line-height:.9;
-  font-size:clamp(34px,7.6vw,104px); margin:0 0 18px}
+.shead h2{font-family:var(--display); font-weight:800; letter-spacing:-.055em; line-height:1.08;
+  font-size:clamp(34px,7.6vw,104px); margin:0 0 18px; overflow-wrap:anywhere}
 .shead .jp{font-size:15px; opacity:.72; margin:0; max-width:52ch; line-height:1.8}
 .sgrid{display:grid; grid-template-columns:1.35fr 1fr; border-bottom:2px solid var(--black)}
 @media (max-width:860px){.sgrid{grid-template-columns:1fr}}
