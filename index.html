@@ -12,42 +12,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1B2BD1; --acid:#E9FF4E; --paper:#F7F5EF; --black:#131313;
-  --bg:var(--ink); --fg:var(--paper); --accent:var(--acid);
+  --ink:#356E69; --acid:#F3D69B; --paper:#FAF8F3; --black:#303632;
+  --mint:#E1ECE5; --peach:#F1E3D8; --line:#CFD9D0;
+  --bg:var(--paper); --fg:var(--black); --accent:var(--ink);
   --display:"Unbounded","Zen Kaku Gothic New",system-ui,sans-serif;
   --body:"Zen Kaku Gothic New",system-ui,sans-serif;
   --pad:clamp(16px,3.4vw,40px);
-  color-scheme:dark;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; scroll-padding-top:110px}
 body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body);
   overflow-x:hidden; -webkit-font-smoothing:antialiased;
   transition:background .7s cubic-bezier(.16,1,.3,1), color .7s cubic-bezier(.16,1,.3,1)}
-body.light{--bg:var(--paper); --fg:var(--black); --accent:var(--ink)}
+body.light{--bg:#F1F5EF}
 body.locked{overflow:hidden}
 a{color:inherit; text-decoration:none}
 button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
 ::selection{background:var(--acid); color:var(--black)}
 :focus-visible{outline:3px solid var(--accent); outline-offset:3px}
 
-#cur{position:fixed; top:0; left:0; width:15px; height:15px; border-radius:50%; background:var(--acid);
-  z-index:900; pointer-events:none; mix-blend-mode:difference; transform:translate(-50%,-50%);
+#cur{position:fixed; top:0; left:0; width:12px; height:12px; border-radius:50%; background:var(--ink);
+  z-index:900; pointer-events:none; opacity:.35; transform:translate(-50%,-50%);
   transition:width .28s,height .28s}
-#cur.big{width:70px; height:70px}
+#cur.big{width:36px; height:36px}
 @media (hover:none),(pointer:coarse){#cur{display:none}}
 
 /* nav */
 nav{position:fixed; top:0; left:0; right:0; z-index:300; display:flex; align-items:center; gap:18px;
   padding:16px var(--pad); font-family:var(--display); font-size:11.5px; font-weight:500;
-  background:var(--ink); color:var(--paper); border-bottom:1px solid rgba(247,245,239,.3)}
+  background:var(--paper); color:var(--black); border-bottom:1px solid var(--line)}
 nav .sp{margin-left:auto}
 nav a,nav button{opacity:.9; transition:opacity .2s}
 nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacity:1}
-.lang{display:flex; border:1px solid rgba(255,255,255,.6); border-radius:99px; overflow:hidden}
+.lang{display:flex; border:1px solid var(--line); border-radius:99px; overflow:hidden}
 .lang button{padding:3px 10px; font-size:10.5px; opacity:.9; border-radius:0}
-.lang button.on{background:var(--acid); color:var(--ink); opacity:1}
-nav .k{border:1px solid rgba(255,255,255,.42); border-radius:99px; padding:3px 10px}
+.lang button.on{background:var(--mint); color:var(--ink); opacity:1}
+nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 @media (max-width:760px){
   nav{flex-wrap:wrap; gap:10px 14px}
   nav .hide{display:none}
@@ -65,7 +66,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   align-items:center; gap:clamp(32px,4vw,80px); width:100%; max-width:1600px; margin:0 auto}
 .hero-copy{min-width:0}
 .hero-portrait{width:min(100%,540px); margin:0; justify-self:center}
-.hero-portrait img{display:block; width:100%; height:auto; border-radius:24px}
+.hero-portrait img{display:block; width:100%; height:auto; border-radius:24px; mix-blend-mode:multiply}
 .meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
   font-weight:300; opacity:.72; margin-bottom:28px}
 .kin{font-family:var(--display); font-weight:800; line-height:.98; letter-spacing:-.055em;
@@ -82,7 +83,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 }
 
 /* marquee */
-.marq{border-top:2px solid currentColor; border-bottom:2px solid currentColor; padding:13px 0;
+.marq{border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:13px 0;
+  background:var(--mint);
   overflow:hidden; white-space:nowrap}
 .track{display:inline-block; font-family:var(--display); font-weight:300;
   font-size:clamp(21px,4vw,44px); letter-spacing:-.025em; will-change:transform}
@@ -90,18 +92,18 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .track em{font-style:normal; color:var(--accent); font-weight:800}
 
 /* pulse */
-.pulse{padding:clamp(46px,7vw,86px) var(--pad) clamp(40px,6vw,70px); border-bottom:2px solid currentColor}
+.pulse{padding:clamp(46px,7vw,86px) var(--pad) clamp(40px,6vw,70px); border-bottom:1px solid var(--line)}
 .pulse-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:24px}
 .pulse-head h2{font-family:var(--display); font-weight:500; font-size:clamp(20px,2.6vw,30px);
   letter-spacing:-.04em; margin:0}
 .badge{font-family:var(--display); font-size:9.5px; border:1px solid currentColor; border-radius:99px;
   padding:3px 9px; opacity:.7}
-.badge.live{background:var(--accent); color:var(--bg); border-color:var(--accent); opacity:1}
+.badge.live{background:var(--mint); color:var(--ink); border-color:var(--line); opacity:1}
 .pulse-head .sum{font-size:12px; opacity:.66; margin-left:auto; font-variant-numeric:tabular-nums}
 .heatwrap{overflow-x:auto; padding-bottom:10px}
 .heat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px;
   min-width:660px; height:104px}
-.heat i{border-radius:1px; background:currentColor; opacity:.12}
+.heat i{border-radius:2px; background:var(--ink); opacity:.12}
 .figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:30px 22px; margin-top:40px}
 .fig strong{display:block; font-family:var(--display); font-weight:800; font-size:clamp(40px,6.2vw,76px);
   letter-spacing:-.06em; line-height:.88; color:var(--accent); font-variant-numeric:tabular-nums}
@@ -114,17 +116,16 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   letter-spacing:-.045em; margin:0}
 .sechead p{margin:0 0 7px auto; font-size:13px; opacity:.7; max-width:34ch}
 .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; font-family:var(--display); font-size:11px}
-.fbtn{border:1px solid currentColor; border-radius:99px; padding:6px 14px; opacity:.6; transition:.25s}
+.fbtn{border:1px solid var(--line); border-radius:99px; padding:6px 14px; opacity:.85; transition:.25s}
 .fbtn:hover{opacity:1}
-.fbtn.on{background:var(--accent); color:var(--bg); border-color:var(--accent); opacity:1}
+.fbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink); opacity:1}
 
 .bento{display:grid; gap:12px; grid-template-columns:repeat(6,minmax(0,1fr))}
-.tile{position:relative; overflow:hidden; border:2px solid currentColor; border-radius:2px;
+.tile{position:relative; overflow:hidden; border:2px solid var(--line); border-radius:12px;
   padding:20px; display:flex; flex-direction:column; min-width:0; min-height:250px;
   transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .42s cubic-bezier(.16,1,.3,1),
     opacity .3s}
-.tile:hover,.tile:focus-within{background:var(--accent); color:var(--ink); transform:translate(-5px,-5px)}
-body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
+.tile:hover,.tile:focus-within{background:var(--mint); color:var(--black); transform:translate(-5px,-5px)}
 .tile.dim{opacity:.24}
 .tile-open{position:absolute; inset:0; z-index:1}
 .tile>:where(:not(.tile-open):not(.site):not(.tile-art)){position:relative; z-index:0; pointer-events:none}
@@ -135,7 +136,7 @@ body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 .tile .jp{font-size:12.5px; opacity:.8; line-height:1.68; margin:0}
 .tile .st{position:static; align-self:flex-start; max-width:100%; margin:12px 0 24px;
   font-family:var(--display); font-size:10px; line-height:1.4;
-  border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--accent); color:var(--bg);
+  border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--acid); color:var(--black);
   z-index:0; pointer-events:none}
 .tile:hover .st,.tile:focus-within .st{border-color:currentColor}
 .tile .site{position:absolute; top:14px; right:14px; z-index:3; font-family:var(--display); font-size:10px;
@@ -151,7 +152,7 @@ body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 .sparkbar{display:flex; gap:2px; align-items:flex-end; height:30px; flex:1; margin-left:auto; max-width:132px}
 .sparkbar i{flex:1; background:currentColor; opacity:.45; border-radius:1px}
 .tile.has-image{isolation:isolate; min-height:360px; background:#07112f; color:var(--paper);
-  border-color:rgba(247,245,239,.65)}
+  border-color:var(--line)}
 .tile .tile-art{position:absolute; inset:0; z-index:-2; width:100%; height:100%;
   object-fit:cover; object-position:50% 35%; pointer-events:none;
   transition:transform .65s cubic-bezier(.16,1,.3,1)}
@@ -163,9 +164,9 @@ body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); border-color:var(--acid)}
 .tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:scale(1.045)}
 .tile.has-image .no,.tile.has-image .jp{opacity:1; text-shadow:0 1px 8px rgba(0,0,0,.45)}
-.tile.has-image .st{background:var(--acid); color:var(--ink)}
+.tile.has-image .st{background:var(--acid); color:var(--black)}
 .tile.has-image .site{background:rgba(5,13,46,.8)}
-.tile.has-image .site:hover{background:var(--acid); color:var(--ink)}
+.tile.has-image .site:hover{background:var(--acid); color:var(--black)}
 .tile.has-image .site:hover span{mix-blend-mode:normal; filter:none}
 .tile.has-image .foot .lbl{opacity:.85}
 .tile.has-image.s-hero,.tile.has-image.s-tall{min-height:420px}
@@ -180,16 +181,18 @@ body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); 
   .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}}
 
 /* about */
-.about{padding:clamp(70px,10vw,124px) var(--pad); margin-top:78px; border-top:2px solid currentColor}
+.about{padding:clamp(70px,10vw,124px) var(--pad); margin-top:78px; border-top:1px solid var(--line);
+  background:var(--mint)}
 .about blockquote{margin:0 0 46px; max-width:22ch; font-family:var(--display); font-weight:300;
   font-size:clamp(28px,5vw,58px); line-height:1.06; letter-spacing:-.05em}
 .abody{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:34px}
 .abody p{margin:0; font-size:14px; line-height:2; opacity:.86; max-width:46ch}
 .skills{display:flex; flex-wrap:wrap; gap:7px; align-content:flex-start;
   font-family:var(--display); font-size:11px; font-weight:300}
-.skills i{font-style:normal; border:1px solid currentColor; border-radius:99px; padding:4px 11px; opacity:.75}
+.skills i{font-style:normal; border:1px solid var(--line); border-radius:99px; padding:4px 11px;
+  background:var(--paper); color:var(--ink)}
 
-footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
+footer{padding:66px var(--pad) 26px; border-top:1px solid var(--line); background:var(--peach)}
 .fbig{font-family:var(--display); font-weight:800; font-size:clamp(44px,13vw,178px); line-height:.82;
   letter-spacing:-.065em; margin:0 0 32px}
 .frow{display:flex; flex-wrap:wrap; gap:14px 28px; font-family:var(--display); font-size:11.5px;
@@ -204,22 +207,22 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
   overflow-y:auto; overscroll-behavior:contain; visibility:hidden}
 #sheet.open{transform:none; visibility:visible}
 .sbar{position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:12px;
-  padding:14px var(--pad); background:var(--paper); border-bottom:2px solid var(--black);
+  padding:14px var(--pad); background:var(--paper); border-bottom:1px solid var(--line);
   font-family:var(--display); font-size:11.5px; flex-wrap:wrap}
 .sbar .idx{color:var(--ink)}
 .sbar .nav{margin-left:auto; display:flex; gap:8px}
 .sbar .nav button,.sclose{border:1px solid var(--black); border-radius:99px; padding:5px 13px; transition:.22s}
 .sbar .nav button:hover,.sclose:hover{background:var(--ink); color:var(--paper); border-color:var(--ink)}
-.shead{padding:clamp(34px,6vw,72px) var(--pad) 30px; border-bottom:2px solid var(--black)}
+.shead{padding:clamp(34px,6vw,72px) var(--pad) 30px; border-bottom:1px solid var(--line)}
 .shead .tagline{font-family:var(--display); font-size:11px; color:var(--ink); margin-bottom:16px}
 .shead h2{font-family:var(--display); font-weight:800; letter-spacing:-.055em; line-height:1.08;
   font-size:clamp(34px,7.6vw,104px); margin:0 0 18px; overflow-wrap:anywhere}
 .shead .jp{font-size:15px; opacity:.72; margin:0; max-width:52ch; line-height:1.8}
-.sgrid{display:grid; grid-template-columns:1.35fr 1fr; border-bottom:2px solid var(--black)}
+.sgrid{display:grid; grid-template-columns:1.35fr 1fr; border-bottom:1px solid var(--line)}
 @media (max-width:860px){.sgrid{grid-template-columns:1fr}}
 .scol{padding:clamp(26px,4vw,44px) var(--pad); min-width:0}
-.scol+.scol{border-left:2px solid var(--black)}
-@media (max-width:860px){.scol+.scol{border-left:none; border-top:2px solid var(--black)}}
+.scol+.scol{border-left:1px solid var(--line)}
+@media (max-width:860px){.scol+.scol{border-left:none; border-top:1px solid var(--line)}}
 .scol h3{font-family:var(--display); font-weight:500; font-size:12px; margin:0 0 16px; letter-spacing:-.01em}
 .scol h3+h3{margin-top:38px}
 .sdesc{font-size:14.5px; line-height:2.05; margin:0 0 34px; max-width:64ch}
@@ -229,8 +232,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
 .chips{display:flex; flex-wrap:wrap; gap:6px}
 .chips i{font-style:normal; border:1px solid var(--ink); color:var(--ink); border-radius:99px;
   padding:3px 11px; font-size:11px; font-family:var(--display); font-weight:300}
-.metrics{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--black);
-  border:2px solid var(--black); margin-bottom:34px}
+.metrics{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); margin-bottom:34px}
 .metric{background:var(--paper); padding:16px 15px}
 .metric b{display:block; font-family:var(--display); font-weight:800; font-size:clamp(26px,3.4vw,40px);
   letter-spacing:-.05em; line-height:1; font-variant-numeric:tabular-nums}
@@ -247,20 +250,20 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
 .log time{font-family:var(--display); font-size:11px; opacity:.5; flex:none; width:88px}
 .log b{font-weight:500; color:var(--ink)}
 .slinks{display:flex; flex-wrap:wrap; gap:10px; padding:clamp(26px,4vw,44px) var(--pad) clamp(50px,8vw,90px)}
-.slink{border:2px solid var(--black); border-radius:2px; padding:13px 22px; font-family:var(--display);
+.slink{border:1px solid var(--line); border-radius:8px; padding:13px 22px; font-family:var(--display);
   font-size:12.5px; transition:.25s}
 .slink:hover,.slink:focus-visible{background:var(--ink); color:var(--paper); border-color:var(--ink);
   transform:translate(-3px,-3px)}
-.slink.primary{background:var(--acid); border-color:var(--black)}
+.slink.primary{background:var(--acid); border-color:var(--acid)}
 .slink.primary:hover{background:var(--ink); color:var(--paper)}
 
 /* palette */
-#pal{position:fixed; inset:0; z-index:700; background:rgba(9,14,90,.82); backdrop-filter:blur(6px);
+#pal{position:fixed; inset:0; z-index:700; background:rgba(35,52,45,.4); backdrop-filter:blur(6px);
   display:none; justify-content:center; padding:12vh var(--pad) 0}
 #pal.open{display:flex}
 .palbox{width:min(620px,100%); height:fit-content; background:var(--paper); color:var(--black);
-  border:2px solid var(--black); border-radius:3px; overflow:hidden}
-.palbox input{width:100%; border:none; border-bottom:2px solid var(--black); background:none;
+  border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.palbox input{width:100%; border:none; border-bottom:1px solid var(--line); background:none;
   font-family:var(--display); font-weight:500; font-size:19px; letter-spacing:-.03em; padding:19px 20px; color:inherit}
 .palbox input:focus{outline:none}
 .palres{max-height:min(46vh,380px); overflow-y:auto}
