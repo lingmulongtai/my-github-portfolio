@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "Ryuta Suzuki",
-    "github": "ryuta-suzuki",
+    "github": "lingmulongtai",
     "hero": [
       "MAKING",
       "THINGS"
@@ -41,7 +41,7 @@
       "AI-assisted development"
     ],
     "links": {
-      "github": "https://github.com/ryuta-suzuki",
+      "github": "https://github.com/lingmulongtai",
       "linkedin": "https://www.linkedin.com/in/ryuta-suzuki/",
       "x": "https://x.com/",
       "mail": "mailto:hello@example.com"
@@ -50,7 +50,7 @@
   "projects": [
     {
       "slug": "aerogrid-3d",
-      "repo": "ryuta-suzuki/AeroGrid-3D",
+      "repo": "lingmulongtai/AeroGrid-3D",
       "name": "AeroGrid-3D",
       "size": "hero",
       "filter": "live",
@@ -83,7 +83,7 @@
     },
     {
       "slug": "scentinel-plug",
-      "repo": "ryuta-suzuki/scentinel-plug",
+      "repo": "lingmulongtai/scentinel-plug",
       "name": "Scentinel Plug",
       "size": "tall",
       "filter": "proto",
@@ -117,7 +117,7 @@
     },
     {
       "slug": "kaguya-raw-studio",
-      "repo": "ryuta-suzuki/kaguya-raw-studio",
+      "repo": "lingmulongtai/KAGUYA-RAW-Studio",
       "name": "KAGUYA RAW Studio",
       "size": "std",
       "filter": "spec",
@@ -150,7 +150,7 @@
     },
     {
       "slug": "pdf-local-unlocker",
-      "repo": "ryuta-suzuki/pdf-local-unlocker",
+      "repo": "lingmulongtai/PDF-Local-Unlocker",
       "name": "PDF Local Unlocker",
       "size": "std",
       "filter": "live",
@@ -183,7 +183,7 @@
     },
     {
       "slug": "launchkey-lighting",
-      "repo": "ryuta-suzuki/launchkey-lighting",
+      "repo": "lingmulongtai/launchkey-lighting",
       "name": "Launchkey Lighting",
       "size": "std",
       "filter": "spec",
@@ -215,7 +215,7 @@
     },
     {
       "slug": "dual-agent-desktop",
-      "repo": "ryuta-suzuki/dual-agent-desktop",
+      "repo": "lingmulongtai/dual-agent-desktop",
       "name": "Dual-Agent Desktop",
       "size": "wide",
       "filter": "spec",
@@ -247,7 +247,7 @@
     },
     {
       "slug": "smart-open-campus",
-      "repo": "ryuta-suzuki/smart-open-campus",
+      "repo": "lingmulongtai/smart-open-campus",
       "name": "Smart Open Campus",
       "size": "wide",
       "filter": "build",
