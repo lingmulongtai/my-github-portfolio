@@ -1,0 +1,67 @@
+name: Sync GitHub data and deploy Pages
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # 毎日 03:00 JST
+  workflow_dispatch:        # 手動実行ボタン
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "projects.json"
+      - "scripts/sync-github.mjs"
+      - ".github/workflows/sync-github.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Check sync script
+        run: node --check scripts/sync-github.mjs
+
+      - name: Fetch repository data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/sync-github.mjs
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site/data
+          cp index.html projects.json _site/
+          cp data/github.json _site/data/
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

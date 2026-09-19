@@ -52,8 +52,8 @@ for (const p of data.projects) {
   if (!p.repo) continue;
   try {
     const repo = await get(`/repos/${p.repo}`);
-    if (!repo) {
-      console.warn(`skip (not found): ${p.repo}`);
+    if (!repo || repo.private) {
+      console.warn(`skip (not public or not found): ${p.repo}`);
       continue;
     }
     const activity = (await get(`/repos/${p.repo}/stats/commit_activity`)) || [];
@@ -78,6 +78,10 @@ for (const p of data.projects) {
   } catch (e) {
     console.warn(`fail ${p.repo}: ${e.message}`);
   }
+}
+
+if (!Object.keys(out).length) {
+  throw new Error("No public repository data was fetched; skipping publication.");
 }
 
 await mkdir("data", { recursive: true });
