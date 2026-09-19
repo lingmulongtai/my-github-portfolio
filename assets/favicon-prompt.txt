@@ -1,0 +1,7 @@
+Use case: logo-brand.
+Asset type: browser favicon for Ryuta Suzuki's personal project portfolio.
+Primary request: ONE extremely simple crisp geometric capital letter "R" in vivid acid yellow (#eaff36) centered on a solid cobalt blue (#1b2bd1) square. The R should occupy about 70 percent of the square and have a bold distinctive diagonal leg, very thick strokes, clean corners and an open counter that remains legible at 16 pixels. Flat two-dimensional vector-like graphic, front view, square 1:1 canvas, no border, no perspective.
+Constraints: exact single letter R only. No other text, no gradient, no shadow, no glow, no mockup, no additional objects, no watermark. Full-bleed blue background.
+
+Final refinement with the built-in image_gen tool:
+Edit this favicon image. Keep exactly one bold acid-yellow capital R with the same simple silhouette, but make its edges clean and smooth. Fill EVERY transparent/background pixel, including the counter inside the R, with solid opaque cobalt blue #1B2BD1. The final image must be a full-bleed opaque blue square with one centered yellow R, no transparency anywhere, no gradients, no shadow, no outline, no other text or objects. Browser favicon, flat graphic, readable at 16 px.
