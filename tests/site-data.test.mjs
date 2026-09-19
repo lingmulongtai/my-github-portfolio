@@ -76,3 +76,14 @@ test("browser API fallback discovers a newly added owned public repository", asy
   assert.equal(result.data.projects[0].name, "brand-new");
   assert.equal(result.data.projects[0].g.commits, null);
 });
+
+test("repositories with unavailable dates are still discovered in the browser", async () => {
+  const account = config.profile.github;
+  const repos = ["empty-one", "empty-two"].map(name => ({ name, full_name: `${account}/${name}`,
+    owner: { login: account }, private: false, created_at: null, pushed_at: null,
+    html_url: `https://github.com/${account}/${name}`, stargazers_count: 0, forks_count: 0 }));
+  const result = await boot(null, repos);
+  assert.equal(result.live, true);
+  assert.equal(result.data.projects.length, 2);
+  assert.ok(result.data.projects.every(p => p.year === "" && p.g.pushed === ""));
+});

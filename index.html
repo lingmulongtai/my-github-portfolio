@@ -1401,12 +1401,12 @@ async function loadGithub(){
     }
     if(!repos.length)return null;
     const known=new Map(DATA.projects.map((p,index)=>[p.repo.toLowerCase(),{p,index}]));
-    repos.sort((a,b)=>(known.get(a.full_name.toLowerCase())?.index??Infinity)-(known.get(b.full_name.toLowerCase())?.index??Infinity)||b.pushed_at.localeCompare(a.pushed_at));
+    repos.sort((a,b)=>(known.get(a.full_name.toLowerCase())?.index??Infinity)-(known.get(b.full_name.toLowerCase())?.index??Infinity)||(b.pushed_at||'').localeCompare(a.pushed_at||''));
     const projects=repos.map(r=>{
       const p=known.get(r.full_name.toLowerCase())?.p;
       const description={ja:r.description||'GitHubで公開しているプロジェクト',en:r.description||'A public project on GitHub'};
       return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
-        year:r.created_at.slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
+        year:(r.created_at||'').slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
         status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
         summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},fork:r.fork};
     });
