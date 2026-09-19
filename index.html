@@ -483,7 +483,8 @@ const T={
   "demo":"DEMO DATA","liveSrc":"GITHUB 同期中",
   "figs":["公開・開発中のプロジェクト","この1年のコミット","獲得スター","使っている言語"],
   "ev":["リポジトリを更新","リリース","プルリクをマージ","READMEを更新","デプロイを実行","イシューを追加"],
-  "note":"数値は GitHub API から取得しています。","noteDemo":"※ GitHub 未接続のため、数値はデモ用の仮データです。"},
+  "noEvents":"公開データを取得できません。",
+  "note":"数値は公開リポジトリから取得しています。未取得の指標は — で表示します。","noteDemo":"※ GitHub 未接続のため、数値はデモ用の仮データです。"},
  en:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
   "pulse.title":"A year of hands moving","work.title":"Selected works",
   "work.lead":"Open a tile to read progress and the technical build.",
@@ -499,7 +500,8 @@ const T={
   "demo":"DEMO DATA","liveSrc":"SYNCED WITH GITHUB",
   "figs":["Projects live or in progress","Commits this year","Stars earned","Languages in use"],
   "ev":["Pushed to the repository","Released","Merged a pull request","Updated the README","Deployed","Opened an issue"],
-  "note":"Figures are pulled from the GitHub API.","noteDemo":"Figures are placeholder demo data — GitHub is not connected."}};
+  "noEvents":"Public data is unavailable.",
+  "note":"Figures come from public repositories. Unavailable metrics are shown as —.","noteDemo":"Figures are placeholder demo data — GitHub is not connected."}};
 let LANG='ja';
 const t=k=>T[LANG][k]??k;
 const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
@@ -561,14 +563,14 @@ async function boot(){
   }catch(e){}
   const gh=await loadGithub();
   DATA.projects.forEach(p=>{
-    const g=(gh&&gh[p.slug])||demoStats(p);
-    if(!g.weeks||!g.weeks.length) g.weeks=demoStats(p).weeks;
+    const g=(gh&&gh[p.slug])||(LIVE?{weeks:[]}:demoStats(p));
+    if(!g.weeks) g.weeks=[];
     p.g=g;
-    p.g.commits=g.weeks.reduce((s,w)=>s+(w.total||0),0);
-    p.g.activeWeeks=g.weeks.filter(w=>(w.total||0)>0).length;
+    p.g.commits=g.weeks.length?g.weeks.reduce((s,w)=>s+(w.total||0),0):null;
+    p.g.activeWeeks=g.weeks.length?g.weeks.filter(w=>(w.total||0)>0).length:null;
     p.g.bars=g.weeks.slice(-14).map(w=>w.total||0);
     p.g.site=p.links?.site||g.site||'';
-    p.g.url=g.url||(p.repo?`https://github.com/${p.repo}`:'#');
+    p.g.url=g.url||(!LIVE&&p.repo?`https://github.com/${p.repo}`:'');
   });
   try{const s=localStorage.getItem('lang'); if(s) LANG=s;}
   catch(e){}
@@ -615,10 +617,10 @@ function render(){
     const w=p.g.weeks[Math.floor(i/7)]; return s+((w&&w.days&&w.days[i%7])||0)},0));
   const max=Math.max(1,...agg);
   $('heat').innerHTML=agg.map(v=>`<i style="opacity:${(.1+(v/max)*.9).toFixed(2)}"></i>`).join('');
-  const totC=P.reduce((s,p)=>s+p.g.commits,0), totS=P.reduce((s,p)=>s+(p.g.stars||0),0);
+  const totC=P.reduce((s,p)=>s+(p.g.commits||0),0), totS=P.reduce((s,p)=>s+(p.g.stars||0),0);
   $('pulseSum').textContent=`${totC.toLocaleString()} commits / 53 weeks`;
   const langs=new Set(P.map(p=>p.g.language).filter(Boolean));
-  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size||P.length,3]];
+  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size,3]];
   $('figs').innerHTML=figs.map(([n,i])=>
     `<div class="fig"><strong data-to="${n}">0</strong><span>${t('figs')[i]}</span></div>`).join('');
   countUp();
@@ -638,7 +640,7 @@ function render(){
       <h3>${p.name}</h3>
       <p class="jp">${tx(p.summary)}</p>
       <span class="foot">
-        <span class="lbl">${t('f.commits')}<b>${p.g.commits.toLocaleString()}</b></span>
+        <span class="lbl">${t('f.commits')}<b>${p.g.commits?.toLocaleString()??'—'}</b></span>
         <span class="lbl">${t('f.updated')}<b>${(p.g.pushed||'').slice(5).replace('-','.')||'—'}</b></span>
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
@@ -683,23 +685,23 @@ function fill(i){
     <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${s}</i>`).join('')}</div></td></tr>
     <tr><td>${t('t.team')}</td><td>${t('team')}</td></tr>`;
   $('sMetrics').innerHTML=`
-    <div class="metric"><b>${g.commits.toLocaleString()}</b><span>${t('m.commits')}</span></div>
-    <div class="metric"><b>${g.activeWeeks}</b><span>${t('m.weeks')}</span></div>
-    <div class="metric"><b>${g.stars??0}</b><span>${t('m.stars')}</span></div>
-    <div class="metric"><b>${g.forks??0}</b><span>${t('m.forks')}</span></div>`;
+    <div class="metric"><b>${g.commits?.toLocaleString()??'—'}</b><span>${t('m.commits')}</span></div>
+    <div class="metric"><b>${g.activeWeeks??'—'}</b><span>${t('m.weeks')}</span></div>
+    <div class="metric"><b>${g.stars??'—'}</b><span>${t('m.stars')}</span></div>
+    <div class="metric"><b>${g.forks??'—'}</b><span>${t('m.forks')}</span></div>`;
   const m=Math.max(1,...g.bars);
   $('sChart').innerHTML=g.bars.map(b=>`<i style="height:${Math.max(3,b/m*100)}%"></i>`).join('');
   const cells=[]; g.weeks.forEach(w=>(w.days||[0,0,0,0,0,0,0]).forEach(d=>cells.push(d)));
   const cm=Math.max(1,...cells);
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
   const base=g.pushed?new Date(g.pushed):new Date();
-  $('sLog').innerHTML=t('ev').map((a,k)=>{
+  $('sLog').innerHTML=LIVE?(g.pushed?`<li><time>${g.pushed}</time><span><b>${p.name}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`):t('ev').map((a,k)=>{
     const d=new Date(base); d.setDate(d.getDate()-k*4);
     return `<li><time>${d.toISOString().slice(0,10)}</time><span><b>${p.name}</b> — ${a}</span></li>`;
   }).join('');
   const L=[];
   if(g.site) L.push(`<a class="slink primary" href="${g.site}" target="_blank" rel="noopener">${t('l.site')}</a>`);
-  L.push(`<a class="slink" href="${g.url}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
+  if(g.url) L.push(`<a class="slink" href="${g.url}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
   if(p.links&&p.links.docs) L.push(`<a class="slink" href="${p.links.docs}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
   $('sLinks').innerHTML=L.join('');
 }
