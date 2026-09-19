@@ -9,6 +9,7 @@ on:
     paths:
       - "index.html"
       - "projects.json"
+      - "assets/**"
       - "scripts/sync-github.mjs"
       - ".github/workflows/sync-github.yml"
 
@@ -45,6 +46,7 @@ jobs:
           mkdir -p _site/data
           cp index.html projects.json _site/
           cp data/github.json _site/data/
+          if [ -d assets ]; then cp -R assets _site/; fi
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
