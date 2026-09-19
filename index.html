@@ -106,6 +106,10 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   padding:3px 9px; opacity:.7}
 .badge.live{background:var(--mint); color:var(--ink); border-color:var(--line); opacity:1}
 .pulse-head .sum{font-size:12px; opacity:.66; margin-left:auto; font-variant-numeric:tabular-nums}
+.section-art{display:block; width:240px; max-width:100%; height:auto; object-fit:contain; mix-blend-mode:multiply}
+.pulse-intro{display:flex; align-items:center; gap:32px; margin-bottom:24px}
+.pulse-intro .pulse-head{flex:1; min-width:0; margin-bottom:0}
+.pulse-intro .section-art{width:180px}
 .heatwrap{overflow-x:auto; padding-bottom:10px}
 .heat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px;
   min-width:660px; height:104px}
@@ -157,25 +161,21 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   font-variant-numeric:tabular-nums}
 .sparkbar{display:flex; gap:2px; align-items:flex-end; height:30px; flex:1; margin-left:auto; max-width:132px}
 .sparkbar i{flex:1; background:currentColor; opacity:.45; border-radius:1px}
-.tile.has-image{isolation:isolate; min-height:360px; background:#07112f; color:var(--paper);
+.tile.has-image{isolation:isolate; background:#fff; color:var(--black);
   border-color:var(--line)}
-.tile .tile-art{position:absolute; inset:0; z-index:-2; width:100%; height:100%;
-  object-fit:cover; object-position:50% 35%; pointer-events:none;
-  transition:transform .65s cubic-bezier(.16,1,.3,1)}
-.tile.s-hero .tile-art{object-position:50% 0}
-.tile.has-image::before{content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
-  background:linear-gradient(180deg,rgba(5,13,46,.68) 0%,rgba(5,13,46,.12) 30%,
-    rgba(5,13,46,.58) 48%,rgba(5,13,46,.94) 72%,#050d2e 100%)}
-.tile.has-image:hover,.tile.has-image:focus-within,body.light .tile.has-image:hover,
-body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); border-color:var(--acid)}
-.tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:scale(1.045)}
-.tile.has-image .no,.tile.has-image .jp{opacity:1; text-shadow:0 1px 8px rgba(0,0,0,.45)}
-.tile.has-image .st{background:var(--acid); color:var(--black)}
-.tile.has-image .site{background:rgba(5,13,46,.8)}
-.tile.has-image .site:hover{background:var(--acid); color:var(--black)}
+.tile .tile-art{display:block; width:100%; height:220px; flex:none; margin:0 0 18px;
+  object-fit:contain; pointer-events:none; mix-blend-mode:multiply;
+  transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.tile .tile-art[hidden]{display:none}
+.tile.has-image:hover,.tile.has-image:focus-within{background:#fff; border-color:var(--ink)}
+.tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:translateY(-4px)}
+.tile.has-image .st{margin-bottom:6px}
+.tile.has-image .site{background:var(--paper); border-color:var(--line)}
+.tile.has-image .site:hover{background:var(--mint); color:var(--ink)}
 .tile.has-image .site:hover span{mix-blend-mode:normal; filter:none}
-.tile.has-image .foot .lbl{opacity:.85}
-.tile.has-image.s-hero,.tile.has-image.s-tall{min-height:420px}
+.tile.has-image .foot{border-color:var(--line)}
+.tile.has-image .foot .lbl{opacity:.75}
+.tile.s-hero .tile-art,.tile.s-tall .tile-art{height:280px}
 @media (prefers-reduced-motion:reduce){.tile .tile-art{transition:none}}
 .s-hero{grid-column:span 4; min-height:336px}
 .s-tall{grid-column:span 2; min-height:336px}
@@ -184,13 +184,16 @@ body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); 
 @media (max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}
   .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 2; min-height:206px}}
 @media (max-width:520px){.bento{grid-template-columns:1fr}
-  .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}}
+  .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}
+  .tile.has-image .tile-art{height:180px}}
 
 /* about */
 .about{padding:clamp(70px,10vw,124px) var(--gutter); margin-top:78px; border-top:1px solid var(--line);
   background:var(--mint)}
-.about blockquote{margin:0 0 46px; max-width:22ch; font-family:var(--display); font-weight:300;
+.about-intro{display:flex; align-items:center; justify-content:space-between; gap:40px; margin-bottom:46px}
+.about blockquote{margin:0; max-width:22ch; font-family:var(--display); font-weight:300;
   font-size:clamp(28px,5vw,58px); line-height:1.06; letter-spacing:-.05em}
+.about-intro .section-art{flex:none}
 .abody{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:34px}
 .abody p{margin:0; font-size:14px; line-height:2; opacity:.86; max-width:46ch}
 .skills{display:flex; flex-wrap:wrap; gap:7px; align-content:flex-start;
@@ -199,13 +202,22 @@ body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); 
   background:var(--paper); color:var(--ink)}
 
 footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); background:#fff}
-.fbig{font-family:var(--display); font-weight:800; font-size:clamp(44px,13vw,178px); line-height:.82;
-  letter-spacing:-.065em; margin:0 0 32px}
+.footer-intro{display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:32px}
+.footer-intro .section-art{width:clamp(80px,28vw,340px); flex:none}
+.fbig{font-family:var(--display); font-weight:800; font-size:clamp(44px,9vw,146px); line-height:.82;
+  letter-spacing:-.065em; margin:0}
 .frow{display:flex; flex-wrap:wrap; gap:14px 28px; font-family:var(--display); font-size:11.5px;
   font-weight:300; opacity:.72}
 .frow a{border-bottom:1px solid transparent; transition:border-color .2s}
 .frow a:hover,.frow a:focus-visible{border-color:var(--accent)}
 .note{margin-top:20px; font-size:10.5px; opacity:.45; font-family:var(--display); font-weight:300}
+@media (max-width:700px){
+  .pulse-intro{flex-wrap:wrap; gap:16px}
+  .pulse-intro .pulse-head{flex-basis:100%}
+  .pulse-intro .section-art{width:132px; margin-left:auto}
+  .about-intro{flex-direction:column; align-items:flex-start; gap:24px}
+  .about-intro .section-art{width:180px; align-self:flex-end}
+}
 
 /* sheet */
 #sheet{position:fixed; inset:0; width:min(1320px,calc(100% - 64px)); max-width:none;
@@ -327,10 +339,14 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 <div class="marq"><div class="marq-inner"><div class="track" id="track"></div></div></div>
 
 <section class="pulse">
-  <div class="pulse-head">
-    <h2 data-i18n="pulse.title"></h2>
-    <span class="badge" id="srcBadge"></span>
-    <span class="sum" id="pulseSum"></span>
+  <div class="pulse-intro">
+    <div class="pulse-head">
+      <h2 data-i18n="pulse.title"></h2>
+      <span class="badge" id="srcBadge"></span>
+      <span class="sum" id="pulseSum"></span>
+    </div>
+    <img class="section-art" src="./assets/illustrations/activity.webp" alt="" aria-hidden="true"
+      loading="lazy" decoding="async" width="720" height="480">
   </div>
   <div class="heatwrap"><div class="heat" id="heat"></div></div>
   <div class="figs" id="figs"></div>
@@ -346,7 +362,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </section>
 
 <section class="about" id="about">
-  <blockquote id="aboutQuote"></blockquote>
+  <div class="about-intro">
+    <blockquote id="aboutQuote"></blockquote>
+    <img class="section-art" src="./assets/illustrations/maker.webp" alt="" aria-hidden="true"
+      loading="lazy" decoding="async" width="720" height="480">
+  </div>
   <div class="abody">
     <p id="aboutBody"></p>
     <div class="skills" id="skills"></div>
@@ -354,7 +374,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </section>
 
 <footer>
-  <p class="fbig">LET'S<br>BUILD</p>
+  <div class="footer-intro">
+    <p class="fbig">LET'S<br>BUILD</p>
+    <img class="section-art" src="./assets/illustrations/contact.webp" alt="" aria-hidden="true"
+      loading="lazy" decoding="async" width="720" height="480">
+  </div>
   <div class="frow" id="frow"></div>
   <p class="note" id="footNote"></p>
 </footer>
@@ -1585,11 +1609,11 @@ function render(){
   /* tiles */
   $('bento').innerHTML=P.map((p,i)=>`
     <article class="tile s-${esc(p.size||'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
-      ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(i+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
       ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
+      ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <h3>${esc(p.name)}</h3>
       <p class="jp">${esc(tx(p.summary))}</p>
       <span class="foot">
