@@ -32,8 +32,8 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Check sync script
-        run: node --check scripts/sync-github.mjs
+      - name: Validate portfolio
+        run: node --test tests/*.test.mjs
 
       - name: Fetch repository data
         env:

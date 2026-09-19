@@ -2,16 +2,19 @@
 
 静的サイト。ビルドツールなし、依存パッケージなし。`index.html` を開けばそのまま動きます。
 
+`lingmulongtai` が所有する**全公開リポジトリ**を掲載します。フォーク・プロフィール・学習用リポジトリも含み、現在は26件です。非公開リポジトリは取得・追加しません。
+
 - 公開サイト: https://lingmulongtai.github.io/my-github-portfolio/
 - リポジトリ: https://github.com/lingmulongtai/my-github-portfolio
 
 ```
 .
 ├── index.html                      サイト本体（触らなくていい）
-├── projects.json                   ★ 内容の編集はここだけ
+├── projects.json                   プロフィールと日英の紹介文
 ├── data/github.json                公開時に自動生成（Git 管理外）
-├── scripts/sync-github.mjs         取得スクリプト
-└── .github/workflows/sync-github.yml  GitHub データ取得と Pages 公開
+├── scripts/sync-github.mjs          全公開リポジトリの取得スクリプト
+├── tests/                          カタログ・読み込み処理の回帰テスト
+└── .github/workflows/               PR 検証と GitHub Pages 公開
 ```
 
 ## 1. まず書き換えるところ
@@ -25,19 +28,21 @@
 | `hero` | 大見出し。2行の配列。英大文字が一番きれいに出る |
 | `location` / `role` / `intro` / `quote` / `about` | `{ "ja": "…", "en": "…" }` の形。英語を空にすると日本語が出る |
 
-プロジェクトは `projects` 配列に並べた順どおりに表示されます。
+プロジェクト一覧は毎回 GitHub API から全ページを取得します。新しい公開リポジトリは、`projects.json` に書かなくても次の同期で追加されます。紹介文が未設定の場合は GitHub の説明・言語を使用します。
+
+`projects.json` の `projects` 配列は、日英の紹介文・分類・表示順の上書き設定です。ここにある公開プロジェクトを配列順で並べ、未設定の新規プロジェクトを更新順で末尾に追加します。削除済み・非公開のリポジトリは同期結果に含めません。
 
 | キー | 中身 |
 |---|---|
-| `slug` | URL に出る識別子。`#aerogrid-3d` のように個別リンクになる |
+| `slug` | リポジトリ名を小文字にした識別子。`#aerogrid-3d` のように個別リンクになる |
 | `repo` | `owner/name`。**これが GitHub API との紐付けキー** |
 | `size` | タイルの大きさ。`hero` / `tall` / `wide` / `std` |
-| `filter` | 絞り込みボタンの分類。好きな値を足すとボタンも自動で増える |
-| `tag` / `status` / `summary` / `desc` | すべて `{ ja, en }` |
+| `filter` | `web` / `desktop` / `mobile` / `tools` / `hardware` / `research` / `docs` / `other` |
+| `tag` / `summary` / `desc` | すべて `{ ja, en }`。確認できる用途・実装を記載する |
 | `stack` | 技術タグ。言語自動判定とは別に、自分で見せたいものを書く |
 | `links.docs` | 仕様書などの任意リンク。空なら出ない |
 
-star 数・言語・ライセンス・最終更新・コミットグラフ・**サイトのリンク**は書きません。GitHub から自動で入ります。
+star 数・言語・ライセンス・最終更新・コミットグラフ・**サイトのリンク**は GitHub から自動で取得します。ステータスも「公開」「フォーク」「アーカイブ」を実際の設定から表示し、進捗率や完成度は推定しません。集計はフォークを含むリポジトリ単位の値です。
 
 ## 2. サイトのリンクについて
 
@@ -55,25 +60,26 @@ star 数・言語・ライセンス・最終更新・コミットグラフ・**�
 
 `data/github.json` は実行時に生成し、サイト本体と一緒に Pages へ公開します。自動更新でリポジトリへコミットする必要はありません。公開対象は `index.html`、`projects.json`、`data/github.json` の3ファイルです。
 
-取得には標準の `GITHUB_TOKEN` を使うため、追加のシークレット設定は不要です。非公開・未作成のリポジトリは取得対象から除外し、1件も取得できない場合は公開を中止します。
+取得には標準の `GITHUB_TOKEN` を使うため、追加のシークレット設定は不要です。公開一覧を最後まで取得できない場合や0件の場合は公開を中止します。コミット集計が処理中・取得不能でも、そのプロジェクト自体は掲載します。
 
-ローカルで同じデータを取得する場合は `node scripts/sync-github.mjs` を実行してください。構文確認は `node --check scripts/sync-github.mjs`、表示確認は `python -m http.server 4173 --bind 127.0.0.1` で行えます。
+ローカルで同じデータを取得する場合は `node scripts/sync-github.mjs` を実行してください。API の利用制限を避けたい場合は、環境変数 `GH_TOKEN` に認証情報を渡せます。トークンをファイルやコミットに含めないでください。
+
+検証は `node --test tests/*.test.mjs`、表示確認は `python -m http.server 4173 --bind 127.0.0.1` で行えます。PR と公開前にも同じテストを実行します。
 
 ## 4. データの読み込み順
 
-1. `data/github.json`（Actions が作ったもの）
-2. なければブラウザから GitHub API を直接叩く（未認証・60回/時）
-3. どちらも駄目なら**デモ用の仮データ**を表示し、画面に `DEMO DATA` と出る
+1. `data/github.json`（Actions が作った `owner` / `syncedAt` / `projects` / `stats` を含むスナップショット）
+2. なければブラウザから GitHub API で全公開リポジトリを取得（年間コミット集計は取得しない）
+3. どちらも駄目なら `projects.json` の紹介文を表示し、統計は `—` とする
 
-実データを取得できた場合、未取得のリポジトリ・コミット集計には仮データを混ぜず、指標を `—` と表示します。詳細のイベント欄も取得済みの最終更新だけを表示します。
+デモ用の数値は使用しません。詳細のイベント欄も取得済みの最終更新だけを表示します。
 
 つまり `index.html` を単体でローカルで開いても、見た目の確認はできます。
 `file://` で開くと `projects.json` の読み込みが CORS で弾かれるので、`index.html` 内の
 `<script type="application/json" id="site-data">` に入っている予備データが使われます。
 確認用にローカルサーバを立てるなら `python3 -m http.server` で十分です。
 
-> サンドボックス化されたプレビュー環境（Claude の成果物ページなど）では外部 API への通信が
-> ブロックされるため、常に `DEMO DATA` になります。自分のドメインに置けば実データになります。
+外部通信がブロックされた環境では「GitHub データ未取得」と表示します。
 
 ## 5. 操作
 
@@ -88,5 +94,7 @@ star 数・言語・ライセンス・最終更新・コミットグラフ・**�
 守ってほしいのは次の3点だけ:
 
 - `slug` は重複させない（URL になる）
-- `tag` / `status` / `summary` / `desc` は必ず `ja` と `en` の両方を書く
+- `tag` / `summary` / `desc` は必ず `ja` と `en` の両方を書く
 - `repo` は実在する `owner/name` にする（間違っていると数値が出ない）
+
+README・実装で確認した内容を使い、フォークを独自開発と書いたり、未検証の機能を完成済みと書いたりしないでください。紹介文を編集した場合は `index.html` 内の `site-data` にも同じ JSON を反映すると、単体プレビューも一致します。

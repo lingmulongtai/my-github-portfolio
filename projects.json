@@ -53,230 +53,919 @@
       "repo": "lingmulongtai/AeroGrid-3D",
       "name": "AeroGrid-3D",
       "size": "hero",
-      "filter": "live",
+      "filter": "web",
       "year": "2026",
       "tag": {
-        "ja": "リアルタイム3Dマップ",
-        "en": "REAL-TIME 3D MAP"
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
       },
       "status": {
-        "ja": "公開中",
-        "en": "Live"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "航空機と衛星をリアルタイムに描く3Dマップ",
-        "en": "A 3D map drawing aircraft and satellites in real time"
+        "ja": "航空機の位置と気象を重ねて見る3Dアトラス",
+        "en": "A 3D atlas combining aircraft positions and weather"
       },
       "desc": {
-        "ja": "Flightradar24 に着想を得た、航空機と人工衛星をリアルタイムに描画する 3D マップです。気象レイヤーを重ねて表示でき、機体は 3D モデルで描かれます。Google AI Studio で試作したものを Claude Code でリファクタリングしながら機能を足し、Google Cloud Run に載せて公開しています。",
-        "en": "A 3D map that renders aircraft and satellites in real time, inspired by Flightradar24. Weather layers can be overlaid, and aircraft appear as 3D models. Prototyped in Google AI Studio, then refactored and extended with Claude Code, and deployed on Google Cloud Run."
+        "ja": "世界規模のデモと、指定地点から最大250海里の航空機を取得するLive Betaを分離。検索・追跡・高度・速度・データ鮮度を表示します。現在のライブモードでは衛星は扱いません。",
+        "en": "Separates a worldwide demo from a Live Beta that retrieves aircraft within 250 nautical miles of a selected location. It shows tracking, altitude, speed, and data freshness. Live satellite data is currently disabled."
       },
       "stack": [
-        "Three.js",
-        "WebGL",
-        "Cloud Run",
-        "TypeScript"
+        "TypeScript",
+        "React",
+        "Cesium",
+        "deck.gl",
+        "Node.js",
+        "Express"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/AeroGrid-3D/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
-      "slug": "scentinel-plug",
-      "repo": "lingmulongtai/scentinel-plug",
-      "name": "Scentinel Plug",
+      "slug": "keylume",
+      "repo": "lingmulongtai/Keylume",
+      "name": "Keylume",
       "size": "tall",
-      "filter": "proto",
+      "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "センサハードウェア",
-        "en": "SENSOR HARDWARE"
+        "ja": "デスクトップアプリ",
+        "en": "DESKTOP APP"
       },
       "status": {
-        "ja": "試作中",
-        "en": "Prototype"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "においとVOCを読み、AIが解釈するUSB-Cモジュール",
-        "en": "A USB-C module that reads smell and VOC, interpreted by AI"
+        "ja": "Launchkeyのライティングと演奏を支える常駐アプリ",
+        "en": "A tray app for Launchkey lighting, piano playback, and MIDI practice"
       },
       "desc": {
-        "ja": "におい・VOC・空気環境の変化を可視化し、AI が解釈して、早期の注意喚起や行動提案を返す補助的な環境認識システムです。スマートフォンの USB-C に直挿しする小型モジュールとして設計しました。第一試作でセンサ構成を確定させ、第二試作で分類器を載せる計画で進めています。",
-        "en": "An assistive environmental-awareness system that visualises changes in smell, VOC and air quality, then has AI interpret them to return early warnings or suggested actions. Designed as a small module that plugs straight into a phone's USB-C port. The first prototype fixes the sensor configuration; the second adds the classifier."
+        "ja": "Launchkey MK4 61向けの非公式ツール。LED編集、内蔵ピアノ、MIDI練習、パッドドラム、ルーパーを備え、実機検証前のプレビューとして公開しています。",
+        "en": "An unofficial tool for the Launchkey MK4 61, with LED editing, a built-in piano, MIDI practice, pad drums, and a looper. Published as a preview pending hardware verification."
       },
       "stack": [
-        "ESP32-S3",
-        "BME688",
-        "SGP40",
-        "Android",
-        "Python"
+        "Rust",
+        "Tauri 2",
+        "React",
+        "MIDI",
+        "WASAPI"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/Keylume/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
-      "slug": "kaguya-raw-studio",
-      "repo": "lingmulongtai/KAGUYA-RAW-Studio",
-      "name": "KAGUYA RAW Studio",
+      "slug": "codexbar-android",
+      "repo": "lingmulongtai/CodexBar-android",
+      "name": "CodexBar-android",
       "size": "std",
-      "filter": "spec",
+      "filter": "mobile",
       "year": "2026",
       "tag": {
-        "ja": "写真ワークフロー",
-        "en": "PHOTO WORKFLOW"
+        "ja": "モバイルアプリ",
+        "en": "MOBILE APP"
       },
       "status": {
-        "ja": "設計確定",
-        "en": "Spec"
+        "ja": "フォーク",
+        "en": "Fork"
       },
       "summary": {
-        "ja": "撮影現場のためのRAWワークフロー",
-        "en": "A RAW workflow built for the shoot itself"
+        "ja": "複数AIサービスの利用枠をまとめて確認するAndroidアプリ",
+        "en": "An Android app for monitoring usage quotas across AI services"
       },
       "desc": {
-        "ja": "Windows ファーストのクロスプラットフォーム RAW ワークフローツール。同じネットワークにいる端末へクライアントビューを配信し、その場で確認できます。RAW 本体はクライアントに残さず、セッションは QR コードとパスコードで保護。カタログ、エディットスタック、納品ギャラリーまでを一本につなぎ、オフラインでも動きます。",
-        "en": "A Windows-first, cross-platform RAW workflow tool. It streams a client view to devices on the same local network so images can be checked on the spot. RAW files never stay on the client, and sessions are protected with a QR code and a passcode. Cataloguing, edit stacks and delivery galleries are joined into one chain that also works offline."
+        "ja": "CodexBar Android版のフォークを拡張。プロバイダー別の残量・リセット時刻・履歴、ホーム画面ウィジェット、継続通知をまとめています。",
+        "en": "An extended fork of CodexBar for Android. Tracks provider quotas, reset times, and usage history, with home-screen widgets and persistent notifications."
       },
       "stack": [
-        "Local HTTP/WS",
-        "SQLite",
-        "DuckDB",
-        "Electron"
+        "Kotlin",
+        "Android",
+        "DataStore",
+        "Android Keystore"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/CodexBar-android/blob/main/README.md",
+        "site": ""
+      },
+      "fork": true
+    },
+    {
+      "slug": "instaframe",
+      "repo": "lingmulongtai/InstaFrame",
+      "name": "InstaFrame",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "写真・動画にEXIF情報付きフレームを合成",
+        "en": "Add customizable frames and EXIF captions to photos and videos"
+      },
+      "desc": {
+        "ja": "ブラウザ内でプレビュー・一括処理・画像や動画の出力を実行。撮影情報、余白、文字、色、SNS用比率を調整できます。",
+        "en": "Preview, batch-process, and export photos and videos in the browser. Customize camera information, margins, typography, colors, and social-media aspect ratios."
+      },
+      "stack": [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Canvas",
+        "exifr",
+        "JSZip"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/InstaFrame/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "glyphray",
+      "repo": "lingmulongtai/GlyphRay",
+      "name": "GlyphRay",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "デスクトップアプリ",
+        "en": "DESKTOP APP"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Android端末をPC用のリモートペンディスプレイに",
+        "en": "Turn an Android device into a remote pen display for a desktop computer"
+      },
+      "desc": {
+        "ja": "Androidクライアント、Windows・macOSホスト、映像・音声・入力の転送基盤を開発。Windows Ink方式のペン入力を主要機能に据えています。",
+        "en": "An Android client and Windows/macOS hosts for video, audio, and input streaming. Windows Ink pen input is a central part of the project."
+      },
+      "stack": [
+        "Rust",
+        "Kotlin",
+        "Jetpack Compose",
+        "SwiftUI",
+        "Win32",
+        "ScreenCaptureKit"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/GlyphRay/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "winai-usage-bar",
+      "repo": "lingmulongtai/WinAI-Usage-Bar",
+      "name": "WinAI-Usage-Bar",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "デスクトップアプリ",
+        "en": "DESKTOP APP"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "AIサービスの利用状況を確認するWindows常駐アプリ",
+        "en": "A Windows tray app for monitoring AI service usage"
+      },
+      "desc": {
+        "ja": "トレイパネル、デスクトップウィジェット、プロバイダー別の利用率・リセット時刻・履歴を表示。手動入力やCLI・APIを使う取得経路を備えます。",
+        "en": "Shows provider usage, reset times, and history in a tray panel and desktop widgets. Supports manual input and data collection through CLI tools and APIs."
+      },
+      "stack": [
+        "C#",
+        "WinUI 3",
+        "Windows App SDK",
+        "MVVM"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/WinAI-Usage-Bar/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "dimtooff-windows",
+      "repo": "lingmulongtai/DimToOff-windows",
+      "name": "DimToOff-windows",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "デスクトップアプリ",
+        "en": "DESKTOP APP"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "PCを動かしたまま画面を暗くするWindows常駐ツール",
+        "en": "A Windows tray utility that blanks the display while keeping the PC awake"
+      },
+      "desc": {
+        "ja": "内蔵ディスプレイの最低輝度やアイドル時間を契機に黒い画面を表示し、入力操作で復帰。ダウンロードやビルドなどを継続できます。",
+        "en": "Blanks the built-in display at minimum brightness or after an idle period, then restores it on input. Downloads, builds, and other background work can continue."
+      },
+      "stack": [
+        "C#",
+        ".NET 8",
+        "WinUI 3",
+        "Windows App SDK",
+        "WMI"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/DimToOff-windows/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
       "slug": "pdf-local-unlocker",
       "repo": "lingmulongtai/PDF-Local-Unlocker",
-      "name": "PDF Local Unlocker",
+      "name": "PDF-Local-Unlocker",
       "size": "std",
-      "filter": "live",
+      "filter": "web",
       "year": "2026",
       "tag": {
-        "ja": "クライアントサイドWebアプリ",
-        "en": "CLIENT-SIDE WEB APP"
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
       },
       "status": {
-        "ja": "MVP",
-        "en": "MVP"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "サーバに送らないPDF解錠ツール",
-        "en": "Unlocks PDFs without sending them anywhere"
+        "ja": "既知のパスワードでPDFを開き、ブラウザ内で解除して保存",
+        "en": "Unlock PDFs locally in the browser using their known passwords"
       },
       "desc": {
-        "ja": "パスワード付き PDF を、ブラウザの中だけで解錠する Web アプリです。ファイルは一切サーバにアップロードされません。qpdf-wasm を Web Worker 上で動かし、複数ファイルのキュー処理、よく使うパスワードの一括試行、ファイルごとの個別指定、ZIP での書き出しに対応しています。",
-        "en": "A web app that unlocks password-protected PDFs entirely inside the browser — no file ever reaches a server. It runs qpdf-wasm in a Web Worker, with multi-file queues, batch attempts using common passwords, per-file passwords and ZIP export."
+        "ja": "PDFを外部送信せず、Web Worker上のqpdf-wasmで処理。複数ファイル、個別パスワード、PDFプレビュー、個別・ZIP保存のUIを備えます。",
+        "en": "Processes PDFs with qpdf-wasm in a Web Worker without uploading them. Includes interfaces for multiple files, individual passwords, PDF previews, and individual or ZIP downloads."
       },
       "stack": [
-        "qpdf-wasm",
-        "Web Worker",
+        "TypeScript",
+        "React",
         "Vite",
-        "GitHub Pages"
+        "qpdf-wasm",
+        "Web Workers",
+        "JSZip"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/PDF-Local-Unlocker/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
-      "slug": "launchkey-lighting",
-      "repo": "lingmulongtai/launchkey-lighting",
-      "name": "Launchkey Lighting",
+      "slug": "kuas-reception",
+      "repo": "lingmulongtai/KUAS-reception",
+      "name": "KUAS-reception",
       "size": "std",
-      "filter": "spec",
-      "year": "2026",
+      "filter": "web",
+      "year": "2025",
       "tag": {
-        "ja": "デスクトップユーティリティ",
-        "en": "DESKTOP UTILITY"
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
       },
       "status": {
-        "ja": "仕様策定",
-        "en": "Spec"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "MIDIキーボードを光らせる常駐アプリ",
-        "en": "A tray app that keeps a MIDI keyboard lit"
+        "ja": "オープンキャンパスの受付・配席をブラウザで管理",
+        "en": "Manage open-campus check-in and program assignments in the browser"
       },
       "desc": {
-        "ja": "Launchkey MK4 61鍵を光らせるための常駐アプリ。ゲーミングキーボード用ソフトのようにプリセットを組み替えられ、画面上のキーボード図から直接ライティングを編集できます。DAW など他のソフトを立ち上げている間も発光が消えないことが、いちばん大事な要件です。",
-        "en": "A tray-resident app that lights up a Launchkey MK4 61. Presets can be swapped like gaming-keyboard software, and lighting is edited directly on an on-screen diagram of the keyboard. The key requirement: the lights must survive while a DAW or other software is running."
+        "ja": "名簿の読み込み、来場受付、希望に応じた割り当て、待機列、Excel・PDF出力をローカルで処理。多言語表示に対応します。",
+        "en": "Handles roster imports, visitor check-in, preference-based assignments, queues, and Excel/PDF exports locally. Supports multiple interface languages."
       },
       "stack": [
-        "MIDI SysEx",
-        "Tray App",
-        "Preset Editor"
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "IndexedDB",
+        "SheetJS",
+        "SortableJS"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/KUAS-reception/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
-      "slug": "dual-agent-desktop",
-      "repo": "lingmulongtai/dual-agent-desktop",
-      "name": "Dual-Agent Desktop",
-      "size": "wide",
-      "filter": "spec",
+      "slug": "kuas-fall-2026",
+      "repo": "lingmulongtai/kuas-fall-2026",
+      "name": "kuas-fall-2026",
+      "size": "std",
+      "filter": "web",
       "year": "2026",
       "tag": {
-        "ja": "エージェントツール",
-        "en": "AGENT TOOLING"
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
       },
       "status": {
-        "ja": "設計中",
-        "en": "In design"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "2つのAIエージェントに同じ質問を投げて見比べる",
-        "en": "Ask two AI agents the same thing, side by side"
+        "ja": "秋学期の時間割・授業計画・教材をまとめる履修ダッシュボード",
+        "en": "A fall-semester dashboard for timetables, course plans, and materials"
       },
       "desc": {
-        "ja": "Claude Code と Codex を裏で常駐させ、ひとつのアプリにまとめるデスクトップツール。コーディング以外の普通のチャットは両方へ同時に送り、返ってきた答えを左右に並べて比較できます。稼働状況は Discord のライブステータスにも流します。",
-        "en": "A desktop tool that keeps Claude Code and Codex running in the background and unifies them into one app. Ordinary, non-coding chat goes to both at once so the two answers can be compared side by side, and live status for both is pushed to Discord."
+        "ja": "2026年度秋学期の履修科目、週ごとの授業内容、成績評価、教材をまとめた静的サイトです。",
+        "en": "A static site collecting fall 2026 courses, weekly class plans, grading criteria, and study materials."
       },
       "stack": [
-        "Desktop",
-        "Agent Runtime",
-        "Discord RPC"
+        "HTML",
+        "CSS",
+        "JavaScript"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/kuas-fall-2026/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     },
     {
-      "slug": "smart-open-campus",
-      "repo": "lingmulongtai/smart-open-campus",
-      "name": "Smart Open Campus",
-      "size": "wide",
-      "filter": "build",
+      "slug": "github-clendar-connector",
+      "repo": "lingmulongtai/Github-Clendar-Connector",
+      "name": "Github-Clendar-Connector",
+      "size": "std",
+      "filter": "tools",
       "year": "2026",
       "tag": {
-        "ja": "キャンパスシステム",
-        "en": "CAMPUS SYSTEM"
+        "ja": "開発ツール",
+        "en": "DEVELOPER TOOL"
       },
       "status": {
-        "ja": "開発中",
-        "en": "Building"
+        "ja": "公開",
+        "en": "Public"
       },
       "summary": {
-        "ja": "受付DXとロボティクスで来場体験をつくり直す",
-        "en": "Rebuilding the visitor experience with check-in DX and robotics"
+        "ja": "GitHubの活動履歴をGoogleカレンダーへ同期",
+        "en": "Sync GitHub contribution history to Google Calendar"
       },
       "desc": {
-        "ja": "オープンキャンパスの来場者体験そのものを設計し直す、工学部コーナーストーンのプロジェクト。ローカルで動く QR 受付アプリと、リストバンドを自動で装着するロボティクス装置を組み合わせます。個人情報の扱いを見直した結果、サーバを介さない完全ローカル構成へ切り替えました。デモには実データを使いません。",
-        "en": "A Cornerstone project in the engineering faculty that redesigns the open-campus visitor experience itself, combining a locally running QR check-in app with a robotic device that attaches wristbands automatically. After reviewing how personal information is handled, the architecture moved to a fully local setup with no server. Demonstrations use sample data only."
+        "ja": "日別コントリビューションを終日予定として作成・更新し、件数に応じて色分け。書き込み前に確認できるdry-runも備えます。",
+        "en": "Creates or updates all-day events for daily contributions and colors them by activity level. A dry-run mode previews changes before writing to the calendar."
       },
       "stack": [
-        "Local QR",
-        "Robotics",
-        "Wristband",
-        "KUAS"
+        "Python",
+        "FastAPI",
+        "GitHub GraphQL API",
+        "Google Calendar API"
       ],
       "links": {
-        "docs": ""
-      }
+        "docs": "https://github.com/lingmulongtai/Github-Clendar-Connector/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "github-dna-visualizer",
+      "repo": "lingmulongtai/GitHub-DNA-Visualizer",
+      "name": "GitHub-DNA-Visualizer",
+      "size": "std",
+      "filter": "tools",
+      "year": "2026",
+      "tag": {
+        "ja": "開発ツール",
+        "en": "DEVELOPER TOOL"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "GitHubの開発活動をグラフと共有カードで可視化",
+        "en": "Visualize GitHub activity with charts and shareable cards"
+      },
+      "desc": {
+        "ja": "言語構成・活動ヒートマップ・スター分布・開発タイムラインを表示。ユーザー比較、SVGカード出力、プロフィールREADME生成に対応します。",
+        "en": "Shows language breakdowns, activity heatmaps, star distribution, and development timelines. Includes user comparisons, SVG card exports, and profile README generation."
+      },
+      "stack": [
+        "TypeScript",
+        "React",
+        "Vite",
+        "Recharts",
+        "Node.js",
+        "Express"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/GitHub-DNA-Visualizer/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "ai-home-energy-assistant",
+      "repo": "lingmulongtai/AI-Home-Energy-Assistant",
+      "name": "AI-Home-Energy-Assistant",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "太陽光・蓄電池・家庭内電力の運用シミュレーター",
+        "en": "A simulator for solar power, batteries, and household energy"
+      },
+      "desc": {
+        "ja": "Jackery、ソーラーパネル、スマートプラグを想定し、天候・時間帯料金・機器の消費電力に応じた充放電をグラフで試せます。",
+        "en": "Simulates a household with a portable battery, solar panels, and smart plugs. Explore charging and discharging against weather, time-of-use prices, and appliance consumption."
+      },
+      "stack": [
+        "TypeScript",
+        "React",
+        "Vite",
+        "Recharts",
+        "Tailwind CSS"
+      ],
+      "links": {
+        "docs": "",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "skycopilot",
+      "repo": "lingmulongtai/SkyCopilot",
+      "name": "SkyCopilot",
+      "size": "std",
+      "filter": "tools",
+      "year": "2026",
+      "tag": {
+        "ja": "開発ツール",
+        "en": "DEVELOPER TOOL"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "プレイヤーの実績に合わせて助言するSkyblock用Discordボット",
+        "en": "A Discord bot giving Skyblock advice based on player statistics"
+      },
+      "desc": {
+        "ja": "MinecraftプロフィールとDiscordを連携し、SkyCryptの統計をAI回答へ反映。複数LLMプロバイダーへの切り替えを備えます。",
+        "en": "Links Minecraft profiles to Discord and uses SkyCrypt statistics in AI answers. Supports switching between multiple LLM providers."
+      },
+      "stack": [
+        "Python",
+        "discord.py",
+        "SQLite",
+        "SkyCrypt API",
+        "LLM APIs"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/SkyCopilot/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "cadence",
+      "repo": "lingmulongtai/Cadence",
+      "name": "Cadence",
+      "size": "std",
+      "filter": "mobile",
+      "year": "2026",
+      "tag": {
+        "ja": "モバイルアプリ",
+        "en": "MOBILE APP"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "端末の動きに連動するモーションキューアプリ",
+        "en": "A motion-cue app with dots that respond to device movement"
+      },
+      "desc": {
+        "ja": "画面端のドット表示、オン・オフ・自動モード、設定画面、通知からの切り替えを備えるモバイルアプリの実装です。",
+        "en": "A mobile implementation with motion-responsive dots along the screen edges, on/off/automatic modes, settings, and notification controls."
+      },
+      "stack": [
+        "TypeScript",
+        "React Native",
+        "Expo",
+        "Expo Sensors",
+        "Reanimated"
+      ],
+      "links": {
+        "docs": "",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "bandwidth-burner",
+      "repo": "lingmulongtai/bandwidth-burner",
+      "name": "bandwidth-burner",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "通信速度を3D粒子で見せるブラウザ帯域消費ツール",
+        "en": "A browser bandwidth burner with a reactive 3D throughput display"
+      },
+      "desc": {
+        "ja": "転送速度・累計転送量・経過時間を表示。連続実行と10秒間の測定を切り替えられます。",
+        "en": "Displays transfer speed, total transferred data, and elapsed time. Switch between continuous operation and a ten-second measurement."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Three.js"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/bandwidth-burner/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "photography-club-website",
+      "repo": "lingmulongtai/Photography-Club-Website",
+      "name": "Photography-Club-Website",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "KUAS写真部の活動と主要リンクをまとめるWebサイト",
+        "en": "A website showcasing KUAS Photography Club activities and links"
+      },
+      "desc": {
+        "ja": "スマートフォンを中心に、入部フォーム、撮影会、SNS、ギャラリーを1ページに集約。ファインダーや3Dカメラの演出を備えます。",
+        "en": "A mobile-oriented page bringing together the membership form, photo walks, social accounts, and gallery, with viewfinder and 3D-camera effects."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Photography-Club-Website/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "my-portfolio",
+      "repo": "lingmulongtai/My-Portfolio",
+      "name": "My-Portfolio",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "写真ギャラリーとLightroomプリセットのポートフォリオ",
+        "en": "A photography portfolio with a gallery and Lightroom presets"
+      },
+      "desc": {
+        "ja": "写真ギャラリー、プロフィール、プリセットのダウンロード、問い合わせ導線をまとめた静的サイトです。",
+        "en": "A static site bringing together a photography gallery, profile, Lightroom preset downloads, and contact links."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Lightroom XMP"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/My-Portfolio/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "holiday-hand-magic",
+      "repo": "lingmulongtai/Holiday-Hand-Magic",
+      "name": "Holiday-Hand-Magic",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "手の動きと生成AIで操るホリデー3Dパーティクル",
+        "en": "Holiday 3D particles controlled by hand motion and generative AI"
+      },
+      "desc": {
+        "ja": "ツリー・雪だるまなどの粒子形状を表示。カメラの動きやジェスチャーを使い、テキストから新しい形状も生成します。",
+        "en": "Displays particle shapes such as trees and snowmen, using camera motion and gestures for interaction. Text prompts can generate additional shapes."
+      },
+      "stack": [
+        "TypeScript",
+        "React",
+        "Three.js",
+        "React Three Fiber",
+        "Gemini API"
+      ],
+      "links": {
+        "docs": "",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "spectralens-pbr",
+      "repo": "lingmulongtai/SpectraLens-PBR",
+      "name": "SpectraLens-PBR",
+      "size": "std",
+      "filter": "research",
+      "year": "2026",
+      "tag": {
+        "ja": "実験・学習",
+        "en": "EXPERIMENT & LEARNING"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "太陽光とシャドウマップを扱うGLSLシェーダー実験",
+        "en": "A GLSL shader experiment with sunlight and shadow mapping"
+      },
+      "desc": {
+        "ja": "深度から位置を復元し、太陽光・影・アルベドを合成する頂点／フラグメントシェーダー。ピクセルごとの法線処理は今後の実装項目です。",
+        "en": "Vertex and fragment shaders that reconstruct positions from depth and combine sunlight, shadows, and albedo. Per-pixel normal handling remains future work."
+      },
+      "stack": [
+        "GLSL"
+      ],
+      "links": {
+        "docs": "",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "spaceapps-concept",
+      "repo": "lingmulongtai/Spaceapps-concept",
+      "name": "Spaceapps-concept",
+      "size": "std",
+      "filter": "research",
+      "year": "2025",
+      "tag": {
+        "ja": "実験・学習",
+        "en": "EXPERIMENT & LEARNING"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "衛星画像の探索・プレビュー・翻訳をつなぐ構想プロトタイプ",
+        "en": "A concept prototype for discovering, previewing, and translating orbital imagery"
+      },
+      "desc": {
+        "ja": "NASA Space Apps向けの構想として、カタログ検索、地図、タイムライン、翻訳の基盤を用意。外部データ連携の拡張を想定しています。",
+        "en": "A NASA Space Apps concept with foundations for catalog searches, maps, timelines, and translation, designed for further external-data integrations."
+      },
+      "stack": [
+        "Python",
+        "FastAPI",
+        "Next.js",
+        "React Query",
+        "Zustand",
+        "DeepL API"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Spaceapps-concept/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "pre-makaizo-project",
+      "repo": "lingmulongtai/pre-makaizo-project",
+      "name": "pre-makaizo-project",
+      "size": "std",
+      "filter": "hardware",
+      "year": "2025",
+      "tag": {
+        "ja": "ハードウェア",
+        "en": "HARDWARE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "動画・DVDトレイ・Arduinoモーターを連動させる実験",
+        "en": "An experiment coordinating video playback, a DVD tray, and an Arduino motor"
+      },
+      "desc": {
+        "ja": "WindowsでVLCの動画再生、DVDトレイの排出、Arduinoへのシリアル命令を組み合わせるショー制御スクリプトとスケッチです。",
+        "en": "Show-control scripts and an Arduino sketch coordinating VLC playback, DVD-tray ejection, and serial motor commands on Windows."
+      },
+      "stack": [
+        "Python",
+        "Arduino",
+        "pyserial",
+        "VLC",
+        "AccelStepper"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/pre-makaizo-project/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "ip1",
+      "repo": "lingmulongtai/IP1",
+      "name": "IP1",
+      "size": "std",
+      "filter": "research",
+      "year": "2026",
+      "tag": {
+        "ja": "実験・学習",
+        "en": "EXPERIMENT & LEARNING"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Pythonによるアルゴリズムとプログラミングの学習記録",
+        "en": "Python exercises for algorithmic thinking and programming"
+      },
+      "desc": {
+        "ja": "週ごとの演習コードと補助説明を収録。条件分岐・繰り返し・ファイル処理・ソート・数値計算などを扱います。",
+        "en": "Weekly exercises and supporting notes covering conditions, loops, file handling, sorting, and numerical computation."
+      },
+      "stack": [
+        "Python"
+      ],
+      "links": {
+        "docs": "",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "kuas-photography-club",
+      "repo": "lingmulongtai/KUAS-Photography-Club",
+      "name": "KUAS-Photography-Club",
+      "size": "std",
+      "filter": "docs",
+      "year": "2025",
+      "tag": {
+        "ja": "ドキュメント",
+        "en": "DOCUMENTATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "KUAS写真サークルの紹介と運営ドキュメント",
+        "en": "Introduction and operating documentation for the KUAS Photography Club"
+      },
+      "desc": {
+        "ja": "活動目的、撮影会、参加方法などを日英で紹介し、運営方針や共有資料を整理するためのリポジトリです。",
+        "en": "Introduces the club, photo walks, and participation in Japanese and English, and organizes operating guidelines and shared resources."
+      },
+      "stack": [
+        "Markdown"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "my-github-portfolio",
+      "repo": "lingmulongtai/my-github-portfolio",
+      "name": "my-github-portfolio",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "Webアプリ・サイト",
+        "en": "WEB APPLICATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "GitHubの公開プロジェクトと活動をまとめるポートフォリオ",
+        "en": "A portfolio of public GitHub projects and development activity"
+      },
+      "desc": {
+        "ja": "日本語・英語のプロジェクト紹介、詳細表示、検索、GitHubデータの定期取得を備えるGitHub Pagesサイトです。",
+        "en": "A GitHub Pages site with bilingual project descriptions, detail views, search, and scheduled GitHub data updates."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "GitHub API",
+        "GitHub Actions"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/my-github-portfolio/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
+    },
+    {
+      "slug": "lingmulongtai",
+      "repo": "lingmulongtai/lingmulongtai",
+      "name": "lingmulongtai",
+      "size": "std",
+      "filter": "docs",
+      "year": "2025",
+      "tag": {
+        "ja": "ドキュメント",
+        "en": "DOCUMENTATION"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "制作分野と技術への関心を紹介するGitHubプロフィール",
+        "en": "A GitHub profile introducing projects, technical interests, and tools"
+      },
+      "desc": {
+        "ja": "AIアプリ、Webツール、組み込みシステム、クリエイティブ技術への取り組みを紹介するプロフィールREADMEです。",
+        "en": "A profile README introducing work on AI applications, web tools, embedded systems, and creative technology."
+      },
+      "stack": [
+        "Markdown",
+        "HTML"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/lingmulongtai/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false
     }
   ]
 }
