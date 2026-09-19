@@ -11,6 +11,7 @@
 .
 ├── index.html                      サイト本体（触らなくていい）
 ├── projects.json                   プロフィールと日英の紹介文
+├── assets/projects/                各プロジェクトの生成背景画像とプロンプト
 ├── data/github.json                公開時に自動生成（Git 管理外）
 ├── scripts/sync-github.mjs          全公開リポジトリの取得スクリプト
 ├── tests/                          カタログ・読み込み処理の回帰テスト
@@ -40,6 +41,7 @@
 | `filter` | `web` / `desktop` / `mobile` / `tools` / `hardware` / `research` / `docs` / `other` |
 | `tag` / `summary` / `desc` | すべて `{ ja, en }`。確認できる用途・実装を記載する |
 | `stack` | 技術タグ。言語自動判定とは別に、自分で見せたいものを書く |
+| `image` | `assets/projects/<slug>.webp`。未指定の新規プロジェクトは単色背景 |
 | `links.docs` | 仕様書などの任意リンク。空なら出ない |
 
 star 数・言語・ライセンス・最終更新・コミットグラフ・**サイトのリンク**は GitHub から自動で取得します。ステータスも「公開」「フォーク」「アーカイブ」を実際の設定から表示し、進捗率や完成度は推定しません。集計はフォークを含むリポジトリ単位の値です。
@@ -56,9 +58,9 @@ star 数・言語・ライセンス・最終更新・コミットグラフ・**�
 2. Settings → Pages → Source を **GitHub Actions** に設定
 3. Actions タブで `Sync GitHub data and deploy Pages` を手動実行
 
-以降は毎日 3:00 JST にデータ取得と公開が実行されます（開始時刻は GitHub 側で遅延する場合があります）。`index.html`、`projects.json`、取得スクリプト、ワークフローを編集して `main` に push したときも実行されます。
+以降は毎日 3:00 JST にデータ取得と公開が実行されます（開始時刻は GitHub 側で遅延する場合があります）。`index.html`、`projects.json`、`assets/`、取得スクリプト、ワークフローを編集して `main` に push したときも実行されます。
 
-`data/github.json` は実行時に生成し、サイト本体と一緒に Pages へ公開します。自動更新でリポジトリへコミットする必要はありません。公開対象は `index.html`、`projects.json`、`data/github.json` の3ファイルです。
+`data/github.json` は実行時に生成し、サイト本体と一緒に Pages へ公開します。自動更新でリポジトリへコミットする必要はありません。公開対象は `index.html`、`projects.json`、`data/github.json` と `assets/` です。
 
 取得には標準の `GITHUB_TOKEN` を使うため、追加のシークレット設定は不要です。公開一覧を最後まで取得できない場合や0件の場合は公開を中止します。コミット集計が処理中・取得不能でも、そのプロジェクト自体は掲載します。
 
@@ -80,6 +82,12 @@ star 数・言語・ライセンス・最終更新・コミットグラフ・**�
 確認用にローカルサーバを立てるなら `python3 -m http.server` で十分です。
 
 外部通信がブロックされた環境では「GitHub データ未取得」と表示します。
+
+## カードの画像
+
+公開26件の背景は、各プロジェクトの用途をもとにChatGPTの内蔵画像生成で個別に作ったコンセプト画像です。実際の画面や製品の写真ではありません。共通の画風と各画像の生成プロンプトは `assets/projects/prompts.json` に保存しています。
+
+配信用画像は幅1280pxのWebPに最適化し、遅延読み込みを使用しています。タイトルの背景には暗いグラデーションを重ねています。新規リポジトリの画像生成は自動同期に含まれません。画像を追加するときは `image` と予備の `site-data` を更新してください。
 
 ## 5. 操作
 

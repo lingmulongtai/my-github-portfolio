@@ -34,7 +34,7 @@ test("an incomplete repository list fails instead of publishing a partial catalo
 test("new projects remain visible when statistics are pending or unavailable", async () => {
   const repos = [repo("new-project"), repo("featured"), repo("fork", { fork: true })];
   const snapshot = await collectPortfolio("owner", [
-    { repo: "OWNER/FEATURED", summary: { ja: "紹介", en: "Featured" } },
+    { repo: "OWNER/FEATURED", summary: { ja: "紹介", en: "Featured" }, image: "assets/projects/featured.webp" },
     { repo: "owner/deleted-project" },
   ], async path => {
     if (path.startsWith("/users/")) return repos;
@@ -43,6 +43,8 @@ test("new projects remain visible when statistics are pending or unavailable", a
   });
   assert.deepEqual(snapshot.projects.map(p => p.repo), ["owner/featured", "owner/fork", "owner/new-project"]);
   assert.equal(snapshot.projects[0].summary.ja, "紹介");
+  assert.equal(snapshot.projects[0].image, "assets/projects/featured.webp");
+  assert.equal(snapshot.projects[2].image, "");
   assert.equal(snapshot.projects[1].status.en, "Fork");
   assert.equal(snapshot.stats["new-project"].url, "https://github.com/owner/new-project");
   assert.deepEqual(snapshot.stats["new-project"].weeks, []);

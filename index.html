@@ -117,7 +117,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
 .tile.dim{opacity:.24}
 .tile-open{position:absolute; inset:0; z-index:1}
-.tile>:where(:not(.tile-open):not(.site)){position:relative; z-index:0; pointer-events:none}
+.tile>:where(:not(.tile-open):not(.site):not(.tile-art)){position:relative; z-index:0; pointer-events:none}
 .tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; line-height:1.55;
   padding-right:76px; opacity:.75; overflow-wrap:anywhere}
 .tile h3{font-family:var(--display); font-weight:500; letter-spacing:-.04em; margin:auto 0 9px;
@@ -140,6 +140,25 @@ body.light .tile:hover,body.light .tile:focus-within{color:var(--paper)}
   font-variant-numeric:tabular-nums}
 .sparkbar{display:flex; gap:2px; align-items:flex-end; height:30px; flex:1; margin-left:auto; max-width:132px}
 .sparkbar i{flex:1; background:currentColor; opacity:.45; border-radius:1px}
+.tile.has-image{isolation:isolate; min-height:360px; background:#07112f; color:var(--paper);
+  border-color:rgba(247,245,239,.65)}
+.tile .tile-art{position:absolute; inset:0; z-index:-2; width:100%; height:100%;
+  object-fit:cover; object-position:50% 35%; pointer-events:none;
+  transition:transform .65s cubic-bezier(.16,1,.3,1)}
+.tile.has-image::before{content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,13,46,.68) 0%,rgba(5,13,46,.12) 30%,
+    rgba(5,13,46,.58) 48%,rgba(5,13,46,.94) 72%,#050d2e 100%)}
+.tile.has-image:hover,.tile.has-image:focus-within,body.light .tile.has-image:hover,
+body.light .tile.has-image:focus-within{background:#07112f; color:var(--paper); border-color:var(--acid)}
+.tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:scale(1.045)}
+.tile.has-image .no,.tile.has-image .jp{opacity:1; text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.tile.has-image .st{background:var(--acid); color:var(--ink)}
+.tile.has-image .site{background:rgba(5,13,46,.8)}
+.tile.has-image .site:hover{background:var(--acid); color:var(--ink)}
+.tile.has-image .site:hover span{mix-blend-mode:normal; filter:none}
+.tile.has-image .foot .lbl{opacity:.85}
+.tile.has-image.s-hero,.tile.has-image.s-tall{min-height:420px}
+@media (prefers-reduced-motion:reduce){.tile .tile-art{transition:none}}
 .s-hero{grid-column:span 4; min-height:336px}
 .s-tall{grid-column:span 2; min-height:336px}
 .s-wide{grid-column:span 3}
@@ -439,7 +458,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/AeroGrid-3D/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/aerogrid-3d.webp"
     },
     {
       "slug": "keylume",
@@ -475,7 +495,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/Keylume/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/keylume.webp"
     },
     {
       "slug": "codexbar-android",
@@ -510,7 +531,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/CodexBar-android/blob/main/README.md",
         "site": ""
       },
-      "fork": true
+      "fork": true,
+      "image": "assets/projects/codexbar-android.webp"
     },
     {
       "slug": "instaframe",
@@ -547,7 +569,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/InstaFrame/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/instaframe.webp"
     },
     {
       "slug": "glyphray",
@@ -584,7 +607,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/GlyphRay/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/glyphray.webp"
     },
     {
       "slug": "winai-usage-bar",
@@ -619,7 +643,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/WinAI-Usage-Bar/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/winai-usage-bar.webp"
     },
     {
       "slug": "dimtooff-windows",
@@ -655,7 +680,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/DimToOff-windows/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/dimtooff-windows.webp"
     },
     {
       "slug": "pdf-local-unlocker",
@@ -692,7 +718,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/PDF-Local-Unlocker/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/pdf-local-unlocker.webp"
     },
     {
       "slug": "kuas-reception",
@@ -729,7 +756,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/KUAS-reception/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-reception.webp"
     },
     {
       "slug": "kuas-fall-2026",
@@ -763,7 +791,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/kuas-fall-2026/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-fall-2026.webp"
     },
     {
       "slug": "github-clendar-connector",
@@ -798,7 +827,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/Github-Clendar-Connector/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/github-clendar-connector.webp"
     },
     {
       "slug": "github-dna-visualizer",
@@ -835,7 +865,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/GitHub-DNA-Visualizer/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/github-dna-visualizer.webp"
     },
     {
       "slug": "ai-home-energy-assistant",
@@ -871,7 +902,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/ai-home-energy-assistant.webp"
     },
     {
       "slug": "skycopilot",
@@ -907,7 +939,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/SkyCopilot/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/skycopilot.webp"
     },
     {
       "slug": "cadence",
@@ -943,7 +976,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/cadence.webp"
     },
     {
       "slug": "bandwidth-burner",
@@ -978,7 +1012,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/bandwidth-burner/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/bandwidth-burner.webp"
     },
     {
       "slug": "photography-club-website",
@@ -1012,7 +1047,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/Photography-Club-Website/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/photography-club-website.webp"
     },
     {
       "slug": "my-portfolio",
@@ -1047,7 +1083,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/My-Portfolio/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/my-portfolio.webp"
     },
     {
       "slug": "holiday-hand-magic",
@@ -1083,7 +1120,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/holiday-hand-magic.webp"
     },
     {
       "slug": "spectralens-pbr",
@@ -1115,7 +1153,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/spectralens-pbr.webp"
     },
     {
       "slug": "spaceapps-concept",
@@ -1152,7 +1191,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/Spaceapps-concept/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/spaceapps-concept.webp"
     },
     {
       "slug": "pre-makaizo-project",
@@ -1188,7 +1228,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/pre-makaizo-project/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/pre-makaizo-project.webp"
     },
     {
       "slug": "ip1",
@@ -1220,7 +1261,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/ip1.webp"
     },
     {
       "slug": "kuas-photography-club",
@@ -1252,7 +1294,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/kuas-photography-club.webp"
     },
     {
       "slug": "my-github-portfolio",
@@ -1288,7 +1331,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/my-github-portfolio/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/my-github-portfolio.webp"
     },
     {
       "slug": "lingmulongtai",
@@ -1321,7 +1365,8 @@ footer{padding:66px var(--pad) 26px; border-top:2px solid currentColor}
         "docs": "https://github.com/lingmulongtai/lingmulongtai/blob/main/README.md",
         "site": ""
       },
-      "fork": false
+      "fork": false,
+      "image": "assets/projects/lingmulongtai.webp"
     }
   ]
 }
@@ -1371,6 +1416,7 @@ const t=k=>T[LANG][k]??k;
 const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
+const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
 
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const $=id=>document.getElementById(id);
@@ -1410,7 +1456,7 @@ async function loadGithub(){
       return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
         year:(r.created_at||'').slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
         status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
-        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},fork:r.fork};
+        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',fork:r.fork};
     });
     const out={};
     repos.forEach((r,index)=>{
@@ -1502,7 +1548,8 @@ function render(){
 
   /* tiles */
   $('bento').innerHTML=P.map((p,i)=>`
-    <article class="tile s-${esc(p.size||'std')}" data-f="${esc(p.filter)}">
+    <article class="tile s-${esc(p.size||'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
+      ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(i+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
@@ -1593,6 +1640,9 @@ addEventListener('popstate',()=>{
 });
 
 /* ===================== events ===================== */
+$('bento').addEventListener('error',e=>{
+  if(e.target.classList.contains('tile-art')) e.target.hidden=true;
+},true);
 document.addEventListener('click',e=>{
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
   const f=e.target.closest('.fbtn');

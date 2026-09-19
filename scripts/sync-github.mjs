@@ -68,6 +68,7 @@ export function projectFromRepository(repo, override = {}) {
     summary: override.summary || { ja: summary || "GitHubで公開しているプロジェクト", en: summary || "A public project on GitHub" },
     desc: override.desc || { ja: summary || "詳細はリポジトリをご覧ください。", en: summary || "See the repository for details." },
     stack: override.stack || (repo.language ? [repo.language] : []),
+    image: override.image || "",
     links: {
       docs: websiteUrl(override.links?.docs),
       site: websiteUrl(override.links?.site),

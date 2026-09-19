@@ -1,0 +1,136 @@
+{
+  "generator": "ChatGPT built-in image_gen",
+  "commonPrompt": "Use case: stylized-concept.\nAsset type: original landscape background artwork for a software project card in a blue-and-acid-yellow developer portfolio, approximately 3:2 landscape.\nStyle/medium: premium editorial 3D illustration with tactile materials, crisp sculptural forms, controlled cinematic light, subtle grain. Rich cobalt and deep midnight blue environment, small electric lime and cool cyan highlights. Each object has a clear recognizable silhouette, not generic abstract decoration.\nComposition/framing: focus the main subject in the upper middle of the image, keep it within the central 65 percent so both wide and nearly-square crops work; bottom third fades into quiet dark blue negative space for white HTML project title and description. Fill the frame, no border.\nConstraints: a conceptual illustration, not an app screenshot. Absolutely no text, letters, numbers, logos, watermarks or readable UI. No collage, no split panels, no human faces. Generate ONE complete image.\nSubject: ",
+  "images": [
+    {
+      "slug": "aerogrid-3d",
+      "path": "assets/projects/aerogrid-3d.webp",
+      "subject": "A small passenger aircraft glides above a tilted three-dimensional terrain map, with delicate glowing altitude arcs, a thin geographic grid and wisps of weather clouds. A layered blue globe-like topography fills the scene. No satellites."
+    },
+    {
+      "slug": "keylume",
+      "path": "assets/projects/keylume.webp",
+      "subject": "A close oblique view of a beautifully modeled unbranded MIDI keyboard, white and black piano keys sweeping diagonally through the upper center, square drum pads glowing lime and cyan, a few subtle floating musical light trails. This represents creative keyboard lighting and music practice."
+    },
+    {
+      "slug": "codexbar-android",
+      "path": "assets/projects/codexbar-android.webp",
+      "subject": "An unbranded dark smartphone floating at a slight angle, its screen holding three sculptural glowing quota rings and small stacked usage bars without any text; tiny modular data blocks surround it. Emphasize mobile AI usage monitoring."
+    },
+    {
+      "slug": "instaframe",
+      "path": "assets/projects/instaframe.webp",
+      "subject": "Three beautifully matted photographic prints float at a slight angle over a blue studio surface, one mountain landscape, one architectural detail, one quiet seascape. Thick ivory frames and finely ruled but completely blank metadata bands evoke customizable EXIF photo borders."
+    },
+    {
+      "slug": "glyphray",
+      "path": "assets/projects/glyphray.webp",
+      "subject": "A stylus draws one luminous cyan stroke across a floating pen tablet; behind it a larger thin desktop display mirrors that exact stroke. A refined arc of light connects the two screens, showing remote display and pen input. No generic charts."
+    },
+    {
+      "slug": "winai-usage-bar",
+      "path": "assets/projects/winai-usage-bar.webp",
+      "subject": "A wide floating desktop monitor with a slender row of lime segmented resource gauges along its lower edge, plus a few compact detached widget tiles with abstract ring meters. Dark cobalt glass and brushed metal evoke a desktop tray utility, with no text."
+    },
+    {
+      "slug": "dimtooff-windows",
+      "path": "assets/projects/dimtooff-windows.webp",
+      "subject": "A half-open modern laptop in a deep blue quiet workspace, its screen completely dark while a small illuminated status light and faint flowing data trail continue beneath it. A fine crescent of light suggests the display fading to off without stopping the computer."
+    },
+    {
+      "slug": "pdf-local-unlocker",
+      "path": "assets/projects/pdf-local-unlocker.webp",
+      "subject": "A stack of ivory document sheets with folded corners beside an elegant open padlock, all contained inside a softly glowing translucent local-computer enclosure. The upper sheet has abstract diagram lines only, no lettering. Calm secure document-processing symbolism, no hacking imagery."
+    },
+    {
+      "slug": "kuas-reception",
+      "path": "assets/projects/kuas-reception.webp",
+      "subject": "An elegant miniature university entrance and reception desk, a small check-in kiosk beside it, and an orderly sequence of simple abstract visitor tokens following softly glowing routing paths. Architectural scale model, no identifiable people or logos."
+    },
+    {
+      "slug": "kuas-fall-2026",
+      "path": "assets/projects/kuas-fall-2026.webp",
+      "subject": "A sculptural weekly timetable made from seven translucent upright columns and neatly arranged ivory course blocks, with an open notebook and a few subtle golden autumn leaves. Academic planning made tangible, absolutely no calendar numerals or text."
+    },
+    {
+      "slug": "github-clendar-connector",
+      "path": "assets/projects/github-clendar-connector.webp",
+      "subject": "Small glowing contribution-grid cubes flow along a curved connection into a physical desk calendar made of an unlabeled square grid. One side resembles a dense mosaic of activity tiles, the other a clean monthly calendar, bridged by one elegant lime data ribbon."
+    },
+    {
+      "slug": "github-dna-visualizer",
+      "path": "assets/projects/github-dna-visualizer.webp",
+      "subject": "A precise double helix constructed from tiny glowing contribution-grid blocks and colored code-like segments, suspended above a dark circular pedestal; subtle branching timeline arcs around the helix. A metaphor for a developer activity profile, no scientific labels."
+    },
+    {
+      "slug": "ai-home-energy-assistant",
+      "path": "assets/projects/ai-home-energy-assistant.webp",
+      "subject": "A beautifully crafted cutaway miniature home with roof solar panels, a portable battery beside it and a few connected appliances, linked by clear cyan and lime energy-flow lines. Dawn light, blue architectural model, a tangible household energy simulation."
+    },
+    {
+      "slug": "skycopilot",
+      "path": "assets/projects/skycopilot.webp",
+      "subject": "A small floating voxel island with a tree and tiny fantasy workshop in a deep blue sky, accompanied by a friendly faceted chat-orb companion and a handful of blank speech bubbles. Block-based game assistance metaphor, no branded characters or logos."
+    },
+    {
+      "slug": "cadence",
+      "path": "assets/projects/cadence.webp",
+      "subject": "A floating portrait phone with a calm blank dark screen, symmetrical glowing motion dots arranged along both screen edges, and elegant curved trajectory lines echoing gentle movement behind it. Minimal precise rhythm, no medical symbolism."
+    },
+    {
+      "slug": "bandwidth-burner",
+      "path": "assets/projects/bandwidth-burner.webp",
+      "subject": "A thick transparent fiber-optic cable curves dynamically through the upper center, filled with racing lime and cyan data pulses, crossing a sculptural speed-gauge arc without numbers. High-speed network throughput with physical depth, no fire."
+    },
+    {
+      "slug": "photography-club-website",
+      "path": "assets/projects/photography-club-website.webp",
+      "subject": "An unbranded mirrorless camera seen in a dramatic three-quarter angle, encircled by floating viewfinder corners and a few small photographic prints of campus architecture and street light. Energetic photo-walk gallery mood, rich cobalt studio background."
+    },
+    {
+      "slug": "my-portfolio",
+      "path": "assets/projects/my-portfolio.webp",
+      "subject": "A quiet contemporary photographic gallery with three large floating framed prints showing a misty mountain, a coastal horizon and an architectural shadow, arranged in layered perspective under soft blue spotlights. Personal photography portfolio, refined and spacious."
+    },
+    {
+      "slug": "holiday-hand-magic",
+      "path": "assets/projects/holiday-hand-magic.webp",
+      "subject": "A gracefully posed single human hand in silhouette guides a swirling constellation of tiny cyan and lime particles into a luminous winter tree, with a small particle snowman nearby. Magical interactive gesture art, anatomically natural five fingers, no holiday text."
+    },
+    {
+      "slug": "spectralens-pbr",
+      "path": "assets/projects/spectralens-pbr.webp",
+      "subject": "A trio of precisely rendered material spheres, brushed metal, frosted glass and matte ceramic, lit by a sharp beam passing through a prismatic lens. Strong physical shadows and subtle reflected color on a blue studio ground evoke experimental PBR shaders."
+    },
+    {
+      "slug": "spaceapps-concept",
+      "path": "assets/projects/spaceapps-concept.webp",
+      "subject": "A luminous layered Earth globe above a dark orbital map plane, with thin data paths connecting small unlabeled catalog tiles and time-marker beads. Space-data exploration concept, dramatic atmospheric rim light, no rockets or NASA branding."
+    },
+    {
+      "slug": "pre-makaizo-project",
+      "path": "assets/projects/pre-makaizo-project.webp",
+      "subject": "An inventive small kinetic machine: a miniature motor, an exposed microcontroller board, a partly ejected optical-disc tray and neatly routed wires, arranged as a carefully built tabletop mechanical performance prototype. Cobalt metal, lime status lights, no labels."
+    },
+    {
+      "slug": "ip1",
+      "path": "assets/projects/ip1.webp",
+      "subject": "An elegant physical programming study model: ordered stacks of small geometric blocks, a looping pathway and branching routes on a blue grid plane, beside a slim open notebook with only blank ruled lines. Introductory algorithms, loops and sorting made tangible."
+    },
+    {
+      "slug": "kuas-photography-club",
+      "path": "assets/projects/kuas-photography-club.webp",
+      "subject": "A shared photography field notebook, two unbranded camera lenses and a tidy fan of campus photo prints on a deep blue tabletop, with small connected lime membership tokens suggesting a welcoming student creative club. Documentary club resources, no names."
+    },
+    {
+      "slug": "my-github-portfolio",
+      "path": "assets/projects/my-github-portfolio.webp",
+      "subject": "A sculptural gallery of small project tiles floating in a six-column-inspired modular arrangement, each holding a different tiny geometric artifact, connected by subtle branching code-history lines. One coherent cobalt portfolio system with lime accents, no lettering or miniature screenshots."
+    },
+    {
+      "slug": "lingmulongtai",
+      "path": "assets/projects/lingmulongtai.webp",
+      "subject": "A carefully composed maker's still life: a tiny circuit board, a camera lens, an elegant code bracket sculpture and a small connected AI node cluster on a deep cobalt desk. A personal creative-technology identity represented through tools, no human portrait or text."
+    }
+  ]
+}
