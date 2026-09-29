@@ -9,7 +9,7 @@ const interactions = code.slice(code.indexOf("const sheet=$("), code.indexOf("/*
 const config = JSON.parse(readFileSync(new URL("../projects.json", import.meta.url), "utf8"));
 
 function setup() {
-  const nodes = new Map(), routes = [], events = new Map(), scrolls = [];
+  const nodes = new Map(), routes = [], events = new Map(), scrolls = [], remembered = [];
   const document = { activeElement: null, addEventListener() {}, querySelectorAll: () => [] };
   function node(id) {
     if (nodes.has(id)) return nodes.get(id);
@@ -28,6 +28,7 @@ function setup() {
       fire(name, event = {}) { handlers.get(name)?.({ preventDefault() {}, ...event }); },
       querySelectorAll() { return this.controls || []; },
       getClientRects: () => [{}],
+      scrollIntoView() {},
       getBoundingClientRect: () => ({ left: 100, top: 100, right: 600, bottom: 700 }),
     };
     nodes.set(id, element);
@@ -37,7 +38,9 @@ function setup() {
   document.activeElement = node("project-launcher");
   const context = createContext({
     $: node, document, location: { hash: "", pathname: "/portfolio/" },
-    history: { pushState: (state, title, route) => routes.push(route) },
+    history: { state: null, scrollRestoration: 'auto',
+      pushState: (state, title, route) => routes.push(route),
+      replaceState: state => remembered.push(state) },
     addEventListener: (name, handler) => events.set(name, handler),
     scrollY: 720, scrollTo: position => scrolls.push(position.top),
     DATA: { profile: config.profile, projects: config.projects.slice(0, 2).map(project => ({
@@ -47,7 +50,7 @@ function setup() {
     t: key => key, esc: value => String(value ?? ""), webUrl: () => "", render() {},
   });
   const api = new Script(interactions + "\n({ open, close, palOpen, palClose })").runInContext(context);
-  return { ...api, node, document, routes, events, context, scrolls };
+  return { ...api, node, document, routes, events, context, scrolls, remembered };
 }
 
 test("project navigation restores the original launcher when the modal closes", () => {
@@ -192,4 +195,20 @@ test("IME confirmation does not open a project before the search query is commit
   }
   ui.node('palin').fire('keydown', { key: 'Enter' });
   assert.equal(ui.node('sheet').open, true);
+});
+
+test("Back restores the saved list position without native restoration competing with the modal", () => {
+  const ui = setup(); ui.open(0);
+  assert.equal(ui.context.history.scrollRestoration, 'manual');
+  assert.equal(ui.remembered[0].pageY, 720);
+  ui.context.scrollY = 0;
+  ui.context.location.hash = '#work';
+  ui.events.get('popstate')({ state: ui.remembered[0] });
+  assert.equal(ui.node('sheet').open, false);
+  assert.equal(ui.scrolls.at(-1), 720);
+  const visits = ui.remembered.length;
+  ui.context.location.hash = '#' + config.projects[0].slug;
+  ui.events.get('popstate')({ state: { i: 0 } });
+  assert.equal(ui.node('sheet').open, true);
+  assert.equal(ui.remembered.length, visits);
 });

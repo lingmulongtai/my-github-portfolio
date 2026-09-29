@@ -1787,6 +1787,9 @@ function countUp(){
 /* ===================== sheet ===================== */
 const sheet=$('sheet'); let curI=-1, lastFocus=null;
 let pageScroll=null;
+// Native restoration can overwrite the saved position after a fixed-body dialog closes.
+history.scrollRestoration='manual';
+function rememberPage(){history.replaceState({...history.state,pageY:pageScroll??scrollY},'')}
 function lockPage(){
   if(pageScroll!==null)return;
   pageScroll=scrollY;
@@ -1833,6 +1836,7 @@ function fill(i){
 }
 function open(i,push=true){
   curI=i; fill(i); sheet.scrollTop=0;
+  if(push&&!sheet.open)rememberPage();
   if(!sheet.open){lastFocus=document.activeElement; lockPage(); sheet.showModal()}
   sheet.classList.add('open');
   $('sClose').focus({preventScroll:true});
@@ -1842,7 +1846,7 @@ function close(push=true){
   sheet.classList.remove('open'); sheet.close();
   unlockPage();
   if(lastFocus)lastFocus.focus({preventScroll:true});
-  curI=-1; if(push)history.pushState({},'',location.pathname);
+  curI=-1; if(push)history.pushState({pageY:scrollY},'',location.pathname);
 }
 $('sClose').addEventListener('click',()=>close());
 sheet.addEventListener('cancel',e=>{e.preventDefault(); close()});
@@ -1853,10 +1857,16 @@ function outsideDialog(e,dialog){
 }
 $('sPrev').addEventListener('click',()=>open((curI-1+DATA.projects.length)%DATA.projects.length));
 $('sNext').addEventListener('click',()=>open((curI+1)%DATA.projects.length));
-addEventListener('popstate',()=>{
+addEventListener('popstate',(event={})=>{
   const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
   if(pal.open)palClose(i>=0);
-  if(i>=0)open(i,false); else if(sheet.classList.contains('open'))close(false);
+  if(i>=0)open(i,false);
+  else{
+    if(sheet.classList.contains('open'))close(false);
+    if(Number.isFinite(event.state?.pageY))scrollTo({top:event.state.pageY,behavior:'instant'});
+    else if(['#home','#work','#about'].includes(location.hash))$(location.hash.slice(1)).scrollIntoView({behavior:'instant',block:'start'});
+    else scrollTo({top:0,behavior:'instant'});
+  }
 });
 
 /* ===================== events ===================== */
@@ -1865,6 +1875,7 @@ $('bento').addEventListener('error',e=>{
 },true);
 document.addEventListener('click',e=>{
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
+  if(e.target.closest('a[href^="#"]'))rememberPage();
   const f=e.target.closest('.fbtn');
   if(f){
     FILTER=f.dataset.k; applyFilter();
