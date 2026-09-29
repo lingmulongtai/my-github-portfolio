@@ -404,7 +404,9 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 }
 @media (hover:none),(pointer:coarse){
   .lang button,nav .k,nav a,.fbtn,.sbar button,.palclose{min-height:44px; min-width:44px}
-  .touch-hint{display:block; margin:8px 0 0; text-align:center; color:var(--ink); font-size:11px}
+  .touch-hint{display:block; margin:8px 0 0; position:relative; text-align:center; color:var(--ink); font-size:11px;
+    background:var(--paper); border-radius:99px; box-shadow:0 0 0 4px var(--paper)}
+  .touch-hint[hidden]{display:block; visibility:hidden}
   .tile:hover,.tile:focus-within{transform:none; background:var(--paper)}
   .tile.has-image:hover,.tile.has-image:focus-within{background:#fff; border-color:var(--line)}
   .tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:none}
