@@ -11,7 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="./assets/hero-motion.js" defer></script>
+<script src="./assets/hero-motion.js?v=2" defer></script>
+<script src="./assets/page-motion.js" defer></script>
 <style>
 :root{
   --ink:#356E69; --acid:#F3D69B; --paper:#FAF8F3; --black:#303632;
@@ -1605,7 +1606,7 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
 
-const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
 let DATA=JSON.parse($('site-data').textContent);
 let LIVE=false;
@@ -1770,12 +1771,12 @@ function sparks(bars){
 function countUp(){
   document.querySelectorAll('.fig strong[data-to]').forEach(el=>{
     const to=+el.dataset.to;
-    if(reduce){el.textContent=to.toLocaleString(); return}
+    if(motionPreference.matches){el.textContent=to.toLocaleString(); return}
     new IntersectionObserver((es,ob)=>es.forEach(en=>{
       if(!en.isIntersecting)return; ob.disconnect();
       const t0=performance.now();
       (function step(t){
-        const k=Math.min((t-t0)/1100,1), e=1-Math.pow(1-k,3);
+        const k=motionPreference.matches?1:Math.min((t-t0)/1100,1), e=1-Math.pow(1-k,3);
         el.textContent=Math.round(to*e).toLocaleString();
         if(k<1)requestAnimationFrame(step);
       })(t0);
@@ -1944,41 +1945,7 @@ function startMotion(){
     document.body.classList.toggle('light',en.isIntersecting);
   }),{threshold:.42}).observe($('about'));
 
-  const track=$('track');
-  let mx=0,vel=0,lastY=scrollY;
-  addEventListener('scroll',()=>{vel+=(scrollY-lastY)*.055;lastY=scrollY},{passive:true});
-  (function loop(){
-    if(!reduce){
-      const w=track.scrollWidth/3;
-      mx-=(.68+Math.abs(vel)); vel*=.9;
-      if(w&&mx<-w)mx+=w;
-      track.style.transform=`translateX(${mx.toFixed(1)}px) skewX(${(-vel*.32).toFixed(2)}deg)`;
-    }
-    requestAnimationFrame(loop);
-  })();
 
-  if(!reduce){
-    let raf=null, mouse={x:0,y:0};
-    addEventListener('pointermove',e=>{
-      mouse={x:e.clientX,y:e.clientY};
-      if(raf)return;
-      raf=requestAnimationFrame(()=>{
-        raf=null;
-        document.querySelectorAll('.kin .l').forEach(l=>{
-          const r=l.getBoundingClientRect();
-          const d=Math.hypot(mouse.x-(r.left+r.width/2),mouse.y-(r.top+r.height/2));
-          const f=Math.max(0,1-d/300);
-          l.style.transform=`translateY(${(-f*18).toFixed(1)}px) scaleY(${(1+f*.14).toFixed(3)})`;
-          l.style.fontWeight=Math.round(300+f*500);
-        });
-      });
-    });
-  }
-  const cur=$('cur');
-  addEventListener('pointermove',e=>{
-    cur.style.transform=`translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`});
-  document.addEventListener('pointerover',e=>{
-    cur.classList.toggle('big',!!(e.target.closest&&e.target.closest('a,button,input')))});
 }
 
 boot();
