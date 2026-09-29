@@ -2,7 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF8F3">
 <title>Ryuta Suzuki — Projects</title>
 <meta name="description" content="鈴木竜太が個人で開発しているプロジェクトの一覧。">
 <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png">
@@ -19,18 +20,20 @@
   --display:"Unbounded","Zen Kaku Gothic New",system-ui,sans-serif;
   --body:"Zen Kaku Gothic New",system-ui,sans-serif;
   --pad:clamp(16px,3.4vw,40px);
-  --content:1600px; --gutter:max(var(--pad),calc((100% - var(--content))/2));
+  --content:1600px; --gutter:max(var(--pad),calc((100% - var(--content))/2)); --nav-height:60px;
   color-scheme:light;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth; scroll-padding-top:110px; scrollbar-gutter:stable}
+html{scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-height) + 20px); scrollbar-gutter:stable}
 body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body);
   overflow-x:hidden; -webkit-font-smoothing:antialiased;
   transition:background .7s cubic-bezier(.16,1,.3,1), color .7s cubic-bezier(.16,1,.3,1)}
 body.light{--bg:#F1F5EF}
-body.locked{overflow:hidden}
+body.locked{position:fixed; width:100%; overflow:hidden}
 a{color:inherit; text-decoration:none}
 button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+a,button{touch-action:manipulation; -webkit-tap-highlight-color:transparent}
+button:active,a:active{opacity:.75}
 ::selection{background:var(--acid); color:var(--black)}
 :focus-visible{outline:3px solid var(--accent); outline-offset:3px}
 
@@ -45,6 +48,7 @@ nav{position:fixed; top:0; left:0; right:0; z-index:300; display:flex; align-ite
   padding:16px var(--gutter); font-family:var(--display); font-size:11.5px; font-weight:500;
   background:var(--paper); color:var(--black); border-bottom:1px solid var(--line)}
 nav .sp{margin-left:auto}
+.navlinks{display:contents}
 nav a,nav button{opacity:.9; transition:opacity .2s}
 nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacity:1}
 .lang{display:flex; border:1px solid var(--line); border-radius:99px; overflow:hidden}
@@ -52,22 +56,25 @@ nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacit
 .lang button.on{background:var(--mint); color:var(--ink); opacity:1}
 nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 @media (max-width:760px){
-  nav{flex-wrap:wrap; gap:10px 14px}
-  nav .hide{display:none}
-  #navName{flex:1 1 calc(100% - 100px)}
-  nav .lang{order:1}
-  nav a{order:2}
-  nav .k{order:2; margin-left:auto}
-  nav .sp{margin-left:0}
+  :root{--nav-height:106px}
+  nav{display:grid; grid-template-columns:1fr auto auto; gap:2px 8px;
+    padding:calc(6px + env(safe-area-inset-top)) var(--pad) 6px}
+  #navName{font-size:clamp(9px,2.7vw,11.5px); white-space:nowrap}
+  nav .lang{grid-column:2; grid-row:1}
+  nav .lang button{min-width:44px; min-height:44px; padding:0 8px}
+  nav .k{grid-column:3; grid-row:1; min-height:44px; padding:0 10px}
+  .navlinks{grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(4,1fr); gap:4px}
+  .navlinks a{display:flex; align-items:center; justify-content:center; min-height:44px;
+    margin:0; border-radius:8px; font-size:10px}
+  .navlinks a[href^="#"]{background:var(--mint); color:var(--ink)}
 }
 @media (max-width:420px){
-  nav{gap:10px; font-size:10px}
-  nav .k{padding:3px 8px}
+  nav .k{font-size:10px; padding:0 8px}
 }
 
 /* hero */
 header{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
-  padding:118px var(--pad) 72px; position:relative; isolation:isolate;
+  padding:calc(var(--nav-height) + 58px) var(--pad) 72px; position:relative; isolation:isolate;
   background:var(--paper); overflow:clip}
 .hero-art{position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%);
   width:min(100%,calc(var(--content) + 2 * var(--pad))); z-index:-1; pointer-events:none}
@@ -92,6 +99,9 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .kin .r2{color:var(--accent)}
 .sub{max-width:52ch; margin:38px 0 0; font-size:15.5px; line-height:1.92; opacity:.88}
 .scrolltip{position:absolute; bottom:26px; right:var(--pad); font-family:var(--display); font-size:11px; opacity:.55}
+.hero-actions{display:none}
+.touch-hint{display:none}
+.touch-hint[hidden]{display:none}
 @media (max-width:1100px){
   .hero-layout{grid-template-columns:minmax(0,1fr); gap:40px}
   .kin{font-size:clamp(40px,14.8vw,128px)}
@@ -140,6 +150,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .fbtn{border:1px solid var(--line); border-radius:99px; padding:6px 14px; opacity:.85; transition:.25s}
 .fbtn:hover{opacity:1}
 .fbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink); opacity:1}
+.work-count{margin:0 0 18px; font-size:12px; color:var(--ink)}
+.filter-hint{display:none}
 
 .bento{display:grid; gap:12px; grid-template-columns:repeat(6,minmax(0,1fr))}
 .tile{position:relative; overflow:hidden; border:2px solid var(--line); border-radius:12px;
@@ -147,7 +159,10 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .42s cubic-bezier(.16,1,.3,1),
     opacity .3s}
 .tile:hover,.tile:focus-within{background:var(--mint); color:var(--black); transform:translate(-5px,-5px)}
-.tile.dim{opacity:.24}
+.tile[hidden]{display:none}
+.tile-more{display:flex; align-items:center; justify-content:space-between; gap:8px;
+  color:var(--ink); margin-top:16px; font-size:12px; font-weight:700}
+.tile-more b{display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; width:28px; height:28px}
 .tile-open{position:absolute; inset:0; z-index:1}
 .tile>:where(:not(.tile-open):not(.site):not(.tile-art)){position:relative; z-index:0; pointer-events:none}
 .tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; line-height:1.55;
@@ -192,8 +207,10 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .s-tall{grid-column:span 2; min-height:336px}
 .s-wide{grid-column:span 3}
 .s-std{grid-column:span 2}
-@media (max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}
-  .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 2; min-height:206px}}
+@media (max-width:900px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .s-hero,.s-wide{grid-column:span 2; min-height:206px}
+  .s-tall,.s-std{grid-column:span 1; min-height:206px}
+  .tile.s-tall .tile-art{height:220px}}
 @media (max-width:520px){.bento{grid-template-columns:1fr}
   .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}
   .tile.has-image .tile-art{height:180px}}
@@ -299,7 +316,10 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   box-shadow:0 24px 90px rgba(25,43,35,.2); overflow:auto}
 .palbox{width:100%; height:fit-content; background:var(--paper); color:var(--black);
   border:1px solid var(--line); border-radius:12px; overflow:hidden}
-.palbox input{width:100%; border:none; border-bottom:1px solid var(--line); background:none;
+.palhead{display:flex; align-items:center; border-bottom:1px solid var(--line)}
+.palclose{flex:none; min-width:44px; min-height:44px; margin-right:8px; border-radius:50%; font-size:22px}
+.palclose:focus-visible,.palclose:hover{background:var(--mint)}
+.palbox input{width:100%; min-width:0; border:none; background:none;
   font-family:var(--display); font-weight:500; font-size:19px; letter-spacing:-.03em; padding:19px 20px; color:inherit}
 .palbox input:focus{outline:none}
 .palres{max-height:min(46vh,380px); overflow-y:auto}
@@ -313,6 +333,85 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 .empty{padding:22px 20px; font-size:13px; opacity:.6}
 @media (max-width:600px){.pi .pj{display:none}}
 
+/* Touch layouts keep the same artwork and hierarchy with reachable, explicit controls. */
+@media (max-width:760px){
+  header{padding-top:calc(var(--nav-height) + 26px); padding-bottom:78px}
+  .hero-layout{gap:22px}
+  .meta{gap:6px 16px; font-size:9px; line-height:1.7; margin-bottom:20px}
+  .kin{font-size:clamp(40px,14.8vw,106px)}
+  .sub{margin-top:22px; font-size:14px; line-height:1.85}
+  .hero-portrait{width:min(80%,330px)}
+  .hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
+  .hero-actions a{display:flex; align-items:center; justify-content:center; min-height:44px;
+    padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px; font-weight:700}
+  .hero-actions a:first-child{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .hero-motion-toggle{min-height:44px; bottom:16px}
+  .scrolltip{bottom:31px; font-size:9px}
+  .pulse-intro{position:relative; min-height:90px; padding-right:78px; margin-bottom:18px}
+  .pulse-intro .section-art{position:absolute; right:0; bottom:0; width:76px}
+  .pulse-head h2{font-size:20px; line-height:1.5}
+  .pulse-head .sum{margin:0; flex-basis:100%}
+  .figs{grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 18px; margin-top:28px}
+  .fig strong{font-size:clamp(34px,9.5vw,60px)}
+  .fig span{font-size:12px}
+  .heat{min-width:0; height:82px; gap:2px}
+  .sechead{gap:12px; margin-bottom:18px}
+  .sechead p{margin:0; max-width:none; flex-basis:100%}
+  .filter-hint{display:block; margin:0 0 8px; font-size:11px; color:var(--ink)}
+  .filters{position:sticky; top:var(--nav-height); z-index:20; flex-wrap:nowrap;
+    overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+    padding:8px 0; margin-bottom:12px; background:var(--bg); scroll-padding-inline:4px}
+  .fbtn{flex:none; min-height:44px; white-space:nowrap; opacity:1}
+  .tile{padding:16px; border-radius:18px}
+  .tile h3{font-size:clamp(21px,5.6vw,28px)}
+  .tile .jp{font-size:13px}
+  .tile .site{min-height:44px; display:flex; align-items:center; top:8px; right:10px}
+  .tile.has-image .tile-art{height:168px; margin-bottom:12px}
+  .tile .st{margin-top:14px}
+  .tile .foot{gap:12px}
+  .about{margin-top:32px}
+  .about-intro{gap:10px; margin-bottom:24px}
+  .about-intro .section-art{width:140px}
+  .about blockquote{font-size:clamp(30px,7vw,46px); line-height:1.25}
+  .abody{grid-template-columns:minmax(0,1fr)}
+  footer{padding-bottom:calc(26px + env(safe-area-inset-bottom))}
+  .frow{gap:8px 12px; opacity:1}
+  .frow a{min-height:44px; display:flex; align-items:center; padding:8px 12px;
+    border:1px solid var(--line); border-radius:99px}
+  .frow span{flex-basis:100%; margin-top:12px; line-height:1.8}
+  #sheet{width:calc(100% - 16px); max-height:calc(100dvh - 16px - env(safe-area-inset-top)); border-radius:20px}
+  .sbar{padding:10px 12px; gap:6px; align-items:center}
+  .sbar .nav{width:100%; display:grid; grid-template-columns:1fr 1fr 1.15fr; gap:8px}
+  .sbar .nav button{min-height:44px; padding:8px 6px; font-size:10px}
+  .sclose{background:var(--mint); color:var(--ink)}
+  .shead{padding-top:28px}
+  .shead h2{font-size:clamp(28px,7vw,48px)}
+  .sheat{min-width:0; gap:2px; height:70px}
+  .stable td:first-child{width:90px}
+  .stable td{overflow-wrap:anywhere}
+  .slinks{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .slink{flex:1 1 120px; min-height:48px; text-align:center; padding:14px 12px}
+  #pal{top:var(--visual-top,0px); margin:12px auto auto; width:calc(100% - 24px);
+    max-height:calc(var(--visual-height,100dvh) - 24px); border-radius:18px}
+  .palbox{display:flex; flex-direction:column; max-height:inherit}
+  .palhead,.palfoot{flex:none}
+  .palbox input{font-size:16px; padding:18px 14px}
+  .palres{max-height:none; min-height:0; overscroll-behavior:contain}
+  .pi{padding:16px 14px; min-height:58px}
+  .palfoot{font-family:var(--body); font-size:12px; opacity:.75}
+  .palfoot .keyboard-hint{display:none}
+}
+@media (hover:none),(pointer:coarse){
+  .lang button,nav .k,nav a,.fbtn,.sbar button,.palclose{min-height:44px; min-width:44px}
+  .touch-hint{display:block; margin:8px 0 0; text-align:center; color:var(--ink); font-size:11px}
+  .tile:hover,.tile:focus-within{transform:none; background:var(--paper)}
+  .tile.has-image:hover,.tile.has-image:focus-within{background:#fff; border-color:var(--line)}
+  .tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:none}
+  .tile:active,.tile.has-image:active{transform:scale(.985); background:var(--mint); border-color:var(--ink); transition-duration:.12s}
+  .slink:hover,.slink:focus-visible{transform:none}
+  .slink:active,.fbtn:active,nav a:active{background:var(--mint); color:var(--ink)}
+}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important; transition-duration:.01ms !important}
   html{scroll-behavior:auto}
@@ -322,12 +421,14 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 <body>
 <div id="cur" aria-hidden="true"></div>
 
-<nav>
+<nav id="siteNav" aria-label="Main navigation">
   <span id="navName">RYUTA SUZUKI</span>
+  <div class="navlinks">
   <a href="#work" class="sp" data-i18n="nav.work">WORK</a>
-  <a href="#about" class="hide" data-i18n="nav.about">ABOUT</a>
+  <a href="#about" data-i18n="nav.about">ABOUT</a>
   <a id="navGh" href="#" target="_blank" rel="noopener">GITHUB</a>
   <a id="navLi" href="#" target="_blank" rel="noopener">LINKEDIN</a>
+  </div>
   <span class="lang"><button data-lang="ja">JA</button><button data-lang="en">EN</button></span>
   <button class="k" id="palbtn" aria-label="Search">Search</button>
 </nav>
@@ -339,17 +440,19 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       <div class="meta" id="heroMeta"></div>
       <h1 class="kin" id="kin"></h1>
       <p class="sub" id="heroSub"></p>
+      <div class="hero-actions"><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
     </div>
     <figure class="hero-portrait">
       <img src="./assets/portrait.webp" width="1024" height="1024"
         alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
+      <figcaption class="touch-hint" id="touchHint" hidden data-i18n="hero.touch"></figcaption>
     </figure>
   </div>
   <button type="button" class="hero-motion-toggle" id="heroMotionToggle" hidden>背景の動きを止める</button>
   <span class="scrolltip" data-i18n="scroll">SCROLL ↓</span>
 </header>
 
-<div class="marq"><div class="marq-inner"><div class="track" id="track"></div></div></div>
+<div class="marq" aria-hidden="true"><div class="marq-inner"><div class="track" id="track"></div></div></div>
 
 <section class="pulse">
   <div class="pulse-intro">
@@ -370,7 +473,9 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
     <h2 data-i18n="work.title"></h2>
     <p data-i18n="work.lead"></p>
   </div>
-  <div class="filters" id="filters"></div>
+  <p class="filter-hint" data-i18n="work.filterHint"></p>
+  <div class="filters" id="filters" role="group" aria-label="Project categories"></div>
+  <p class="work-count" id="workCount" role="status" aria-live="polite"></p>
   <div class="bento" id="bento"></div>
 </section>
 
@@ -400,8 +505,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   <div class="sbar">
     <span class="idx" id="sIdx"></span><span id="sYear" style="opacity:.5"></span>
     <div class="nav">
-      <button id="sPrev">← PREV</button><button id="sNext">NEXT →</button>
-      <button class="sclose" id="sClose">CLOSE ✕</button>
+      <button id="sPrev" data-i18n="sheet.prev">← PREV</button><button id="sNext" data-i18n="sheet.next">NEXT →</button>
+      <button class="sclose" id="sClose" data-i18n="close">CLOSE ✕</button>
     </div>
   </div>
   <div class="shead">
@@ -435,9 +540,10 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 
 <dialog id="pal" aria-label="Search">
   <div class="palbox">
-    <input id="palin" aria-label="Search projects" autocomplete="off">
+    <div class="palhead"><input id="palin" type="search" enterkeyhint="search" aria-label="Search projects" autocomplete="off">
+      <button class="palclose" id="palClose" aria-label="検索を閉じる">×</button></div>
     <div class="palres" id="palres"></div>
-    <div class="palfoot"><span>↑↓</span><span>↵</span><span>ESC</span></div>
+    <div class="palfoot"><span data-i18n="search.hint"></span><span class="keyboard-hint">↑↓ / ↵ / ESC</span></div>
   </div>
 </dialog>
 
@@ -1449,7 +1555,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 const T={
  ja:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
   "pulse.title":"リポジトリのアクティビティ","work.title":"全プロジェクト",
-  "work.lead":"タイルをクリックすると、進捗と技術構成まで読めます。",
+  "work.lead":"気になるカードから、つくったものと技術の話を。",
+  "hero.work":"プロジェクトを見る ↗","hero.about":"自己紹介 ↓","hero.touch":"イラストをタップすると、線がふわっと動きます",
+  "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
+  "sheet.prev":"← 前へ","sheet.next":"次へ →","close":"閉じる ×","search.close":"検索を閉じる",
+  "search.hint":"名前や技術名で検索。結果から詳細を開けます。",
   "sheet.overview":"概要","sheet.spec":"仕様","sheet.events":"直近のイベント","sheet.metrics":"指標",
   "sheet.commits":"コミット（直近14週）","sheet.activity":"アクティビティ",
   "sheet.weeksAgo":"14週前","sheet.thisWeek":"今週",
@@ -1467,7 +1577,11 @@ const T={
   "note":"フォークを含む全公開リポジトリの数値です。未取得の指標は — で表示します。","noteDemo":"GitHubの数値を取得できませんでした。未取得の指標は — で表示します。"},
  en:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
   "pulse.title":"Repository activity","work.title":"All projects",
-  "work.lead":"Open a tile to read progress and the technical build.",
+  "work.lead":"Explore what I build and the ideas behind each project.",
+  "hero.work":"Explore projects ↗","hero.about":"About me ↓","hero.touch":"Tap the illustration to give the lines a little nudge",
+  "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
+  "sheet.prev":"← PREV","sheet.next":"NEXT →","close":"CLOSE ×","search.close":"Close search",
+  "search.hint":"Search a name or technology, then open a result.",
   "sheet.overview":"Overview","sheet.spec":"Details","sheet.events":"Recent events","sheet.metrics":"Metrics",
   "sheet.commits":"Commits (last 14 weeks)","sheet.activity":"Activity",
   "sheet.weeksAgo":"14 weeks ago","sheet.thisWeek":"This week",
@@ -1484,6 +1598,7 @@ const T={
   "noEvents":"Public data is unavailable.",
   "note":"Figures cover all public repositories, including forks. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
+let FILTER='all';
 const t=k=>T[LANG][k]??k;
 const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1573,6 +1688,7 @@ function render(){
   document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));
   $('palin').placeholder=t('search');
+  $('palClose').setAttribute('aria-label',t('search.close'));
   $('navName').textContent=pr.name.toUpperCase();
   $('navGh').href=pr.links.github; $('navLi').href=pr.links.linkedin;
 
@@ -1614,8 +1730,9 @@ function render(){
 
   /* filters */
   const keys=['all',...new Set(P.map(p=>p.filter))];
-  $('filters').innerHTML=keys.map((k,i)=>
-    `<button class="fbtn ${i===0?'on':''}" data-k="${esc(k)}">${esc(t(k))}</button>`).join('');
+  if(!keys.includes(FILTER))FILTER='all';
+  $('filters').innerHTML=keys.map(k=>
+    `<button class="fbtn ${k===FILTER?'on':''}" aria-pressed="${k===FILTER}" data-k="${esc(k)}">${esc(t(k))}</button>`).join('');
 
   /* tiles */
   $('bento').innerHTML=P.map((p,i)=>`
@@ -1632,8 +1749,19 @@ function render(){
         <span class="lbl">${t('f.updated')}<b>${(p.g.pushed||'').slice(5).replace('-','.')||'—'}</b></span>
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
+      <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
     </article>`).join('');
+  applyFilter();
   if(curI>=0) fill(curI);
+}
+function applyFilter(){
+  document.querySelectorAll('.fbtn').forEach(button=>{
+    const selected=button.dataset.k===FILTER;
+    button.classList.toggle('on',selected); button.setAttribute('aria-pressed',String(selected));
+  });
+  document.querySelectorAll('.tile').forEach(tile=>{tile.hidden=FILTER!=='all'&&tile.dataset.f!==FILTER});
+  const count=DATA.projects.filter(project=>FILTER==='all'||project.filter===FILTER).length;
+  $('workCount').textContent=`${count} / ${DATA.projects.length} ${t('work.count')}`;
 }
 function sparks(bars){
   const m=Math.max(1,...bars);
@@ -1657,6 +1785,19 @@ function countUp(){
 
 /* ===================== sheet ===================== */
 const sheet=$('sheet'); let curI=-1, lastFocus=null;
+let pageScroll=null;
+function lockPage(){
+  if(pageScroll!==null)return;
+  pageScroll=scrollY;
+  document.body.style.top=`-${pageScroll}px`;
+  document.body.classList.add('locked');
+}
+function unlockPage(){
+  if(sheet.open||pal.open||pageScroll===null)return;
+  const y=pageScroll; pageScroll=null;
+  document.body.classList.remove('locked'); document.body.style.top='';
+  scrollTo({top:y,behavior:'instant'});
+}
 function fill(i){
   const p=DATA.projects[i], g=p.g;
   $('sIdx').textContent=`WORK ${String(i+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
@@ -1691,15 +1832,14 @@ function fill(i){
 }
 function open(i,push=true){
   curI=i; fill(i); sheet.scrollTop=0;
-  if(!sheet.open){lastFocus=document.activeElement; sheet.showModal()}
+  if(!sheet.open){lastFocus=document.activeElement; lockPage(); sheet.showModal()}
   sheet.classList.add('open');
-  document.body.classList.add('locked');
   $('sClose').focus({preventScroll:true});
   if(push)history.pushState({i},'','#'+DATA.projects[i].slug);
 }
 function close(push=true){
   sheet.classList.remove('open'); sheet.close();
-  document.body.classList.toggle('locked',pal.open);
+  unlockPage();
   if(lastFocus)lastFocus.focus({preventScroll:true});
   curI=-1; if(push)history.pushState({},'',location.pathname);
 }
@@ -1713,8 +1853,8 @@ function outsideDialog(e,dialog){
 $('sPrev').addEventListener('click',()=>open((curI-1+DATA.projects.length)%DATA.projects.length));
 $('sNext').addEventListener('click',()=>open((curI+1)%DATA.projects.length));
 addEventListener('popstate',()=>{
-  if(pal.open)palClose();
   const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
+  if(pal.open)palClose(i>=0);
   if(i>=0)open(i,false); else if(sheet.classList.contains('open'))close(false);
 });
 
@@ -1726,9 +1866,7 @@ document.addEventListener('click',e=>{
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
   const f=e.target.closest('.fbtn');
   if(f){
-    document.querySelectorAll('.fbtn').forEach(x=>x.classList.toggle('on',x===f));
-    document.querySelectorAll('.tile').forEach(tl=>
-      tl.classList.toggle('dim', f.dataset.k!=='all' && tl.dataset.f!==f.dataset.k));
+    FILTER=f.dataset.k; applyFilter();
     return;
   }
   const l=e.target.closest('.lang button');
@@ -1752,17 +1890,20 @@ function palDraw(){
       <span class="ps">${esc(tx(p.status))}</span></button>`}).join('')
     :`<div class="empty">${t('empty')}</div>`;
 }
-function palOpen(){if(!pal.open)pal.showModal(); pal.classList.add('open'); document.body.classList.add('locked');
+function palOpen(){if(!pal.open){lockPage();pal.showModal()} pal.classList.add('open');
   palin.value=''; psel=0; palDraw(); palin.focus()}
-function palClose(){pal.classList.remove('open'); pal.close();
-  if(!sheet.open)document.body.classList.remove('locked')}
+function palClose(keepLocked=false){pal.classList.remove('open'); pal.close();
+  if(!keepLocked)unlockPage()}
+function selectResult(i){palClose(true);open(i)}
 $('palbtn').addEventListener('click',palOpen);
+$('palClose').addEventListener('click',()=>palClose());
 palin.addEventListener('input',()=>{psel=0;palDraw()});
-palres.addEventListener('click',e=>{const b=e.target.closest('.pi'); if(!b)return; palClose(); open(+b.dataset.i)});
+palres.addEventListener('click',e=>{const b=e.target.closest('.pi'); if(!b)return; selectResult(+b.dataset.i)});
 palin.addEventListener('keydown',e=>{
+  if(e.isComposing||e.keyCode===229)return;
   if(e.key==='ArrowDown'){e.preventDefault();psel=Math.min(psel+1,plist.length-1);palDraw()}
   if(e.key==='ArrowUp'){e.preventDefault();psel=Math.max(psel-1,0);palDraw()}
-  if(e.key==='Enter'&&plist.length){e.preventDefault();palClose();open(plist[psel])}
+  if(e.key==='Enter'&&plist.length){e.preventDefault();selectResult(plist[psel])}
 });
 pal.addEventListener('click',e=>{if(outsideDialog(e,pal))palClose()});
 pal.addEventListener('cancel',e=>{e.preventDefault(); palClose()});
@@ -1786,6 +1927,16 @@ addEventListener('keydown',e=>{
 
 /* ===================== motion ===================== */
 function startMotion(){
+  const sizeNav=()=>document.documentElement.style.setProperty('--nav-height',`${$('siteNav').getBoundingClientRect().height}px`);
+  new ResizeObserver(sizeNav).observe($('siteNav')); sizeNav();
+  const sizeSearch=()=>{
+    pal.style.setProperty('--visual-height',`${visualViewport.height}px`);
+    pal.style.setProperty('--visual-top',`${visualViewport.offsetTop}px`);
+  };
+  if(window.visualViewport){
+    visualViewport.addEventListener('resize',sizeSearch);
+    visualViewport.addEventListener('scroll',sizeSearch); sizeSearch();
+  }
   const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
   if(i>=0)open(i,false);
 

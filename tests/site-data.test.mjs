@@ -16,7 +16,7 @@ async function boot(snapshot, apiRepos) {
     document: {
       getElementById: id => {
         if (!nodes.has(id)) nodes.set(id, { textContent: id === "site-data" ? JSON.stringify(config) : "",
-          innerHTML: "", classList: { toggle() {} } });
+          innerHTML: "", setAttribute() {}, classList: { toggle() {} } });
         return nodes.get(id);
       },
       querySelectorAll: () => [], documentElement: {},
@@ -30,7 +30,7 @@ async function boot(snapshot, apiRepos) {
     URL, AbortSignal, curI: -1, startMotion() {},
   });
   const result = await new Script(loading + rendering + "\nboot().then(() => ({ data: DATA, live: LIVE }))").runInContext(context);
-  return { ...result, nodes };
+  return { ...result, nodes, context };
 }
 
 test("the page JavaScript parses and fallback project identifiers match", () => {
@@ -96,4 +96,21 @@ test("repositories with unavailable dates are still discovered in the browser", 
   assert.equal(result.live, true);
   assert.equal(result.data.projects.length, 2);
   assert.ok(result.data.projects.every(p => p.year === "" && p.g.pushed === ""));
+});
+
+test("category selection removes unrelated cards and survives a language change", async () => {
+  const ui = await boot(null);
+  const tiles = ui.data.projects.map(project => ({ dataset: { f: project.filter }, hidden: false }));
+  const buttons = ['all', 'mobile'].map(k => ({ dataset: { k }, attributes: {},
+    classList: { toggle() {} }, setAttribute(name, value) { this.attributes[name] = value; } }));
+  ui.context.document.querySelectorAll = selector => selector === '.tile' ? tiles : selector === '.fbtn' ? buttons : [];
+  new Script("FILTER='mobile'; applyFilter()").runInContext(ui.context);
+  assert.ok(tiles.some(tile => tile.hidden));
+  assert.ok(tiles.filter(tile => !tile.hidden).every(tile => tile.dataset.f === 'mobile'));
+  assert.equal(buttons[1].attributes['aria-pressed'], 'true');
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.ok(tiles.filter(tile => !tile.hidden).every(tile => tile.dataset.f === 'mobile'));
+  assert.match(ui.nodes.get('workCount').textContent, /件を表示/);
+  new Script("FILTER='all'; applyFilter()").runInContext(ui.context);
+  assert.ok(tiles.every(tile => !tile.hidden));
 });
