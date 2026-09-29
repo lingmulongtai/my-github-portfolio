@@ -490,9 +490,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
     ],
     "links": {
       "github": "https://github.com/lingmulongtai",
-      "linkedin": "https://www.linkedin.com/in/ryuta-suzuki/",
-      "x": "https://x.com/",
-      "mail": "mailto:hello@example.com"
+      "linkedin": "https://www.linkedin.com/in/lingmulongtai/",
+      "mail": "mailto:lingmulongtai200@gmail.com"
     }
   },
   "projects": [
@@ -1587,7 +1586,6 @@ function render(){
   $('skills').innerHTML=pr.skills.map(s=>`<i>${s}</i>`).join('');
   $('frow').innerHTML=`<a href="${pr.links.github}" target="_blank" rel="noopener">GITHUB</a>
     <a href="${pr.links.linkedin}" target="_blank" rel="noopener">LINKEDIN</a>
-    <a href="${pr.links.x}" target="_blank" rel="noopener">X</a>
     <a href="${pr.links.mail}">MAIL</a>
     <span style="margin-left:auto">© ${new Date().getFullYear()} ${pr.name} — ${tx(pr.location)}</span>`;
   $('footNote').textContent=LIVE?t('note'):t('noteDemo');

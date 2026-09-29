@@ -26,7 +26,7 @@
 | キー | 中身 |
 |---|---|
 | `github` | GitHub のユーザー名。Pages の URL 推定にも使う |
-| `links.github` / `links.linkedin` / `links.x` / `links.mail` | ヘッダーとフッターのリンク |
+| `links.github` / `links.linkedin` / `links.mail` | ヘッダーとフッターのリンク |
 | `hero` | 大見出し。2行の配列。英大文字が一番きれいに出る |
 | `location` / `role` / `intro` / `quote` / `about` | `{ "ja": "…", "en": "…" }` の形。英語を空にすると日本語が出る |
 
