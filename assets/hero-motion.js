@@ -3,6 +3,7 @@
   const hero = document.getElementById("home");
   const canvas = document.getElementById("heroCanvas");
   const toggle = document.getElementById("heroMotionToggle");
+  const touchHint = document.getElementById("touchHint");
   const portrait = hero?.querySelector(".hero-portrait img");
   const copy = hero?.querySelector(".hero-copy");
   const ctx = canvas?.getContext("2d");
@@ -35,6 +36,7 @@
   let paused = false;
   try { paused = localStorage.getItem(preferenceKey) === "true"; } catch {}
   let frame = 0, elapsed = 3.2, lastPaint = 0, onscreen = false;
+  let touchStart = null, tap = null, layoutKey = "";
   let width = 0, height = 0, dpr = 1, scale = 1, offsetX = 0, offsetY = 0, inkWidth = 5.5, stacked = false;
 
   function blob(x, y, rx, ry, color, seed, rotation) {
@@ -67,13 +69,14 @@
   }
 
   function drawWave(wave) {
+    const nudge = tap ? Math.cos((elapsed - tap.time) * 9 + wave.phase) * Math.exp(-(elapsed - tap.time) * 2.8) : 0;
     const x = wave.x + Math.sin(elapsed * (.13 + Math.abs(wave.rate) * .07) + wave.phase) * 6;
     const y = wave.y + Math.cos(elapsed * (.11 + Math.abs(wave.rate) * .09) + wave.phase * .8) * 5;
     const tilt = Math.sin(elapsed * (.10 + Math.abs(wave.rate) * .04) + wave.phase) * .035;
     const points = [];
     for (let i = 0; i <= 60; i++) {
       const px = (i / 60 - .5) * wave.length;
-      points.push([px, Math.sin(px * tau / wave.wavelength + elapsed * wave.rate + wave.phase) * wave.amplitude +
+      points.push([px, Math.sin(px * tau / wave.wavelength + elapsed * wave.rate + wave.phase) * (wave.amplitude + nudge * 9) +
         Math.sin(px * .09 + wave.phase) * .5]);
     }
     ctx.save(); ctx.translate(x, y); ctx.rotate(wave.angle + tilt);
@@ -96,6 +99,19 @@
       ctx.fill();
     });
     ctx.restore();
+    if (tap) {
+      const age = elapsed - tap.time;
+      if (age > 1.4) tap = null;
+      else {
+        ctx.save(); ctx.globalAlpha = .8 * (1 - age / 1.4);
+        for (let i = 0; i < 6; i++) {
+          const angle = i / 6 * tau + .2, radius = 20 + age * 35;
+          ctx.fillStyle = i % 2 ? colors.gold : colors.blue;
+          ctx.beginPath(); ctx.arc(tap.x + Math.cos(angle) * radius, tap.y + Math.sin(angle) * radius, inkWidth * scale / 2, 0, tau); ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
     ctx.save(); ctx.globalCompositeOperation = "destination-out";
     ctx.drawImage(mask, 0, 0, width, height); ctx.restore();
   }
@@ -105,6 +121,10 @@
     width = bounds.width; height = bounds.height;
     if (!width || !height || !image.width) return;
     dpr = Math.min(devicePixelRatio || 1, 1.5);
+    const nextKey = [width, height, dpr, image.left - bounds.left, image.top - bounds.top, image.width,
+      text.left - bounds.left, text.top - bounds.top, text.width, text.height].map(value => Math.round(value * 10)).join(',');
+    if (nextKey === layoutKey) return;
+    layoutKey = nextKey;
     canvas.width = mask.width = Math.round(width * dpr);
     canvas.height = mask.height = Math.round(height * dpr);
     stacked = image.top >= text.bottom;
@@ -134,6 +154,7 @@
     const ja = document.documentElement.lang.startsWith("ja");
     toggle.textContent = paused ? (ja ? "背景の動きを再生" : "Play background") : (ja ? "背景の動きを止める" : "Pause background");
     toggle.hidden = reduced.matches;
+    if (touchHint) touchHint.hidden = paused || reduced.matches;
   }
 
   function tick(now) {
@@ -148,6 +169,8 @@
 
   function sync() {
     label();
+    document.documentElement.dataset.motionPaused = String(paused);
+    if (!canAnimate()) { touchStart = null; tap = null; }
     if (canAnimate() && !frame) { lastPaint = 0; frame = requestAnimationFrame(tick); }
     else if (!canAnimate() && frame) { cancelAnimationFrame(frame); frame = 0; lastPaint = 0; }
   }
@@ -157,6 +180,23 @@
     try { localStorage.setItem(preferenceKey, String(paused)); } catch {}
     sync();
   });
+  hero.addEventListener("pointerdown", event => {
+    touchStart = null;
+    if (event.pointerType !== "touch" || !event.isPrimary || !canAnimate() || event.target.closest("a,button,input")) return;
+    touchStart = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp };
+  }, { passive: true });
+  hero.addEventListener("pointermove", event => {
+    if (touchStart && Math.hypot(event.clientX - touchStart.x, event.clientY - touchStart.y) > 10) touchStart = null;
+  }, { passive: true });
+  hero.addEventListener("pointercancel", () => { touchStart = null; }, { passive: true });
+  hero.addEventListener("pointerup", event => {
+    const start = touchStart; touchStart = null;
+    if (!start || start.id !== event.pointerId || !canAnimate() || event.timeStamp - start.time > 450 ||
+        Math.hypot(event.clientX - start.x, event.clientY - start.y) > 10) return;
+    const bounds = canvas.getBoundingClientRect();
+    tap = { x: event.clientX - bounds.left, y: event.clientY - bounds.top, time: elapsed };
+    draw();
+  }, { passive: true });
   reduced.addEventListener("change", sync);
   document.addEventListener("visibilitychange", sync);
   new IntersectionObserver(entries => { onscreen = entries[0].isIntersecting; sync(); }).observe(hero);

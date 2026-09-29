@@ -10,7 +10,7 @@ function setup({ reduced = false, savedPause = null, storageBlocked = false } = 
     const listeners = new Map();
     return { ...extra,
       addEventListener: (name, listener) => listeners.set(name, listener),
-      fire: name => listeners.get(name)?.(),
+      fire: (name, event = {}) => listeners.get(name)?.(event),
     };
   }
   const rect = (left, top, width, height) => ({ left, top, width, height, right: left + width, bottom: top + height });
@@ -22,12 +22,13 @@ function setup({ reduced = false, savedPause = null, storageBlocked = false } = 
   const canvas = { getContext: () => context, getBoundingClientRect: () => rect(0, 0, 1600, 900) };
   const portrait = { getBoundingClientRect: () => rect(1000, 200, 500, 500) };
   const copy = { getBoundingClientRect: () => rect(40, 220, 850, 350) };
-  const hero = { querySelector: selector => selector.includes("img") ? portrait : copy };
+  const hero = target({ querySelector: selector => selector.includes("img") ? portrait : copy });
   const toggle = target({ hidden: true });
+  const touchHint = { hidden: true };
   const classes = new Set();
-  const document = target({ hidden: false, documentElement: { lang: "ja" },
+  const document = target({ hidden: false, documentElement: { lang: "ja", dataset: {} },
     body: { classList: { contains: name => classes.has(name) } },
-    getElementById: id => ({ home: hero, heroCanvas: canvas, heroMotionToggle: toggle })[id],
+    getElementById: id => ({ home: hero, heroCanvas: canvas, heroMotionToggle: toggle, touchHint })[id],
     createElement: () => ({ getContext: () => context }) });
   const preference = target({ matches: reduced });
   new Script(code).runInContext(createContext({
@@ -45,7 +46,7 @@ function setup({ reduced = false, savedPause = null, storageBlocked = false } = 
       observe(element) { observers.push({ element, callback: this.callback }); }
     },
   }));
-  return { document, toggle, preference, stored, canvas, frames, get draws() { return draws; },
+  return { document, toggle, touchHint, hero, preference, stored, canvas, frames, get draws() { return draws; },
     visible(value) { intersections[0]([{ isIntersecting: value }]); },
     locked(value) {
       if (value) classes.add("locked"); else classes.delete("locked");
@@ -120,4 +121,44 @@ test("motion controls work without storage and follow the chosen language", () =
   assert.equal(ui.frames.size, 0);
   ui.language("ja");
   assert.equal(ui.toggle.textContent, "背景の動きを再生");
+});
+
+const touch = (extra = {}) => ({ pointerType: 'touch', pointerId: 1, isPrimary: true,
+  clientX: 1250, clientY: 450, timeStamp: 100, target: { closest: () => null }, ...extra });
+
+test("a brief touch nudges the artwork, while scrolls, cancellations, controls and long presses do not", () => {
+  const ui = setup(); ui.visible(true);
+  const before = ui.draws;
+  ui.hero.fire('pointerdown', touch());
+  ui.hero.fire('pointerup', touch({ timeStamp: 200 }));
+  assert.equal(ui.draws, before + 1);
+  for (const sequence of [
+    [['pointerdown', {}], ['pointermove', { clientY: 500 }], ['pointerup', {}]],
+    [['pointerdown', {}], ['pointercancel', {}], ['pointerup', {}]],
+    [['pointerdown', {}], ['pointerup', { timeStamp: 800 }]],
+    [['pointerdown', {}], ['pointerup', { clientY: 500 }]],
+    [['pointerdown', { pointerType: 'mouse' }], ['pointerup', {}]],
+    [['pointerdown', { target: { closest: () => ({}) } }], ['pointerup', {}]],
+    [['pointerdown', {}], ['pointerdown', { isPrimary: false, pointerId: 2 }], ['pointerup', {}]],
+  ]) {
+    const draws = ui.draws;
+    sequence.forEach(([name, event]) => ui.hero.fire(name, touch(event)));
+    assert.equal(ui.draws, draws);
+  }
+});
+
+test("touch feedback respects pause and reduced motion and shares the pause preference with page effects", () => {
+  const ui = setup(); ui.visible(true);
+  assert.equal(ui.touchHint.hidden, false);
+  ui.toggle.fire('click');
+  assert.equal(ui.touchHint.hidden, true);
+  assert.equal(ui.document.documentElement.dataset.motionPaused, 'true');
+  const draws = ui.draws;
+  ui.hero.fire('pointerdown', touch()); ui.hero.fire('pointerup', touch());
+  assert.equal(ui.draws, draws);
+  ui.toggle.fire('click');
+  ui.preference.matches = true; ui.preference.fire('change');
+  assert.equal(ui.touchHint.hidden, true);
+  ui.hero.fire('pointerdown', touch()); ui.hero.fire('pointerup', touch());
+  assert.equal(ui.draws, draws);
 });

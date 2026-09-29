@@ -9,13 +9,13 @@ const interactions = code.slice(code.indexOf("const sheet=$("), code.indexOf("/*
 const config = JSON.parse(readFileSync(new URL("../projects.json", import.meta.url), "utf8"));
 
 function setup() {
-  const nodes = new Map(), routes = [], events = new Map();
+  const nodes = new Map(), routes = [], events = new Map(), scrolls = [], remembered = [];
   const document = { activeElement: null, addEventListener() {}, querySelectorAll: () => [] };
   function node(id) {
     if (nodes.has(id)) return nodes.get(id);
     const classes = new Set(), handlers = new Map();
     const element = {
-      id, open: false, value: "", textContent: "", innerHTML: "", scrollTop: 0,
+      id, open: false, value: "", textContent: "", innerHTML: "", scrollTop: 0, style: {},
       classList: {
         add: name => classes.add(name), remove: name => classes.delete(name),
         contains: name => classes.has(name),
@@ -28,6 +28,7 @@ function setup() {
       fire(name, event = {}) { handlers.get(name)?.({ preventDefault() {}, ...event }); },
       querySelectorAll() { return this.controls || []; },
       getClientRects: () => [{}],
+      scrollIntoView() {},
       getBoundingClientRect: () => ({ left: 100, top: 100, right: 600, bottom: 700 }),
     };
     nodes.set(id, element);
@@ -37,8 +38,11 @@ function setup() {
   document.activeElement = node("project-launcher");
   const context = createContext({
     $: node, document, location: { hash: "", pathname: "/portfolio/" },
-    history: { pushState: (state, title, route) => routes.push(route) },
+    history: { state: null, scrollRestoration: 'auto',
+      pushState: (state, title, route) => routes.push(route),
+      replaceState: state => remembered.push(state) },
     addEventListener: (name, handler) => events.set(name, handler),
+    scrollY: 720, scrollTo: position => scrolls.push(position.top),
     DATA: { profile: config.profile, projects: config.projects.slice(0, 2).map(project => ({
       ...project, g: { bars: [1], weeks: [], pushed: "", site: "", url: project.repo },
     })) },
@@ -46,7 +50,7 @@ function setup() {
     t: key => key, esc: value => String(value ?? ""), webUrl: () => "", render() {},
   });
   const api = new Script(interactions + "\n({ open, close, palOpen, palClose })").runInContext(context);
-  return { ...api, node, document, routes, events, context };
+  return { ...api, node, document, routes, events, context, scrolls, remembered };
 }
 
 test("project navigation restores the original launcher when the modal closes", () => {
@@ -156,4 +160,55 @@ test("browser Back from Search leaves only the restored project modal open", () 
   assert.equal(ui.node("sTitle").textContent, config.projects[1].name);
   ui.close();
   assert.equal(ui.document.body.classList.contains("locked"), false);
+});
+
+test("the visible search close button restores the original page position", () => {
+  const ui = setup();
+  ui.palOpen();
+  assert.equal(ui.document.body.style.top, '-720px');
+  ui.context.scrollY = 0;
+  ui.node('palClose').fire('click');
+  assert.equal(ui.node('pal').open, false);
+  assert.equal(ui.document.body.style.top, '');
+  assert.deepEqual(ui.scrolls, [720]);
+});
+
+test("search-to-project handoff and nested search keep the page locked until the last dialog closes", () => {
+  const ui = setup();
+  ui.palOpen();
+  ui.context.scrollY = 0;
+  ui.node('palin').fire('keydown', { key: 'Enter' });
+  assert.deepEqual(ui.scrolls, []);
+  assert.equal(ui.document.body.style.top, '-720px');
+  ui.palOpen(); ui.palClose();
+  assert.deepEqual(ui.scrolls, []);
+  ui.close();
+  assert.deepEqual(ui.scrolls, [720]);
+});
+
+test("IME confirmation does not open a project before the search query is committed", () => {
+  const ui = setup(); ui.palOpen();
+  for (const event of [{ key: 'Enter', isComposing: true }, { key: 'Enter', keyCode: 229 }]) {
+    ui.node('palin').fire('keydown', event);
+    assert.equal(ui.node('pal').open, true);
+    assert.equal(ui.node('sheet').open, false);
+  }
+  ui.node('palin').fire('keydown', { key: 'Enter' });
+  assert.equal(ui.node('sheet').open, true);
+});
+
+test("Back restores the saved list position without native restoration competing with the modal", () => {
+  const ui = setup(); ui.open(0);
+  assert.equal(ui.context.history.scrollRestoration, 'manual');
+  assert.equal(ui.remembered[0].pageY, 720);
+  ui.context.scrollY = 0;
+  ui.context.location.hash = '#work';
+  ui.events.get('popstate')({ state: ui.remembered[0] });
+  assert.equal(ui.node('sheet').open, false);
+  assert.equal(ui.scrolls.at(-1), 720);
+  const visits = ui.remembered.length;
+  ui.context.location.hash = '#' + config.projects[0].slug;
+  ui.events.get('popstate')({ state: { i: 0 } });
+  assert.equal(ui.node('sheet').open, true);
+  assert.equal(ui.remembered.length, visits);
 });
