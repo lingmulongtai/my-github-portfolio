@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { collectPortfolio, listPublicRepositories, projectFromRepository, websiteUrl } from "../scripts/sync-github.mjs";
+import { collectPortfolio, commitCountFromPage, listPublicRepositories, projectFromRepository, websiteUrl } from "../scripts/sync-github.mjs";
 
 const repo = (name, fields = {}) => ({
   name, full_name: `owner/${name}`, owner: { login: "owner" }, private: false,
@@ -59,4 +59,29 @@ test("only safe websites are published, including the root Pages repository", as
     ? [repo("owner.github.io", { has_pages: true, homepage: "javascript:alert(1)" })] : []);
   assert.equal(snapshot.stats["owner.github.io"].site, "https://owner.github.io/");
   assert.equal(projectFromRepository(repo("archived", { archived: true })).status.en, "Archived");
+});
+
+test("total default-branch commits use pagination, including one-commit and empty repositories", () => {
+  assert.equal(commitCountFromPage([], ""), 0);
+  assert.equal(commitCountFromPage([{ sha: "one" }]), 1);
+  assert.equal(commitCountFromPage([{ sha: "one" }], '<https://api.github.com/repos/o/r/commits?per_page=1&page=2>; rel="next", <https://api.github.com/repos/o/r/commits?per_page=1&page=626>; rel="last"'), 626);
+  assert.throws(() => commitCountFromPage({}, ""), /Invalid commit list/);
+  assert.throws(() => commitCountFromPage([{}], '<https://api.github.com/repos/o/r/commits?page=2>; rel="next"'), /incomplete/);
+});
+
+test("lifetime commits and all languages are independent of pending annual activity", async () => {
+  const snapshot = await collectPortfolio("owner", [], async (path, options) => {
+    if (path.startsWith("/users/")) return [repo("new-project", { pushed_at: "2026-10-11T09:42:00Z" }), repo("empty")];
+    if (path.endsWith("/languages")) return { JavaScript: 200, HTML: 100, CSS: 50 };
+    if (path.includes("/commits?")) {
+      assert.equal(options.countCommits, true);
+      return path.includes("/empty/") ? 0 : 626;
+    }
+    return null;
+  });
+  assert.equal(snapshot.stats["new-project"].commits, 626);
+  assert.equal(snapshot.stats.empty.commits, 0);
+  assert.equal(snapshot.stats["new-project"].pushedAt, "2026-10-11T09:42:00Z");
+  assert.deepEqual(snapshot.stats["new-project"].languages, { JavaScript: 200, HTML: 100, CSS: 50 });
+  assert.deepEqual(snapshot.stats["new-project"].weeks, []);
 });

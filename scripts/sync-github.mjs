@@ -10,7 +10,21 @@ const headers = {
   ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
 };
 
-async function get(path) {
+export function commitCountFromPage(page, link = "") {
+  if (!Array.isArray(page)) throw new Error("Invalid commit list");
+  if (!page.length) return 0;
+  const last = link.split(",").find(part => /rel="last"/.test(part));
+  if (!last) {
+    if (link) throw new Error("Commit pagination is incomplete");
+    return page.length;
+  }
+  const url = new URL(last.match(/<([^>]+)>/)?.[1]);
+  const count = Number(url.searchParams.get("page"));
+  if (!Number.isSafeInteger(count) || count < 1) throw new Error("Invalid commit count");
+  return count;
+}
+
+async function get(path, { countCommits = false } = {}) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const response = await fetch("https://api.github.com" + path, {
       headers,
@@ -20,9 +34,14 @@ async function get(path) {
       if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
       continue;
     }
+    if (response.status === 409 && countCommits) {
+      const error = await response.json();
+      if (error.message === "Git Repository is empty.") return 0;
+    }
     if (response.status === 404 || response.status === 204) return null;
     if (!response.ok) throw new Error(`${response.status} ${path}`);
-    return response.json();
+    const body = await response.json();
+    return countCommits ? commitCountFromPage(body, response.headers.get("link") || "") : body;
   }
   return null;
 }
@@ -91,21 +110,30 @@ export async function collectPortfolio(login, overrides = [], request = get) {
   for (let offset = 0; offset < repos.length; offset += 4) {
     const entries = await Promise.all(repos.slice(offset, offset + 4).map(async (repo, index) => {
       const project = projects[offset + index];
-      let weeks = [];
-      try {
-        const activity = await request(`/repos/${repo.full_name}/stats/commit_activity`);
-        if (Array.isArray(activity)) weeks = activity.map(({ week, days, total }) => ({ week, days, total }));
-      } catch (error) {
-        console.warn(`Activity unavailable for ${repo.full_name}: ${error.message}`);
-      }
+      const optional = async (path, options) => {
+        try { return await request(path, options); }
+        catch (error) {
+          console.warn(`Metric unavailable for ${repo.full_name}: ${error.message}`);
+          return null;
+        }
+      };
+      const [activity, commits, languages] = await Promise.all([
+        optional(`/repos/${repo.full_name}/stats/commit_activity`),
+        optional(`/repos/${repo.full_name}/commits?per_page=1`, { countCommits: true }),
+        optional(`/repos/${repo.full_name}/languages`),
+      ]);
+      const weeks = Array.isArray(activity) ? activity.map(({ week, days, total }) => ({ week, days, total })) : [];
       const owner = repo.owner.login;
       const pagesUrl = `https://${owner}.github.io/${repo.name.toLowerCase() === `${owner.toLowerCase()}.github.io` ? "" : `${repo.name}/`}`;
       return [project.slug, {
         stars: repo.stargazers_count,
         forks: repo.forks_count,
         language: repo.language,
+        languages: languages && !Array.isArray(languages) && typeof languages === "object" ? languages : null,
+        commits: Number.isSafeInteger(commits) && commits >= 0 ? commits : null,
         license: repo.license?.spdx_id || "—",
         pushed: (repo.pushed_at || "").slice(0, 10),
+        pushedAt: repo.pushed_at || "",
         url: repo.html_url,
         site: project.links.site || websiteUrl(repo.homepage) || (repo.has_pages ? pagesUrl : ""),
         topics: repo.topics || [],
