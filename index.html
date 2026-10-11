@@ -75,7 +75,7 @@ nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 
 /* hero */
 header{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
-  padding:calc(var(--nav-height) + 58px) var(--pad) 72px; position:relative; isolation:isolate;
+  padding:calc(var(--nav-height) + clamp(26px,5vh,58px)) var(--gutter) 78px; position:relative; isolation:isolate;
   background:var(--paper); overflow:clip}
 .hero-art{position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%);
   width:min(100%,calc(var(--content) + 2 * var(--pad))); z-index:-1; pointer-events:none}
@@ -86,27 +86,37 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .hero-motion-toggle:hover{background:var(--mint)}
 .hero-motion-toggle[hidden]{display:none}
 @media (pointer:coarse){.hero-motion-toggle{min-height:44px}}
-.hero-layout{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-  align-items:center; gap:clamp(32px,4vw,80px); width:100%; max-width:1600px; margin:0 auto}
-.hero-copy{min-width:0}
+.hero-layout{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+  align-items:center; gap:clamp(24px,4vw,64px); width:100%; max-width:1600px; margin:0 auto}
+.hero-copy{min-width:0; container-type:inline-size}
 .hero-portrait{width:min(100%,540px); margin:0; justify-self:center}
 .hero-portrait img{display:block; width:100%; height:auto; border-radius:24px; mix-blend-mode:multiply}
 .meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
   font-weight:300; opacity:.72; margin-bottom:28px}
 .kin{font-family:var(--display); font-weight:800; line-height:.98; letter-spacing:-.055em;
-  font-size:clamp(72px,8vw,146px); margin:0}
+  font-size:clamp(40px,18cqw,146px); margin:0}
 .kin .row{display:block}
 .kin .l{display:inline-block; transition:transform .45s cubic-bezier(.16,1,.3,1)}
 .kin .r2{color:var(--accent)}
 .sub{max-width:52ch; margin:38px 0 0; font-size:15.5px; line-height:1.92; opacity:.88}
 .scrolltip{position:absolute; bottom:26px; right:var(--pad); font-family:var(--display); font-size:11px; opacity:.55}
-.hero-actions{display:none}
+.hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+.hero-actions a{display:flex; align-items:center; justify-content:center; min-height:44px;
+  padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px; font-weight:700}
+.hero-actions a:first-child{background:var(--ink); color:var(--paper); border-color:var(--ink)}
 .touch-hint{display:none}
 .touch-hint[hidden]{display:none}
-@media (max-width:1100px){
-  .hero-layout{grid-template-columns:minmax(0,1fr); gap:40px}
-  .kin{font-size:clamp(40px,14.8vw,128px)}
-  .hero-portrait{width:min(100%,440px)}
+@media (min-width:761px) and (max-width:1100px){
+  .meta{gap:8px 16px; font-size:9px; line-height:1.7; margin-bottom:22px}
+  .sub{font-size:14px; margin-top:24px}
+}
+@media (min-width:761px) and (max-height:600px){
+  header{padding-top:calc(var(--nav-height) + 24px); padding-bottom:70px}
+  .hero-layout{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+  .hero-portrait{width:min(100%,320px)}
+  .kin{font-size:clamp(40px,15cqw,100px)}
+  .sub{margin-top:20px; font-size:14px}
+  .meta{margin-bottom:16px}
 }
 
 /* marquee */
@@ -127,6 +137,9 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .badge{font-family:var(--display); font-size:9.5px; border:1px solid currentColor; border-radius:99px;
   padding:3px 9px; opacity:.7}
 .badge.live{background:var(--mint); color:var(--ink); border-color:var(--line); opacity:1}
+.badge.stale{background:var(--acid); color:var(--ink); opacity:1}
+.sync-info,.activity-note{font-size:12px; line-height:1.8; margin:0 0 18px; color:var(--ink)}
+.activity-note{margin:12px 0 0; opacity:.75}
 .pulse-head .sum{font-size:12px; opacity:.66; margin-left:auto; font-variant-numeric:tabular-nums}
 .section-art{display:block; width:240px; max-width:100%; height:auto; object-fit:contain; mix-blend-mode:multiply}
 .pulse-intro{display:flex; align-items:center; gap:32px; margin-bottom:24px}
@@ -136,10 +149,15 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .heat{display:grid; grid-template-rows:repeat(7,1fr); grid-auto-flow:column; gap:3px;
   min-width:660px; height:104px}
 .heat i{border-radius:2px; background:var(--ink); opacity:.12}
-.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:30px 22px; margin-top:40px}
+.figs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:30px 22px; margin-top:40px}
 .fig strong{display:block; font-family:var(--display); font-weight:800; font-size:clamp(40px,6.2vw,76px);
   letter-spacing:-.06em; line-height:.88; color:var(--accent); font-variant-numeric:tabular-nums}
 .fig span{display:block; font-size:12.5px; opacity:.74; margin-top:11px; line-height:1.65}
+.fig-languages{grid-column:1/-1; padding-top:24px; border-top:1px solid var(--line)}
+.fig-languages h3{margin:0 0 12px; font-size:13px; font-weight:500}
+.language-list{display:flex; flex-wrap:wrap; gap:8px}
+.language-list i{font-style:normal; padding:7px 12px; border:1px solid var(--line); border-radius:99px;
+  font-size:13px; background:var(--paper); overflow-wrap:anywhere}
 
 /* work */
 .work{padding:clamp(56px,8vw,96px) var(--gutter) 40px}
@@ -152,6 +170,14 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .fbtn:hover{opacity:1}
 .fbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink); opacity:1}
 .work-count{margin:0 0 18px; font-size:12px; color:var(--ink)}
+.work-toolbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
+.work-toolbar .work-count{margin:0}
+.sort-control{display:flex; align-items:center; gap:10px; font-size:12px}
+.sort-control select{max-width:100%; min-height:44px; padding:8px 32px 8px 12px; border:1px solid var(--line);
+  border-radius:12px; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer}
+.sort-note{margin:0 0 18px; font-size:12px; line-height:1.7; opacity:.75}
+.tile-languages{display:flex; flex-wrap:wrap; gap:5px; margin-top:12px; font-size:11px; line-height:1.5}
+.tile-languages i{font-style:normal; background:var(--mint); border-radius:6px; padding:3px 7px; overflow-wrap:anywhere}
 .filter-hint{display:none}
 
 .bento{display:grid; gap:12px; grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -337,15 +363,12 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 /* Touch layouts keep the same artwork and hierarchy with reachable, explicit controls. */
 @media (max-width:760px){
   header{padding-top:calc(var(--nav-height) + 26px); padding-bottom:78px}
-  .hero-layout{gap:22px}
+  .hero-layout{grid-template-columns:minmax(0,1fr); gap:22px}
   .meta{gap:6px 16px; font-size:9px; line-height:1.7; margin-bottom:20px}
-  .kin{font-size:clamp(40px,14.8vw,106px)}
+  .kin{font-size:clamp(40px,18cqw,106px)}
   .sub{margin-top:22px; font-size:14px; line-height:1.85}
   .hero-portrait{width:min(80%,330px)}
-  .hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
-  .hero-actions a{display:flex; align-items:center; justify-content:center; min-height:44px;
-    padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px; font-weight:700}
-  .hero-actions a:first-child{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .hero-actions{margin-top:20px}
   .hero-motion-toggle{min-height:44px; bottom:16px}
   .scrolltip{bottom:31px; font-size:9px}
   .pulse-intro{position:relative; min-height:90px; padding-right:78px; margin-bottom:18px}
@@ -353,6 +376,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   .pulse-head h2{font-size:20px; line-height:1.5}
   .pulse-head .sum{margin:0; flex-basis:100%}
   .figs{grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 18px; margin-top:28px}
+  .figs>.fig:nth-child(3){grid-column:1/-1}
   .fig strong{font-size:clamp(34px,9.5vw,60px)}
   .fig span{font-size:12px}
   .heat{min-width:0; height:82px; gap:2px}
@@ -467,7 +491,9 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
     <img class="section-art" src="./assets/illustrations/activity.webp" alt="" aria-hidden="true"
       loading="lazy" decoding="async" width="720" height="480">
   </div>
+  <p class="sync-info" id="syncInfo"></p>
   <div class="heatwrap"><div class="heat" id="heat"></div></div>
+  <p class="activity-note" id="activityNote"></p>
   <div class="figs" id="figs"></div>
 </section>
 
@@ -478,7 +504,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   </div>
   <p class="filter-hint" data-i18n="work.filterHint"></p>
   <div class="filters" id="filters" role="group" aria-label="Project categories"></div>
-  <p class="work-count" id="workCount" role="status" aria-live="polite"></p>
+  <div class="work-toolbar">
+    <p class="work-count" id="workCount" role="status" aria-live="polite"></p>
+    <label class="sort-control" for="projectSort"><span data-i18n="sort.label"></span><select id="projectSort"></select></label>
+  </div>
+  <p class="sort-note" id="sortNote"></p>
   <div class="bento" id="bento"></div>
 </section>
 
@@ -678,6 +708,40 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       },
       "fork": false,
       "image": "assets/projects/keylume.webp"
+    },
+    {
+      "slug": "tsuyulabo",
+      "repo": "lingmulongtai/tsuyulabo",
+      "name": "ツユラボ / Tsuyu Labo",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "育成研究ゲーム",
+        "en": "REARING RESEARCH GAME"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "ハエの神経接続モデルで、卵から毎週1匹を育てる研究ゲーム",
+        "en": "A weekly egg-to-fly rearing game using a fly neural-connectivity model"
+      },
+      "desc": {
+        "ja": "ツユラボは、毎週1匹のハエを卵から育てる育成研究ゲームです。ハエの神経接続モデルを使った成長と学習の仕組みを探ります。",
+        "en": "Tsuyu Labo is a research game about raising one fly from an egg each week, exploring growth and learning through a fly neural-connectivity model."
+      },
+      "stack": [
+        "Python",
+        "TypeScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/tsuyulabo/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/tsuyulabo.webp"
     },
     {
       "slug": "codexbar-android",
@@ -1561,6 +1625,14 @@ const T={
   "work.lead":"気になるカードから、つくったものと技術の話を。",
   "hero.work":"プロジェクトを見る ↗","hero.about":"自己紹介 ↓","hero.touch":"イラストをタップすると、線がふわっと動きます",
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
+  "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
+  "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
+  "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
+  "sort.note.commits":"デフォルトブランチの全期間コミット数（マージを含む）が多い順。未取得は最後に表示します。",
+  "sort.note.updated":"最後にプッシュした日時が新しい順。",
+  "sync.at":"最終同期","sync.daily":"毎日 03:17 / 07:17 JST に自動更新","sync.stale":"GITHUB 更新待ち",
+  "sync.api":"GitHub APIから取得（年間グラフ・全期間コミット数は未取得）","sync.unknown":"同期日時を取得できませんでした。",
+  "activity.coverage":"年間グラフを取得","activity.scope":"直近52週・マージを除く・全貢献者。GitHubプロフィールの個人貢献数とは集計範囲が異なります。",
   "sheet.prev":"← 前へ","sheet.next":"次へ →","close":"閉じる ×","search.close":"検索を閉じる",
   "search.hint":"名前や技術名で検索。結果から詳細を開けます。",
   "sheet.overview":"概要","sheet.spec":"仕様","sheet.events":"直近のイベント","sheet.metrics":"指標",
@@ -1569,20 +1641,28 @@ const T={
   "search":"プロジェクトを検索…","empty":"見つかりませんでした。技術名でも探せます。",
   "all":"ALL","web":"Web","desktop":"デスクトップ","mobile":"モバイル","hardware":"ハードウェア",
   "research":"実験・学習","tools":"開発ツール","docs":"ドキュメント","other":"その他",
-  "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52週","m.weeks":"稼働週",
+  "f.commits":"COMMITS / 全期間","f.updated":"UPDATED","m.commits":"COMMITS / 全期間","m.weeks":"稼働週 / 52週",
   "m.stars":"STARS","m.forks":"FORKS","t.status":"ステータス","t.lang":"言語","t.lic":"ライセンス",
   "t.updated":"最終更新","t.stack":"構成","t.team":"管理アカウント",
   "l.repo":"リポジトリ","l.site":"サイトを開く ↗","l.docs":"ドキュメント",
   "demo":"GITHUB データ未取得","liveSrc":"GITHUB 同期済み",
-  "figs":["公開リポジトリ","取得済みの年間コミット","リポジトリのスター","使っている言語"],
+  "figs":["公開リポジトリ","全期間のコミット（取得分）","リポジトリのスター","使っている言語"],
   "ev":["リポジトリを更新","リリース","プルリクをマージ","READMEを更新","デプロイを実行","イシューを追加"],
   "noEvents":"公開データを取得できません。",
-  "note":"フォークを含む全公開リポジトリの数値です。未取得の指標は — で表示します。","noteDemo":"GitHubの数値を取得できませんでした。未取得の指標は — で表示します。"},
+  "note":"フォークを含む全公開リポジトリを集計。コミット数はデフォルトブランチの全貢献者・マージを含む全期間の件数です。未取得は — で表示します。","noteDemo":"GitHubの数値を取得できませんでした。未取得の指標は — で表示します。"},
  en:{"nav.work":"WORK","nav.about":"ABOUT","scroll":"SCROLL ↓",
   "pulse.title":"Repository activity","work.title":"All projects",
   "work.lead":"Explore what I build and the ideas behind each project.",
   "hero.work":"Explore projects ↗","hero.about":"About me ↓","hero.touch":"Tap the illustration to give the lines a little nudge",
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
+  "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
+  "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
+  "sort.note.popular":"Most stars first; forks break ties.",
+  "sort.note.commits":"All-time default-branch commits, including merges. Unavailable counts appear last.",
+  "sort.note.updated":"Most recently pushed first, using the full timestamp.",
+  "sync.at":"Last synced","sync.daily":"Automatic updates daily at 03:17 / 07:17 JST","sync.stale":"GITHUB UPDATE PENDING",
+  "sync.api":"Fetched from GitHub API (annual activity and all-time counts unavailable)","sync.unknown":"Sync time is unavailable.",
+  "activity.coverage":"Annual activity available","activity.scope":"Last 52 weeks, excluding merges, all contributors. This differs from personal contributions on a GitHub profile.",
   "sheet.prev":"← PREV","sheet.next":"NEXT →","close":"CLOSE ×","search.close":"Close search",
   "search.hint":"Search a name or technology, then open a result.",
   "sheet.overview":"Overview","sheet.spec":"Details","sheet.events":"Recent events","sheet.metrics":"Metrics",
@@ -1591,17 +1671,19 @@ const T={
   "search":"Search projects…","empty":"Nothing found. Try a technology name.",
   "all":"ALL","web":"Web","desktop":"Desktop","mobile":"Mobile","hardware":"Hardware",
   "research":"Experiments & learning","tools":"Developer tools","docs":"Documentation","other":"Other",
-  "f.commits":"COMMITS","f.updated":"UPDATED","m.commits":"COMMITS / 52W","m.weeks":"ACTIVE WEEKS",
+  "f.commits":"COMMITS / ALL TIME","f.updated":"UPDATED","m.commits":"COMMITS / ALL TIME","m.weeks":"ACTIVE WEEKS / 52W",
   "m.stars":"STARS","m.forks":"FORKS","t.status":"Status","t.lang":"Language","t.lic":"License",
   "t.updated":"Last update","t.stack":"Built with","t.team":"Repository owner",
   "l.repo":"Repository","l.site":"Open site ↗","l.docs":"Documentation",
   "demo":"GITHUB DATA UNAVAILABLE","liveSrc":"SYNCED WITH GITHUB",
-  "figs":["Public repositories","Available annual commits","Repository stars","Languages in use"],
+  "figs":["Public repositories","All-time commits (available)","Repository stars","Languages in use"],
   "ev":["Pushed to the repository","Released","Merged a pull request","Updated the README","Deployed","Opened an issue"],
   "noEvents":"Public data is unavailable.",
-  "note":"Figures cover all public repositories, including forks. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
+  "note":"All public repositories, including forks. Commit counts cover all contributors on the default branch, all time, including merges. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 let FILTER='all';
+let SORT='recommended';
+const SORT_KEYS=['recommended','popular','commits','updated'];
 const t=k=>T[LANG][k]??k;
 const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1612,16 +1694,38 @@ const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
 let DATA=JSON.parse($('site-data').textContent);
 let LIVE=false;
+let SYNCED_AT='', SOURCE='none';
+function projectLanguages(project){
+  const g=project.g||{};
+  if(g.languages&&typeof g.languages==='object')return Object.entries(g.languages)
+    .filter(([,bytes])=>Number.isFinite(bytes)&&bytes>0).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([name])=>name);
+  return g.language?[g.language]:[];
+}
+function projectOrder(){
+  const entries=DATA.projects.map((p,i)=>({p,i}));
+  const metric=p=>SORT==='popular'?p.g.stars:SORT==='commits'?p.g.commits:Date.parse(p.g.pushedAt||p.g.pushed);
+  if(SORT==='recommended')return entries;
+  return entries.sort((a,b)=>{
+    const av=metric(a.p),bv=metric(b.p),ak=Number.isFinite(av),bk=Number.isFinite(bv);
+    return Number(bk)-Number(ak)||(ak&&bk?bv-av:0)
+      ||(SORT==='popular'?(b.p.g.forks||0)-(a.p.g.forks||0):0)||a.i-b.i;
+  });
+}
+function setSort(value){
+  SORT=SORT_KEYS.includes(value)?value:'recommended';
+  try{localStorage.setItem('project-sort',SORT)}catch(e){}
+  renderTiles();
+}
 
 /* ===================== data loading ===================== */
 async function loadGithub(){
   /* 1) build-time file written by GitHub Actions */
   try{
-    const r=await fetch('./data/github.json',{cache:'no-cache'});
+    const r=await fetch('./data/github.json',{cache:'no-cache',signal:AbortSignal.timeout(10000)});
     if(r.ok){
       const j=await r.json();
       if(j.owner===DATA.profile.github&&Array.isArray(j.projects)&&j.projects.length&&j.stats){
-        DATA.projects=j.projects; LIVE=true; return j.stats;
+        DATA.projects=j.projects; LIVE=true; SOURCE='snapshot'; SYNCED_AT=j.syncedAt||''; return j.stats;
       }
     }
   }catch(e){}
@@ -1651,11 +1755,11 @@ async function loadGithub(){
     const out={};
     repos.forEach((r,index)=>{
       out[projects[index].slug]={weeks:[], stars:r.stargazers_count, forks:r.forks_count,
-        language:r.language, license:r.license?.spdx_id||'—',
-        pushed:(r.pushed_at||'').slice(0,10), url:r.html_url,
+        language:r.language, languages:null, commits:null, license:r.license?.spdx_id||'—',
+        pushed:(r.pushed_at||'').slice(0,10), pushedAt:r.pushed_at||'', url:r.html_url,
         site:webUrl(r.homepage)||(r.has_pages?`https://${login}.github.io/${r.name.toLowerCase()===`${login.toLowerCase()}.github.io`?'':`${r.name}/`}`:'')};
     });
-    DATA.projects=projects; LIVE=true; return out;
+    DATA.projects=projects; LIVE=true; SOURCE='api'; SYNCED_AT=new Date().toISOString(); return out;
   }catch(e){}
   return null;
 }
@@ -1670,13 +1774,17 @@ async function boot(){
     const g=(gh&&gh[p.slug])||{weeks:[]};
     if(!g.weeks) g.weeks=[];
     p.g=g;
-    p.g.commits=g.weeks.length?g.weeks.reduce((s,w)=>s+(w.total||0),0):null;
+    p.g.commits=Number.isSafeInteger(g.commits)&&g.commits>=0?g.commits:null;
+    p.g.annualCommits=g.weeks.length?g.weeks.reduce((s,w)=>s+(w.total||0),0):null;
     p.g.activeWeeks=g.weeks.length?g.weeks.filter(w=>(w.total||0)>0).length:null;
     p.g.bars=g.weeks.slice(-14).map(w=>w.total||0);
     p.g.site=webUrl(p.links?.site)||webUrl(g.site);
     p.g.url=webUrl(g.url)||(p.repo?`https://github.com/${p.repo}`:'');
   });
-  try{const s=localStorage.getItem('lang'); if(s) LANG=s;}
+  try{
+    const s=localStorage.getItem('lang'); if(['ja','en'].includes(s))LANG=s;
+    const sort=localStorage.getItem('project-sort'); if(SORT_KEYS.includes(sort))SORT=sort;
+  }
   catch(e){}
   if(!localStorageLang()&&navigator.language&&!navigator.language.startsWith('ja')) LANG='en';
   render();
@@ -1695,8 +1803,10 @@ function render(){
   $('navName').textContent=pr.name.toUpperCase();
   $('navGh').href=pr.links.github; $('navLi').href=pr.links.linkedin;
 
+  const syncTime=Date.parse(SYNCED_AT), stale=SOURCE==='snapshot'&&(!Number.isFinite(syncTime)||Date.now()-syncTime>36*60*60*1000);
+  const sourceLabel=LIVE?t(stale?'sync.stale':'liveSrc'):t('demo');
   $('heroMeta').innerHTML=[tx(pr.location).toUpperCase(),tx(pr.role).toUpperCase(),
-    `${P.length} PUBLIC PROJECTS`,LIVE?t('liveSrc'):t('demo')].map(s=>`<span>${esc(s)}</span>`).join('');
+    `${P.length} PUBLIC PROJECTS`,sourceLabel].map(s=>`<span>${esc(s)}</span>`).join('');
   $('kin').innerHTML=pr.hero.map((r,i)=>
     `<span class="row r${i+1}">${[...r].map(c=>`<span class="l">${c}</span>`).join('')}</span>`).join('');
   $('heroSub').textContent=tx(pr.intro);
@@ -1715,8 +1825,10 @@ function render(){
 
   /* pulse */
   const badge=$('srcBadge');
-  badge.textContent=LIVE?t('liveSrc'):t('demo');
-  badge.classList.toggle('live',LIVE);
+  badge.textContent=sourceLabel;
+  badge.classList.toggle('live',LIVE&&!stale); badge.classList.toggle('stale',stale);
+  $('syncInfo').textContent=LIVE?(Number.isFinite(syncTime)?`${t('sync.at')}: ${new Intl.DateTimeFormat(LANG==='ja'?'ja-JP':'en-GB',
+    {dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Tokyo'}).format(syncTime)} JST · ${t(SOURCE==='api'?'sync.api':'sync.daily')}`:t('sync.unknown')):t('demo');
   const weekCount=Math.max(0,...P.map(p=>p.g.weeks.length))||52;
   const agg=Array.from({length:weekCount*7},(_,i)=>P.reduce((s,p)=>{
     const w=p.g.weeks[Math.floor(i/7)]; return s+((w&&w.days&&w.days[i%7])||0)},0));
@@ -1724,11 +1836,14 @@ function render(){
   $('heat').innerHTML=agg.map(v=>`<i style="opacity:${(.1+(v/max)*.9).toFixed(2)}"></i>`).join('');
   const totC=P.some(p=>p.g.commits!==null)?P.reduce((s,p)=>s+(p.g.commits||0),0):null;
   const totS=P.some(p=>p.g.stars!==undefined)?P.reduce((s,p)=>s+(p.g.stars||0),0):null;
-  $('pulseSum').textContent=`${totC?.toLocaleString()??'—'} commits / ${weekCount} weeks`;
-  const langs=new Set(P.map(p=>p.g.language).filter(Boolean));
-  const figs=[[P.length,0],[totC,1],[totS,2],[langs.size||null,3]];
+  const annual=P.some(p=>p.g.annualCommits!==null)?P.reduce((s,p)=>s+(p.g.annualCommits||0),0):null;
+  $('pulseSum').textContent=`${annual?.toLocaleString()??'—'} commits / ${weekCount} weeks`;
+  $('activityNote').textContent=`${t('activity.coverage')}: ${P.filter(p=>p.g.weeks.length).length} / ${P.length} · ${t('activity.scope')}`;
+  const langs=[...new Set(P.flatMap(projectLanguages))].sort((a,b)=>a.localeCompare(b));
+  const figs=[[P.length,0],[totC,1],[totS,2]];
   $('figs').innerHTML=figs.map(([n,i])=>
-    `<div class="fig"><strong${n===null?'':` data-to="${n}"`}>${n===null?'—':'0'}</strong><span>${t('figs')[i]}</span></div>`).join('');
+    `<div class="fig"><strong${n===null?'':` data-to="${n}"`}>${n===null?'—':'0'}</strong><span>${t('figs')[i]}</span></div>`).join('')
+    +`<div class="fig-languages"><h3>${t('figs')[3]}</h3><div class="language-list">${langs.length?langs.map(name=>`<i>${esc(name)}</i>`).join(''):'—'}</div></div>`;
   countUp();
 
   /* filters */
@@ -1737,25 +1852,30 @@ function render(){
   $('filters').innerHTML=keys.map(k=>
     `<button class="fbtn ${k===FILTER?'on':''}" aria-pressed="${k===FILTER}" data-k="${esc(k)}">${esc(t(k))}</button>`).join('');
 
-  /* tiles */
-  $('bento').innerHTML=P.map((p,i)=>`
-    <article class="tile s-${esc(p.size||'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
+  renderTiles();
+  if(curI>=0) fill(curI);
+}
+function renderTiles(){
+  $('projectSort').innerHTML=SORT_KEYS.map(key=>`<option value="${key}"${key===SORT?' selected':''}>${t('sort.'+key)}</option>`).join('');
+  $('sortNote').textContent=t('sort.note.'+SORT);
+  $('bento').innerHTML=projectOrder().map(({p,i},rank)=>`
+    <article class="tile s-${esc(SORT==='recommended'?(p.size||'std'):'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
-      <span class="no">${String(i+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
+      <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
       ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
       ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <h3>${esc(p.name)}</h3>
       <p class="jp">${esc(tx(p.summary))}</p>
+      <span class="tile-languages">${projectLanguages(p).map(name=>`<i>${esc(name)}</i>`).join('')}</span>
       <span class="foot">
         <span class="lbl">${t('f.commits')}<b>${p.g.commits?.toLocaleString()??'—'}</b></span>
-        <span class="lbl">${t('f.updated')}<b>${(p.g.pushed||'').slice(5).replace('-','.')||'—'}</b></span>
+        <span class="lbl">${t('f.updated')}<b>${esc(p.g.pushed||'—')}</b></span>
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
       <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
     </article>`).join('');
   applyFilter();
-  if(curI>=0) fill(curI);
 }
 function applyFilter(){
   document.querySelectorAll('.fbtn').forEach(button=>{
@@ -1806,7 +1926,8 @@ function unlockPage(){
 }
 function fill(i){
   const p=DATA.projects[i], g=p.g;
-  $('sIdx').textContent=`WORK ${String(i+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
+  const rank=projectOrder().findIndex(entry=>entry.i===i);
+  $('sIdx').textContent=`WORK ${String(rank+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
   $('sYear').textContent=p.year;
   $('sTag').textContent=tx(p.tag);
   $('sTitle').textContent=p.name;
@@ -1814,7 +1935,7 @@ function fill(i){
   $('sDesc').textContent=tx(p.desc);
   $('sTable').innerHTML=`
     <tr><td>${t('t.status')}</td><td>${esc(tx(p.status))}</td></tr>
-    <tr><td>${t('t.lang')}</td><td>${esc(g.language||'—')}</td></tr>
+    <tr><td>${t('t.lang')}</td><td>${esc(projectLanguages(p).join(' / ')||'—')}</td></tr>
     <tr><td>${t('t.lic')}</td><td>${esc(g.license||'—')}</td></tr>
     <tr><td>${t('t.updated')}</td><td>${g.pushed||'—'}</td></tr>
     <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${esc(s)}</i>`).join('')}</div></td></tr>
@@ -1857,8 +1978,14 @@ function outsideDialog(e,dialog){
   const r=dialog.getBoundingClientRect();
   return e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom);
 }
-$('sPrev').addEventListener('click',()=>open((curI-1+DATA.projects.length)%DATA.projects.length));
-$('sNext').addEventListener('click',()=>open((curI+1)%DATA.projects.length));
+function stepProject(delta){
+  let order=projectOrder().filter(({p})=>FILTER==='all'||p.filter===FILTER);
+  if(!order.some(({i})=>i===curI))order=projectOrder();
+  const position=order.findIndex(({i})=>i===curI);
+  open(order[(position+delta+order.length)%order.length].i);
+}
+$('sPrev').addEventListener('click',()=>stepProject(-1));
+$('sNext').addEventListener('click',()=>stepProject(1));
 addEventListener('popstate',(event={})=>{
   const i=DATA.projects.findIndex(p=>p.slug===location.hash.slice(1));
   if(pal.open)palClose(i>=0);
@@ -1872,6 +1999,7 @@ addEventListener('popstate',(event={})=>{
 });
 
 /* ===================== events ===================== */
+$('projectSort').addEventListener('change',e=>setSort(e.target.value));
 $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
 },true);
@@ -1892,9 +2020,9 @@ const pal=$('pal'), palin=$('palin'), palres=$('palres');
 let psel=0, plist=[];
 function palDraw(){
   const q=palin.value.trim().toLowerCase();
-  plist=DATA.projects.map((p,i)=>i).filter(i=>{
+  plist=projectOrder().map(({i})=>i).filter(i=>{
     const p=DATA.projects[i];
-    return (p.name+tx(p.summary)+p.stack.join()+tx(p.tag)).toLowerCase().includes(q);
+    return (p.name+tx(p.summary)+p.stack.join()+projectLanguages(p).join()+tx(p.tag)).toLowerCase().includes(q);
   });
   if(psel>=plist.length)psel=Math.max(plist.length-1,0);
   palres.innerHTML=plist.length?plist.map((i,k)=>{
@@ -1934,8 +2062,8 @@ addEventListener('keydown',e=>{
   }
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();palOpen();return}
   if(sheet.classList.contains('open')&&!pal.classList.contains('open')){
-    if(e.key==='ArrowRight')open((curI+1)%DATA.projects.length);
-    if(e.key==='ArrowLeft')open((curI-1+DATA.projects.length)%DATA.projects.length);
+    if(e.key==='ArrowRight')stepProject(1);
+    if(e.key==='ArrowLeft')stepProject(-1);
   }
 });
 
