@@ -48,7 +48,9 @@ function setup() {
     })) },
     tx: value => typeof value === "string" ? value : value?.en || "",
     t: key => key, esc: value => String(value ?? ""), webUrl: () => "", render() {},
+    FILTER: 'all', projectLanguages: () => [],
   });
+  context.projectOrder = () => context.DATA.projects.map((p, i) => ({ p, i }));
   const api = new Script(interactions + "\n({ open, close, palOpen, palClose })").runInContext(context);
   return { ...api, node, document, routes, events, context, scrolls, remembered };
 }
@@ -65,6 +67,22 @@ test("project navigation restores the original launcher when the modal closes", 
   assert.equal(ui.document.activeElement, launcher);
   assert.equal(ui.document.body.classList.contains("locked"), false);
   assert.equal(ui.routes.at(-1), "/portfolio/");
+});
+
+test("detail navigation and search follow visible ordering without changing project identity", () => {
+  const ui = setup();
+  ui.context.DATA.projects.push({ ...ui.context.DATA.projects[0], slug: 'third', name: 'Third' });
+  ui.context.projectOrder = () => [2, 0, 1].map(i => ({ i, p: ui.context.DATA.projects[i] }));
+  ui.open(2);
+  ui.node('sNext').fire('click');
+  assert.equal(ui.node('sTitle').textContent, config.projects[0].name);
+  assert.equal(ui.routes.at(-1), '#' + config.projects[0].slug);
+  ui.node('sPrev').fire('click');
+  assert.equal(ui.node('sTitle').textContent, 'Third');
+  ui.close();
+  ui.palOpen();
+  const results = ui.node('palres').innerHTML;
+  assert.ok(results.indexOf('Third') < results.indexOf(config.projects[0].name));
 });
 
 test("native Escape cancellation closes the modal and clears the project route", () => {
