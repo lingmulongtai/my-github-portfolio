@@ -123,6 +123,40 @@
       "image": "assets/projects/keylume.webp"
     },
     {
+      "slug": "tsuyulabo",
+      "repo": "lingmulongtai/tsuyulabo",
+      "name": "ツユラボ / Tsuyu Labo",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "育成研究ゲーム",
+        "en": "REARING RESEARCH GAME"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "ハエの神経接続モデルで、卵から毎週1匹を育てる研究ゲーム",
+        "en": "A weekly egg-to-fly rearing game using a fly neural-connectivity model"
+      },
+      "desc": {
+        "ja": "ツユラボは、毎週1匹のハエを卵から育てる育成研究ゲームです。ハエの神経接続モデルを使った成長と学習の仕組みを探ります。",
+        "en": "Tsuyu Labo is a research game about raising one fly from an egg each week, exploring growth and learning through a fly neural-connectivity model."
+      },
+      "stack": [
+        "Python",
+        "TypeScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/tsuyulabo/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/tsuyulabo.webp"
+    },
+    {
       "slug": "codexbar-android",
       "repo": "lingmulongtai/CodexBar-android",
       "name": "CodexBar-android",
