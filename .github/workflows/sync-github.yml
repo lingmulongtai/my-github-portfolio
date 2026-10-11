@@ -2,7 +2,7 @@ name: Sync GitHub data and deploy Pages
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # 毎日 03:00 JST
+    - cron: "17 18,22 * * *" # 毎日 03:17 / 07:17 JST（2回目は更新の再実行枠）
   workflow_dispatch:        # 手動実行ボタン
   push:
     branches: [main]
