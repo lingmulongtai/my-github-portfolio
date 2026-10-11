@@ -74,8 +74,10 @@ test("detail navigation and search follow visible ordering without changing proj
   ui.context.DATA.projects.push({ ...ui.context.DATA.projects[0], slug: 'third', name: 'Third' });
   ui.context.projectOrder = () => [2, 0, 1].map(i => ({ i, p: ui.context.DATA.projects[i] }));
   ui.open(2);
+  assert.equal(ui.node('sIdx').textContent, 'WORK 01 / 03');
   ui.node('sNext').fire('click');
   assert.equal(ui.node('sTitle').textContent, config.projects[0].name);
+  assert.equal(ui.node('sIdx').textContent, 'WORK 02 / 03');
   assert.equal(ui.routes.at(-1), '#' + config.projects[0].slug);
   ui.node('sPrev').fire('click');
   assert.equal(ui.node('sTitle').textContent, 'Third');

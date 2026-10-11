@@ -1926,7 +1926,8 @@ function unlockPage(){
 }
 function fill(i){
   const p=DATA.projects[i], g=p.g;
-  $('sIdx').textContent=`WORK ${String(i+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
+  const rank=projectOrder().findIndex(entry=>entry.i===i);
+  $('sIdx').textContent=`WORK ${String(rank+1).padStart(2,'0')} / ${String(DATA.projects.length).padStart(2,'0')}`;
   $('sYear').textContent=p.year;
   $('sTag').textContent=tx(p.tag);
   $('sTitle').textContent=p.name;
