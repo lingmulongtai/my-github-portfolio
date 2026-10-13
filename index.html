@@ -130,6 +130,24 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .track em{font-style:normal; color:var(--accent); font-weight:800}
 
 /* pulse */
+.sites{padding:clamp(44px,6vw,80px) var(--gutter); border-bottom:1px solid var(--line); background:var(--paper)}
+.site-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px}
+.site-fbtn{min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px}
+.site-fbtn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.site-fbtn:disabled{opacity:.5; cursor:default}
+.launch-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+.launch-card{display:flex; flex-direction:column; min-width:0; padding:20px; background:#fff;
+  border:1px solid var(--line); border-radius:18px; transition:border-color .2s,background .2s}
+.launch-card:hover,.launch-card:focus-visible{border-color:var(--ink); background:var(--mint)}
+.launch-card img{width:100%; height:156px; object-fit:contain; mix-blend-mode:multiply}
+.launch-card h3{font-family:var(--display); margin:14px 0 8px; font-size:clamp(18px,1.6vw,24px); overflow-wrap:anywhere}
+.launch-card p{font-size:13px; line-height:1.75; margin:0 0 18px; flex:1}
+.launch-action{display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:14px;
+  border-top:1px solid var(--line); font-size:13px; font-weight:700}
+.launch-action small{font-size:10px; font-weight:400}
+.site-empty{font-size:13px; line-height:1.8; margin:0}
+@media (max-width:1000px){.launch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.launch-grid{grid-template-columns:minmax(0,1fr)}}
 .pulse{padding:clamp(46px,7vw,86px) var(--gutter) clamp(40px,6vw,70px); border-bottom:1px solid var(--line)}
 .pulse-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:24px}
 .pulse-head h2{font-family:var(--display); font-weight:500; font-size:clamp(20px,2.6vw,30px);
@@ -172,6 +190,21 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .work-count{margin:0 0 18px; font-size:12px; color:var(--ink)}
 .work-toolbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
 .work-toolbar .work-count{margin:0}
+.view-controls{display:flex; flex-wrap:wrap; gap:6px}
+.viewbtn{min-height:44px; padding:9px 14px; border:1px solid var(--line); border-radius:12px; font-size:12px}
+.viewbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink)}
+.project-group{grid-column:1/-1; padding:24px; border:1px solid var(--line); border-radius:22px; background:var(--mint)}
+.project-group[hidden]{display:none}
+.group-heading{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px}
+.group-heading h3{font-family:var(--display); font-size:26px; margin:0 0 8px}
+.group-heading p{font-size:13px; line-height:1.8; max-width:62ch; margin:0}
+.group-heading small{font-family:var(--body); font-size:12px; font-weight:400; margin-left:12px}
+.group-site{display:flex; align-items:center; min-height:44px; padding:10px 16px; border-radius:12px;
+  background:var(--ink); color:var(--paper); font-size:12px; font-weight:700}
+.bento.group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.group-grid>.tile{grid-column:span 1}
+@media (max-width:760px){.project-group{padding:14px}.group-heading h3{font-size:22px}}
+@media (max-width:520px){.bento.group-grid{grid-template-columns:minmax(0,1fr)}}
 .sort-control{display:flex; align-items:center; gap:10px; font-size:12px}
 .sort-control select{max-width:100%; min-height:44px; padding:8px 32px 8px 12px; border:1px solid var(--line);
   border-radius:12px; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer}
@@ -193,7 +226,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .tile-open{position:absolute; inset:0; z-index:1}
 .tile>:where(:not(.tile-open):not(.site):not(.tile-art)){position:relative; z-index:0; pointer-events:none}
 .tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; line-height:1.55;
-  padding-right:76px; opacity:.75; overflow-wrap:anywhere}
+  padding-right:142px; opacity:.75; overflow-wrap:anywhere}
 .tile h3{font-family:var(--display); font-weight:500; letter-spacing:-.04em; margin:auto 0 9px;
   font-size:clamp(20px,2.3vw,33px); line-height:1.16; overflow-wrap:anywhere}
 .tile .jp{font-size:12.5px; opacity:.8; line-height:1.68; margin:0}
@@ -202,11 +235,11 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--acid); color:var(--black);
   z-index:0; pointer-events:none}
 .tile:hover .st,.tile:focus-within .st{border-color:currentColor}
-.tile .site{position:absolute; top:14px; right:14px; z-index:3; font-family:var(--display); font-size:10px;
-  border:1px solid currentColor; border-radius:99px; padding:4px 11px;
+.tile .site{position:absolute; top:14px; right:14px; z-index:3; display:flex; align-items:center; gap:10px;
+  min-height:44px; max-width:132px; font-size:12px; font-weight:700; line-height:1.4;
+  border:1px solid var(--ink); border-radius:12px; padding:10px 14px; background:var(--ink); color:var(--paper);
   transition:background .2s}
-.tile .site:hover{background:currentColor}
-.tile .site:hover span{mix-blend-mode:difference; filter:invert(1)}
+.tile .site:hover{background:var(--accent); color:var(--paper)}
 .tile .foot{display:flex; align-items:flex-end; gap:14px; margin-top:16px;
   padding-top:13px; border-top:1px solid currentColor}
 .tile .foot .lbl{font-family:var(--display); font-size:10px; opacity:.62; line-height:1.5; white-space:nowrap}
@@ -223,9 +256,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .tile.has-image:hover,.tile.has-image:focus-within{background:#fff; border-color:var(--ink)}
 .tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:translateY(-4px)}
 .tile.has-image .st{margin-bottom:6px}
-.tile.has-image .site{background:var(--paper); border-color:var(--line)}
-.tile.has-image .site:hover{background:var(--mint); color:var(--ink)}
-.tile.has-image .site:hover span{mix-blend-mode:normal; filter:none}
+.tile .site[data-kind="guide"],.tile .site[data-kind="page"]{background:var(--mint); color:var(--ink)}
+.tile .site[data-kind="guide"]:hover,.tile .site[data-kind="page"]:hover{background:var(--ink); color:var(--paper)}
 .tile.has-image .foot{border-color:var(--line)}
 .tile.has-image .foot .lbl{opacity:.75}
 .tile.s-hero .tile-art,.tile.s-tall .tile-art{height:280px}
@@ -467,7 +499,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       <div class="meta" id="heroMeta"></div>
       <h1 class="kin" id="kin"></h1>
       <p class="sub" id="heroSub"></p>
-      <div class="hero-actions"><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
+      <div class="hero-actions"><a href="#sites" data-i18n="hero.sites"></a><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
     </div>
     <figure class="hero-portrait">
       <img src="./assets/portrait.webp" width="1024" height="1024"
@@ -480,6 +512,12 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </header>
 
 <div class="marq" aria-hidden="true"><div class="marq-inner"><div class="track" id="track"></div></div></div>
+
+<section class="sites" id="sites" aria-labelledby="sitesTitle">
+  <div class="sechead"><h2 id="sitesTitle" data-i18n="sites.title"></h2><p data-i18n="sites.lead"></p></div>
+  <div class="site-tabs" id="siteTabs" role="group" aria-label="Website types"></div>
+  <div class="launch-grid" id="launchGrid"></div>
+</section>
 
 <section class="pulse">
   <div class="pulse-intro">
@@ -506,6 +544,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   <div class="filters" id="filters" role="group" aria-label="Project categories"></div>
   <div class="work-toolbar">
     <p class="work-count" id="workCount" role="status" aria-live="polite"></p>
+    <div class="view-controls" id="projectViewControls" role="group" aria-label="Project view"></div>
     <label class="sort-control" for="projectSort"><span data-i18n="sort.label"></span><select id="projectSort"></select></label>
   </div>
   <p class="sort-note" id="sortNote"></p>
@@ -670,7 +709,42 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/aerogrid-3d.webp"
+      "image": "assets/projects/aerogrid-3d.webp",
+      "siteKind": "app"
+    },
+    {
+      "slug": "oceanfpv",
+      "repo": "lingmulongtai/OceanFPV",
+      "name": "OceanFPV",
+      "size": "tall",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "ブラウザゲーム",
+        "en": "BROWSER GAME"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "海・船・島を自由に飛び回る、ブラウザのFPVドローンゲーム",
+        "en": "Fly an FPV drone over oceans, ships and islands in your browser"
+      },
+      "desc": {
+        "ja": "ブラウザだけで遊べるFPVドローン飛行ゲームです。海・船・島を探索し、Xboxコントローラー、USB FPV送信機、キーボード・マウスで操作できます。",
+        "en": "A browser-based FPV drone game for exploring oceans, ships and islands. Supports Xbox controllers, USB FPV transmitters, and keyboard and mouse controls."
+      },
+      "stack": [
+        "TypeScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/OceanFPV/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/oceanfpv.webp",
+      "siteKind": "app"
     },
     {
       "slug": "keylume",
@@ -741,7 +815,153 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/tsuyulabo.webp"
+      "image": "assets/projects/tsuyulabo.webp",
+      "siteKind": "app"
+    },
+    {
+      "slug": "okuyuki-site",
+      "repo": "lingmulongtai/Okuyuki-site",
+      "name": "Okuyuki · Website",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "紹介サイト",
+        "en": "PROJECT WEBSITE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxy・Quest・LGテレビをつなぐOkuyukiの紹介サイト",
+        "en": "Meet Okuyuki: local photo viewing across Galaxy, Quest and LG TVs"
+      },
+      "desc": {
+        "ja": "Okuyukiの対応機器、接続方法、開発状況をまとめる紹介サイトです。Android・Questのアルファ配布と、開発中のwebOS版への入口を案内します。",
+        "en": "An introduction to Okuyuki, its supported devices, setup and development status. Links to Android and Quest alpha releases and the webOS project in development."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-site/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-site.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-android",
+      "repo": "lingmulongtai/Okuyuki-android",
+      "name": "Okuyuki · Android",
+      "size": "std",
+      "filter": "mobile",
+      "year": "2026",
+      "tag": {
+        "ja": "Androidアプリ",
+        "en": "ANDROID HOST"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの3D写真をスマホに置いたまま、Questへ届ける",
+        "en": "Host Galaxy stereo photos locally for a nearby Quest viewer"
+      },
+      "desc": {
+        "ja": "Galaxyで3D写真を管理し、同じWi-FiのQuestへ必要な写真だけを渡すスマホ側アプリです。Android・Quest版はアルファを配布中。実機での原本デコードと立体表示は未検証です。",
+        "en": "The phone-side host for Galaxy stereo photos, sharing selected images with a Quest on the same Wi-Fi. Android and Quest alpha releases are available; source decoding and stereoscopic display on physical devices remain unverified."
+      },
+      "stack": [
+        "Kotlin",
+        "Android"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-android/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-android.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-quest",
+      "repo": "lingmulongtai/Okuyuki-quest",
+      "name": "Okuyuki · Quest",
+      "size": "std",
+      "filter": "mobile",
+      "year": "2026",
+      "tag": {
+        "ja": "Questビューア",
+        "en": "QUEST VIEWER"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの3D写真を、同じWi-FiのMeta Questで見る",
+        "en": "View Galaxy stereo photos on a Meta Quest over local Wi-Fi"
+      },
+      "desc": {
+        "ja": "Galaxyの写真を一時的に受け取り、Meta Questで見るビューアです。Android版と組み合わせるアルファを配布中。実機での原本デコードと立体表示は未検証です。",
+        "en": "A Meta Quest viewer that temporarily receives selected photos from a Galaxy phone. An alpha is available alongside the Android host; source decoding and stereoscopic display on physical devices remain unverified."
+      },
+      "stack": [
+        "Kotlin",
+        "Android",
+        "Meta Quest"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-quest/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-quest.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-webos",
+      "repo": "lingmulongtai/Okuyuki-webos",
+      "name": "Okuyuki · webOS",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "テレビ向けプロジェクト",
+        "en": "TV COMPANION PROJECT"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの写真・動画を、同じWi-FiのLGテレビで見るための開発",
+        "en": "A TV companion project for local Galaxy photo and video viewing"
+      },
+      "desc": {
+        "ja": "写真をGalaxyに置いたまま、LG webOSテレビへ表示に必要なデータを一時的に渡すテレビ側アプリのプロジェクトです。現在の公開リポジトリはREADMEで目的を案内しています。",
+        "en": "A project for viewing Galaxy photos and videos on an LG webOS TV, receiving only temporary display data while the originals stay on the phone. The current public repository documents the intended app in its README."
+      },
+      "stack": [
+        "webOS"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-webos/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-webos.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
     },
     {
       "slug": "codexbar-android",
@@ -777,7 +997,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": true,
-      "image": "assets/projects/codexbar-android.webp"
+      "image": "assets/projects/codexbar-android.webp",
+      "siteKind": "guide"
     },
     {
       "slug": "instaframe",
@@ -815,7 +1036,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/instaframe.webp"
+      "image": "assets/projects/instaframe.webp",
+      "siteKind": "app"
     },
     {
       "slug": "glyphray",
@@ -853,7 +1075,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/glyphray.webp"
+      "image": "assets/projects/glyphray.webp",
+      "siteKind": "guide"
     },
     {
       "slug": "winai-usage-bar",
@@ -964,7 +1187,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/pdf-local-unlocker.webp"
+      "image": "assets/projects/pdf-local-unlocker.webp",
+      "siteKind": "app"
     },
     {
       "slug": "kuas-reception",
@@ -1037,7 +1261,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/kuas-fall-2026.webp"
+      "image": "assets/projects/kuas-fall-2026.webp",
+      "siteKind": "app"
     },
     {
       "slug": "github-clendar-connector",
@@ -1148,7 +1373,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/ai-home-energy-assistant.webp"
+      "image": "assets/projects/ai-home-energy-assistant.webp",
+      "siteKind": "app"
     },
     {
       "slug": "skycopilot",
@@ -1258,7 +1484,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/bandwidth-burner.webp"
+      "image": "assets/projects/bandwidth-burner.webp",
+      "siteKind": "app"
     },
     {
       "slug": "photography-club-website",
@@ -1577,7 +1804,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/my-github-portfolio.webp"
+      "image": "assets/projects/my-github-portfolio.webp",
+      "showcase": false
     },
     {
       "slug": "lingmulongtai",
@@ -1611,7 +1839,18 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/lingmulongtai.webp"
+      "image": "assets/projects/lingmulongtai.webp",
+      "showcase": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "okuyuki",
+      "name": "Okuyuki",
+      "summary": {
+        "ja": "Galaxyの写真を、QuestやLGテレビへ。Android・Quest・webOS・紹介サイトをまとめたプロジェクト。",
+        "en": "Galaxy photos across Quest and LG TVs: Android, Quest, webOS and the project website, together."
+      }
     }
   ]
 }
@@ -1625,6 +1864,12 @@ const T={
   "work.lead":"気になるカードから、つくったものと技術の話を。",
   "hero.work":"プロジェクトを見る ↗","hero.about":"自己紹介 ↓","hero.touch":"イラストをタップすると、線がふわっと動きます",
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
+  "site.action.app":"使ってみる","site.action.guide":"紹介を見る","site.action.page":"サイトを見る","site.newTab":"別タブで開く",
+  "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
+  "sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
+  "sites.empty":"この種類のサイトはまだありません。",
+  "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
+  "view.note.groups":"グループは最上位のリポジトリを基準に並びます。",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
   "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
   "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
@@ -1655,6 +1900,12 @@ const T={
   "work.lead":"Explore what I build and the ideas behind each project.",
   "hero.work":"Explore projects ↗","hero.about":"About me ↓","hero.touch":"Tap the illustration to give the lines a little nudge",
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
+  "site.action.app":"Try it","site.action.guide":"Meet the app","site.action.page":"Visit site","site.newTab":"Opens in a new tab",
+  "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
+  "sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
+  "sites.empty":"There are no websites in this category yet.",
+  "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
+  "view.note.groups":"Groups follow their highest ranked repository.",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
   "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
   "sort.note.popular":"Most stars first; forks break ties.",
@@ -1682,6 +1933,8 @@ const T={
   "note":"All public repositories, including forks. Commit counts cover all contributors on the default branch, all time, including merges. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 let FILTER='all';
+let SITE_FILTER='app';
+let VIEW='groups';
 let SORT='recommended';
 const SORT_KEYS=['recommended','popular','commits','updated'];
 const t=k=>T[LANG][k]??k;
@@ -1689,31 +1942,60 @@ const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
+const siteAction=project=>t('site.action.'+(['app','guide','page'].includes(project.siteKind)?project.siteKind:'page'));
 
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
 let DATA=JSON.parse($('site-data').textContent);
 let LIVE=false;
 let SYNCED_AT='', SOURCE='none';
+function websiteEntries(){
+  const seen=new Set();
+  return DATA.projects.flatMap((p,i)=>{
+    const href=webUrl(p.g?.site);
+    if(!href||p.showcase===false)return [];
+    const key=new URL(href); key.hash=''; key.pathname=key.pathname.replace(/\/+$/,'')||'/';
+    if(seen.has(key.href))return [];
+    seen.add(key.href);
+    return [{p,i,href,group:(DATA.groups||[]).find(group=>group.id===p.group)}];
+  });
+}
 function projectLanguages(project){
   const g=project.g||{};
   if(g.languages&&typeof g.languages==='object')return Object.entries(g.languages)
     .filter(([,bytes])=>Number.isFinite(bytes)&&bytes>0).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([name])=>name);
   return g.language?[g.language]:[];
 }
+function projectBuckets(entries){
+  const groups=new Map((DATA.groups||[]).map(group=>[group.id,group]));
+  const seen=new Set(),buckets=[];
+  for(const entry of entries){
+    const group=VIEW==='groups'?groups.get(entry.p.group):null;
+    if(!group){buckets.push({group:null,entries:[entry]});continue}
+    if(seen.has(group.id))continue;
+    seen.add(group.id);
+    buckets.push({group,entries:entries.filter(item=>item.p.group===group.id)});
+  }
+  return buckets;
+}
 function projectOrder(){
   const entries=DATA.projects.map((p,i)=>({p,i}));
   const metric=p=>SORT==='popular'?p.g.stars:SORT==='commits'?p.g.commits:Date.parse(p.g.pushedAt||p.g.pushed);
-  if(SORT==='recommended')return entries;
-  return entries.sort((a,b)=>{
+  if(SORT!=='recommended')entries.sort((a,b)=>{
     const av=metric(a.p),bv=metric(b.p),ak=Number.isFinite(av),bk=Number.isFinite(bv);
     return Number(bk)-Number(ak)||(ak&&bk?bv-av:0)
       ||(SORT==='popular'?(b.p.g.forks||0)-(a.p.g.forks||0):0)||a.i-b.i;
   });
+  return projectBuckets(entries).flatMap(bucket=>bucket.entries);
 }
 function setSort(value){
   SORT=SORT_KEYS.includes(value)?value:'recommended';
   try{localStorage.setItem('project-sort',SORT)}catch(e){}
+  renderTiles();
+}
+function setView(value){
+  VIEW=['groups','repos'].includes(value)?value:'groups';
+  try{localStorage.setItem('project-view',VIEW)}catch(e){}
   renderTiles();
 }
 
@@ -1750,7 +2032,8 @@ async function loadGithub(){
       return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
         year:(r.created_at||'').slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
         status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
-        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',fork:r.fork};
+        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',
+        group:p?.group||'',siteKind:['app','guide','page'].includes(p?.siteKind)?p.siteKind:'page',showcase:p?.showcase!==false,fork:r.fork};
     });
     const out={};
     repos.forEach((r,index)=>{
@@ -1784,6 +2067,7 @@ async function boot(){
   try{
     const s=localStorage.getItem('lang'); if(['ja','en'].includes(s))LANG=s;
     const sort=localStorage.getItem('project-sort'); if(SORT_KEYS.includes(sort))SORT=sort;
+    const view=localStorage.getItem('project-view'); if(['groups','repos'].includes(view))VIEW=view;
   }
   catch(e){}
   if(!localStorageLang()&&navigator.language&&!navigator.language.startsWith('ja')) LANG='en';
@@ -1845,6 +2129,7 @@ function render(){
     `<div class="fig"><strong${n===null?'':` data-to="${n}"`}>${n===null?'—':'0'}</strong><span>${t('figs')[i]}</span></div>`).join('')
     +`<div class="fig-languages"><h3>${t('figs')[3]}</h3><div class="language-list">${langs.length?langs.map(name=>`<i>${esc(name)}</i>`).join(''):'—'}</div></div>`;
   countUp();
+  renderSites();
 
   /* filters */
   const keys=['all',...new Set(P.map(p=>p.filter))];
@@ -1855,15 +2140,49 @@ function render(){
   renderTiles();
   if(curI>=0) fill(curI);
 }
+function renderSites(){
+  const sites=websiteEntries();
+  if(!sites.some(({p})=>p.siteKind==='app'))SITE_FILTER='other';
+  $('siteTabs').innerHTML=['app','other'].map(key=>{
+    const count=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===key).length;
+    return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
+  }).join('');
+  const visible=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===SITE_FILTER);
+  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
+    <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
+      aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
+      ${artworkPath(p.image)?`<img src="${esc(p.image)}" alt="" aria-hidden="true" width="1280" height="853" loading="lazy" decoding="async">`:''}
+      <h3>${esc(group?.name||p.name)}</h3><p>${esc(tx(group?.summary||p.summary))}</p>
+      <span class="launch-action"><span>${siteAction(p)} ↗</span><small>${t('site.newTab')}</small></span>
+    </a>`).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
+}
 function renderTiles(){
+  $('projectViewControls').innerHTML=['groups','repos'].map(key=>`<button class="viewbtn ${VIEW===key?'on':''}"
+    data-view="${key}" aria-pressed="${VIEW===key}">${t('view.'+key)}</button>`).join('');
   $('projectSort').innerHTML=SORT_KEYS.map(key=>`<option value="${key}"${key===SORT?' selected':''}>${t('sort.'+key)}</option>`).join('');
-  $('sortNote').textContent=t('sort.note.'+SORT);
-  $('bento').innerHTML=projectOrder().map(({p,i},rank)=>`
+  $('sortNote').textContent=t('sort.note.'+SORT)+(VIEW==='groups'?' '+t('view.note.groups'):'');
+  const ordered=projectOrder(),ranks=new Map(ordered.map(({i},rank)=>[i,rank]));
+  const tile=({p,i})=>tileMarkup(p,i,ranks.get(i));
+  $('bento').innerHTML=projectBuckets(ordered).map(({group,entries})=>{
+    if(!group)return entries.map(tile).join('');
+    const site=entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
+    return `<section class="project-group" aria-labelledby="group-${esc(group.id)}">
+      <div class="group-heading"><div><h3 id="group-${esc(group.id)}">${esc(group.name)}<small>${entries.length} ${t('group.repositories')}</small></h3>
+        <p>${esc(tx(group.summary))}</p></div>
+        ${site?`<a class="group-site" href="${esc(site)}" target="_blank" rel="noopener"
+          aria-label="${esc(group.name+' — '+t('site.action.guide')+' ('+t('site.newTab')+')')}">${t('site.action.guide')} ↗</a>`:''}</div>
+      <div class="bento group-grid">${entries.map(tile).join('')}</div></section>`;
+  }).join('');
+  applyFilter();
+}
+function tileMarkup(p,i,rank){
+  return `
     <article class="tile s-${esc(SORT==='recommended'?(p.size||'std'):'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
-      ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
+      ${p.g.site?`<a class="site" data-kind="${esc(p.siteKind||'page')}" href="${esc(p.g.site)}" target="_blank" rel="noopener"
+        aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}"><span>${siteAction(p)}</span><b aria-hidden="true">↗</b></a>`:''}
       ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <h3>${esc(p.name)}</h3>
       <p class="jp">${esc(tx(p.summary))}</p>
@@ -1874,8 +2193,7 @@ function renderTiles(){
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
       <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
-    </article>`).join('');
-  applyFilter();
+    </article>`;
 }
 function applyFilter(){
   document.querySelectorAll('.fbtn').forEach(button=>{
@@ -1883,6 +2201,7 @@ function applyFilter(){
     button.classList.toggle('on',selected); button.setAttribute('aria-pressed',String(selected));
   });
   document.querySelectorAll('.tile').forEach(tile=>{tile.hidden=FILTER!=='all'&&tile.dataset.f!==FILTER});
+  document.querySelectorAll('.project-group').forEach(group=>{group.hidden=![...group.querySelectorAll('.tile')].some(tile=>!tile.hidden)});
   const count=DATA.projects.filter(project=>FILTER==='all'||project.filter===FILTER).length;
   $('workCount').textContent=`${count} / ${DATA.projects.length} ${t('work.count')}`;
 }
@@ -1952,7 +2271,8 @@ function fill(i){
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
   $('sLog').innerHTML=g.pushed?`<li><time>${esc(g.pushed)}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
   const L=[];
-  if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener">${t('l.site')}</a>`);
+  if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener"
+    aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">${siteAction(p)} ↗</a>`);
   if(g.url) L.push(`<a class="slink" href="${esc(g.url)}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
   if(webUrl(p.links?.docs)) L.push(`<a class="slink" href="${esc(webUrl(p.links.docs))}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
   $('sLinks').innerHTML=L.join('');
@@ -1993,7 +2313,7 @@ addEventListener('popstate',(event={})=>{
   else{
     if(sheet.classList.contains('open'))close(false);
     if(Number.isFinite(event.state?.pageY))scrollTo({top:event.state.pageY,behavior:'instant'});
-    else if(['#home','#work','#about'].includes(location.hash))$(location.hash.slice(1)).scrollIntoView({behavior:'instant',block:'start'});
+    else if(['#home','#sites','#work','#about'].includes(location.hash))$(location.hash.slice(1)).scrollIntoView({behavior:'instant',block:'start'});
     else scrollTo({top:0,behavior:'instant'});
   }
 });
@@ -2004,6 +2324,13 @@ $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
 },true);
 document.addEventListener('click',e=>{
+  const view=e.target.closest('.viewbtn');
+  if(view){setView(view.dataset.view);$('projectViewControls').querySelector(`[data-view="${VIEW}"]`)?.focus({preventScroll:true});return}
+  const siteFilter=e.target.closest('.site-fbtn');
+  if(siteFilter){
+    SITE_FILTER=siteFilter.dataset.sites; renderSites();
+    $('siteTabs').querySelector(`[data-sites="${SITE_FILTER}"]`)?.focus({preventScroll:true});return;
+  }
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
   if(e.target.closest('a[href^="#"]'))rememberPage();
   const f=e.target.closest('.fbtn');

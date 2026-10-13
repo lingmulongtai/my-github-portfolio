@@ -83,7 +83,42 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/aerogrid-3d.webp"
+      "image": "assets/projects/aerogrid-3d.webp",
+      "siteKind": "app"
+    },
+    {
+      "slug": "oceanfpv",
+      "repo": "lingmulongtai/OceanFPV",
+      "name": "OceanFPV",
+      "size": "tall",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "ブラウザゲーム",
+        "en": "BROWSER GAME"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "海・船・島を自由に飛び回る、ブラウザのFPVドローンゲーム",
+        "en": "Fly an FPV drone over oceans, ships and islands in your browser"
+      },
+      "desc": {
+        "ja": "ブラウザだけで遊べるFPVドローン飛行ゲームです。海・船・島を探索し、Xboxコントローラー、USB FPV送信機、キーボード・マウスで操作できます。",
+        "en": "A browser-based FPV drone game for exploring oceans, ships and islands. Supports Xbox controllers, USB FPV transmitters, and keyboard and mouse controls."
+      },
+      "stack": [
+        "TypeScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/OceanFPV/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/oceanfpv.webp",
+      "siteKind": "app"
     },
     {
       "slug": "keylume",
@@ -154,7 +189,153 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/tsuyulabo.webp"
+      "image": "assets/projects/tsuyulabo.webp",
+      "siteKind": "app"
+    },
+    {
+      "slug": "okuyuki-site",
+      "repo": "lingmulongtai/Okuyuki-site",
+      "name": "Okuyuki · Website",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "紹介サイト",
+        "en": "PROJECT WEBSITE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxy・Quest・LGテレビをつなぐOkuyukiの紹介サイト",
+        "en": "Meet Okuyuki: local photo viewing across Galaxy, Quest and LG TVs"
+      },
+      "desc": {
+        "ja": "Okuyukiの対応機器、接続方法、開発状況をまとめる紹介サイトです。Android・Questのアルファ配布と、開発中のwebOS版への入口を案内します。",
+        "en": "An introduction to Okuyuki, its supported devices, setup and development status. Links to Android and Quest alpha releases and the webOS project in development."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-site/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-site.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-android",
+      "repo": "lingmulongtai/Okuyuki-android",
+      "name": "Okuyuki · Android",
+      "size": "std",
+      "filter": "mobile",
+      "year": "2026",
+      "tag": {
+        "ja": "Androidアプリ",
+        "en": "ANDROID HOST"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの3D写真をスマホに置いたまま、Questへ届ける",
+        "en": "Host Galaxy stereo photos locally for a nearby Quest viewer"
+      },
+      "desc": {
+        "ja": "Galaxyで3D写真を管理し、同じWi-FiのQuestへ必要な写真だけを渡すスマホ側アプリです。Android・Quest版はアルファを配布中。実機での原本デコードと立体表示は未検証です。",
+        "en": "The phone-side host for Galaxy stereo photos, sharing selected images with a Quest on the same Wi-Fi. Android and Quest alpha releases are available; source decoding and stereoscopic display on physical devices remain unverified."
+      },
+      "stack": [
+        "Kotlin",
+        "Android"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-android/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-android.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-quest",
+      "repo": "lingmulongtai/Okuyuki-quest",
+      "name": "Okuyuki · Quest",
+      "size": "std",
+      "filter": "mobile",
+      "year": "2026",
+      "tag": {
+        "ja": "Questビューア",
+        "en": "QUEST VIEWER"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの3D写真を、同じWi-FiのMeta Questで見る",
+        "en": "View Galaxy stereo photos on a Meta Quest over local Wi-Fi"
+      },
+      "desc": {
+        "ja": "Galaxyの写真を一時的に受け取り、Meta Questで見るビューアです。Android版と組み合わせるアルファを配布中。実機での原本デコードと立体表示は未検証です。",
+        "en": "A Meta Quest viewer that temporarily receives selected photos from a Galaxy phone. An alpha is available alongside the Android host; source decoding and stereoscopic display on physical devices remain unverified."
+      },
+      "stack": [
+        "Kotlin",
+        "Android",
+        "Meta Quest"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-quest/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-quest.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "okuyuki-webos",
+      "repo": "lingmulongtai/Okuyuki-webos",
+      "name": "Okuyuki · webOS",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "テレビ向けプロジェクト",
+        "en": "TV COMPANION PROJECT"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "Galaxyの写真・動画を、同じWi-FiのLGテレビで見るための開発",
+        "en": "A TV companion project for local Galaxy photo and video viewing"
+      },
+      "desc": {
+        "ja": "写真をGalaxyに置いたまま、LG webOSテレビへ表示に必要なデータを一時的に渡すテレビ側アプリのプロジェクトです。現在の公開リポジトリはREADMEで目的を案内しています。",
+        "en": "A project for viewing Galaxy photos and videos on an LG webOS TV, receiving only temporary display data while the originals stay on the phone. The current public repository documents the intended app in its README."
+      },
+      "stack": [
+        "webOS"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/Okuyuki-webos/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/okuyuki-webos.webp",
+      "group": "okuyuki",
+      "siteKind": "guide"
     },
     {
       "slug": "codexbar-android",
@@ -190,7 +371,8 @@
         "site": ""
       },
       "fork": true,
-      "image": "assets/projects/codexbar-android.webp"
+      "image": "assets/projects/codexbar-android.webp",
+      "siteKind": "guide"
     },
     {
       "slug": "instaframe",
@@ -228,7 +410,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/instaframe.webp"
+      "image": "assets/projects/instaframe.webp",
+      "siteKind": "app"
     },
     {
       "slug": "glyphray",
@@ -266,7 +449,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/glyphray.webp"
+      "image": "assets/projects/glyphray.webp",
+      "siteKind": "guide"
     },
     {
       "slug": "winai-usage-bar",
@@ -377,7 +561,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/pdf-local-unlocker.webp"
+      "image": "assets/projects/pdf-local-unlocker.webp",
+      "siteKind": "app"
     },
     {
       "slug": "kuas-reception",
@@ -450,7 +635,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/kuas-fall-2026.webp"
+      "image": "assets/projects/kuas-fall-2026.webp",
+      "siteKind": "app"
     },
     {
       "slug": "github-clendar-connector",
@@ -561,7 +747,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/ai-home-energy-assistant.webp"
+      "image": "assets/projects/ai-home-energy-assistant.webp",
+      "siteKind": "app"
     },
     {
       "slug": "skycopilot",
@@ -671,7 +858,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/bandwidth-burner.webp"
+      "image": "assets/projects/bandwidth-burner.webp",
+      "siteKind": "app"
     },
     {
       "slug": "photography-club-website",
@@ -990,7 +1178,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/my-github-portfolio.webp"
+      "image": "assets/projects/my-github-portfolio.webp",
+      "showcase": false
     },
     {
       "slug": "lingmulongtai",
@@ -1024,7 +1213,18 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/lingmulongtai.webp"
+      "image": "assets/projects/lingmulongtai.webp",
+      "showcase": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "okuyuki",
+      "name": "Okuyuki",
+      "summary": {
+        "ja": "Galaxyの写真を、QuestやLGテレビへ。Android・Quest・webOS・紹介サイトをまとめたプロジェクト。",
+        "en": "Galaxy photos across Quest and LG TVs: Android, Quest, webOS and the project website, together."
+      }
     }
   ]
 }

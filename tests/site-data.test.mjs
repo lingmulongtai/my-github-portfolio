@@ -66,6 +66,50 @@ test("project artwork is restricted to local assets", async () => {
   assert.ok(!cards.includes("external.example"));
 });
 
+test("website actions distinguish runnable apps and guides and open separately from project details", async () => {
+  const projects = ['app','guide'].map((siteKind,i)=>({...config.projects[i],slug:siteKind,siteKind}));
+  const ui = await boot({owner:config.profile.github,projects,stats:{app:{site:'https://app.example/'},guide:{site:'https://guide.example/'}}});
+  const cards = ui.nodes.get('bento').innerHTML;
+  assert.match(cards, /data-kind="app"[^]*?<span>Try it<\/span>/);
+  assert.match(cards, /data-kind="guide"[^]*?<span>Meet the app<\/span>/);
+  assert.equal((cards.match(/target="_blank" rel="noopener"/g)||[]).length, 2);
+  assert.match(cards, /Opens in a new tab/);
+  assert.match(cards, /class="tile-open" data-i="0"/);
+});
+
+test("quick-launch collection deduplicates shared websites and omits unsafe or self links", async () => {
+  const projects = [
+    {...config.projects[0],slug:'app',siteKind:'app'},
+    {...config.projects[1],slug:'shared-one',siteKind:'guide'},
+    {...config.projects[2],slug:'shared-two',siteKind:'guide'},
+    {...config.projects[3],slug:'self',showcase:false},
+    {...config.projects[0],slug:'unsafe'},
+  ];
+  const ui = await boot({owner:config.profile.github,projects,stats:{
+    app:{site:'https://app.example/'},'shared-one':{site:'https://guide.example/project/'},
+    'shared-two':{site:'https://guide.example/project'},self:{site:'https://portfolio.example/'},unsafe:{site:'javascript:alert(1)'},
+  }});
+  assert.match(ui.nodes.get('launchGrid').innerHTML, /https:\/\/app.example\//);
+  assert.ok(!ui.nodes.get('launchGrid').innerHTML.includes('guide.example'));
+  new Script("SITE_FILTER='other'; renderSites(); LANG='ja'; render()").runInContext(ui.context);
+  const links = ui.nodes.get('launchGrid').innerHTML;
+  assert.equal((links.match(/class="launch-card"/g)||[]).length, 1);
+  assert.match(links, /target="_blank" rel="noopener"/);
+  assert.ok(!links.includes('portfolio.example'));
+  assert.ok(!links.includes('javascript:'));
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
+});
+
+test("guide-only collections disable the empty browser-app tab and retain the selected category", async () => {
+  const ui = await boot({owner:config.profile.github,projects:[{...config.projects[0],siteKind:'guide'}],stats:{
+    [config.projects[0].slug]:{site:'https://guide.example/'},
+  }});
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="app" aria-pressed="false" disabled/);
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
+  assert.match(ui.nodes.get('launchGrid').innerHTML, /guide.example/);
+});
+
 test("offline mode preserves real project descriptions without invented statistics", async () => {
   const result = await boot(null);
   assert.equal(result.live, false);
@@ -169,4 +213,38 @@ test("sort selection restores only supported values and works with blocked stora
   const blocked = await boot(null, null, { storage: { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } } });
   new Script("setSort('popular')").runInContext(blocked.context);
   assert.match(blocked.nodes.get('projectSort').innerHTML, /value="popular" selected/);
+});
+
+test("product groups keep every repository identity and follow sorting in both views", async () => {
+  const projects = ['first','family-old','middle','family-new'].map((slug,i)=>({
+    ...config.projects[0],slug,name:slug,group:[1,3].includes(i)?'okuyuki':'',
+  }));
+  const ui = await boot({owner:config.profile.github,projects,stats:{
+    first:{commits:1},'family-old':{commits:2},middle:{commits:3},'family-new':{commits:5},
+  }});
+  const order = () => JSON.parse(new Script('JSON.stringify(projectOrder().map(({p})=>p.slug))').runInContext(ui.context));
+  new Script("setSort('commits')").runInContext(ui.context);
+  assert.deepEqual(order(), ['family-new','family-old','middle','first']);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="project-group"/g)||[]).length, 1);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile-open"/g)||[]).length, 4);
+  new Script("setView('repos')").runInContext(ui.context);
+  assert.deepEqual(order(), ['family-new','middle','family-old','first']);
+  assert.ok(!ui.nodes.get('bento').innerHTML.includes('class="project-group"'));
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.match(ui.nodes.get('projectViewControls').innerHTML, /data-view="repos" aria-pressed="true"/);
+  assert.deepEqual(ui.data.projects.map(p=>p.slug),projects.map(p=>p.slug));
+});
+
+test("product view restores valid preferences and hides groups with no category matches", async () => {
+  const ui = await boot(null,null,{storage:{getItem:key=>key==='project-view'?'repos':'en'}});
+  assert.match(ui.nodes.get('projectViewControls').innerHTML,/data-view="repos" aria-pressed="true"/);
+  const tiles=[{dataset:{f:'mobile'},hidden:false},{dataset:{f:'web'},hidden:false}];
+  const group={hidden:false,querySelectorAll:()=>tiles};
+  ui.context.document.querySelectorAll=selector=>selector==='.tile'?tiles:selector==='.project-group'?[group]:[];
+  new Script("FILTER='desktop'; applyFilter()").runInContext(ui.context);
+  assert.equal(group.hidden,true);
+  new Script("FILTER='mobile'; applyFilter()").runInContext(ui.context);
+  assert.equal(group.hidden,false);
+  assert.equal(tiles[0].hidden,false);
+  assert.equal(tiles[1].hidden,true);
 });
