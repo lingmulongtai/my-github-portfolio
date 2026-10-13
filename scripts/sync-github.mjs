@@ -126,13 +126,17 @@ export async function collectPortfolio(login, overrides = [], request = get) {
         optional(`/repos/${repo.full_name}/languages`),
       ]);
       const weeks = Array.isArray(activity) ? activity.map(({ week, days, total }) => ({ week, days, total })) : [];
+      const languageMap = languages && !Array.isArray(languages) && typeof languages === "object" ? languages : null;
+      const primaryLanguage = repo.language || Object.entries(languageMap || {})
+        .filter(([, bytes]) => Number.isFinite(bytes) && bytes > 0)
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] || null;
       const owner = repo.owner.login;
       const pagesUrl = `https://${owner}.github.io/${repo.name.toLowerCase() === `${owner.toLowerCase()}.github.io` ? "" : `${repo.name}/`}`;
       return [project.slug, {
         stars: repo.stargazers_count,
         forks: repo.forks_count,
-        language: repo.language,
-        languages: languages && !Array.isArray(languages) && typeof languages === "object" ? languages : null,
+        language: primaryLanguage,
+        languages: languageMap,
         commits: Number.isSafeInteger(commits) && commits >= 0 ? commits : null,
         license: repo.license?.spdx_id || "—",
         pushed: (repo.pushed_at || "").slice(0, 10),

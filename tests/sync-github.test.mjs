@@ -97,3 +97,15 @@ test("lifetime commits and all languages are independent of pending annual activ
   assert.deepEqual(snapshot.stats["new-project"].languages, { JavaScript: 200, HTML: 100, CSS: 50 });
   assert.deepEqual(snapshot.stats["new-project"].weeks, []);
 });
+
+test("a newly created fork gets its primary language from measured code when metadata is pending", async () => {
+  const snapshot = await collectPortfolio('owner', [], async path => {
+    if (path.startsWith('/users/')) return [repo('pending-fork',{fork:true,language:null}),repo('empty',{language:null})];
+    if (path.endsWith('/languages')) return path.includes('/empty/') ? {} : { TypeScript: 100, Rust: 400, CSS: 30 };
+    if (path.includes('/commits?')) return 0;
+    return null;
+  });
+  assert.equal(snapshot.stats['pending-fork'].language, 'Rust');
+  assert.equal(snapshot.stats.empty.language, null);
+  assert.deepEqual(snapshot.stats['pending-fork'].languages, { TypeScript: 100, Rust: 400, CSS: 30 });
+});
