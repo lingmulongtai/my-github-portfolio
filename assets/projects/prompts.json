@@ -142,6 +142,26 @@
       "slug": "oceanfpv",
       "path": "assets/projects/oceanfpv.webp",
       "subject": "A compact four-propeller FPV racing drone in gentle three-quarter view flying above loose teal ocean wave strokes. Below it, one small unbranded passenger ship and one tiny lighthouse island suggest free exploration over the sea. A warm mustard flight-trail accent and an airy ink vignette on white paper."
+    },
+    {
+      "slug": "okuyuki-site",
+      "path": "assets/projects/okuyuki-site.webp",
+      "subject": "A small coherent product-family vignette: one upright unbranded smartphone in the foreground with a mountain photograph, one standalone VR headset to the left and one television to the right showing the same image. A loose teal connection ties the three complete devices together, with mustard accents."
+    },
+    {
+      "slug": "okuyuki-android",
+      "path": "assets/projects/okuyuki-android.webp",
+      "subject": "An upright unbranded Android-style smartphone holding stereo photographs: two side-by-side mountain photo views on its screen suggest depth. Two small local photo prints sit beside it, with a short loose teal connection stroke and mustard accent."
+    },
+    {
+      "slug": "okuyuki-quest",
+      "path": "assets/projects/okuyuki-quest.webp",
+      "subject": "An unbranded standalone VR headset in gentle three-quarter view, with a soft strap and two visible eye lenses. A small pair of mountain photo views above it suggests stereo depth, with a short teal connection stroke and mustard accents. No people or controllers."
+    },
+    {
+      "slug": "okuyuki-webos",
+      "path": "assets/projects/okuyuki-webos.webp",
+      "subject": "An unbranded television on a small stand showing an ink mountain-and-sea photograph with teal water and a mustard sun. A small upright phone beside it shows the same image, connected by a loose teal brush stroke. No furniture scene or tiny UI."
     }
   ]
 }
