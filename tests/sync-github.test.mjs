@@ -69,6 +69,18 @@ test("total default-branch commits use pagination, including one-commit and empt
   assert.throws(() => commitCountFromPage([{}], '<https://api.github.com/repos/o/r/commits?page=2>; rel="next"'), /incomplete/);
 });
 
+test("public presentation metadata survives synchronization without changing repository identity", () => {
+  const project = projectFromRepository(repo('component'), {
+    group: 'product', siteKind: 'guide', showcase: false,
+  });
+  assert.equal(project.repo, 'owner/component');
+  assert.equal(project.group, 'product');
+  assert.equal(project.siteKind, 'guide');
+  assert.equal(project.showcase, false);
+  assert.equal(projectFromRepository(repo('new')).showcase, true);
+  assert.equal(projectFromRepository(repo('new'), {siteKind: 'invalid'}).siteKind, 'page');
+});
+
 test("lifetime commits and all languages are independent of pending annual activity", async () => {
   const snapshot = await collectPortfolio("owner", [], async (path, options) => {
     if (path.startsWith("/users/")) return [repo("new-project", { pushed_at: "2026-10-11T09:42:00Z" }), repo("empty")];

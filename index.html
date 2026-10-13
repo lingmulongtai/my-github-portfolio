@@ -1750,7 +1750,8 @@ async function loadGithub(){
       return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
         year:(r.created_at||'').slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
         status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
-        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',fork:r.fork};
+        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',
+        group:p?.group||'',siteKind:['app','guide','page'].includes(p?.siteKind)?p.siteKind:'page',showcase:p?.showcase!==false,fork:r.fork};
     });
     const out={};
     repos.forEach((r,index)=>{
