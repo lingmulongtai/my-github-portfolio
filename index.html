@@ -130,6 +130,23 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .track em{font-style:normal; color:var(--accent); font-weight:800}
 
 /* pulse */
+.sites{padding:clamp(44px,6vw,80px) var(--gutter); border-bottom:1px solid var(--line); background:var(--paper)}
+.site-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px}
+.site-fbtn{min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px}
+.site-fbtn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.launch-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+.launch-card{display:flex; flex-direction:column; min-width:0; padding:20px; background:#fff;
+  border:1px solid var(--line); border-radius:18px; transition:border-color .2s,background .2s}
+.launch-card:hover,.launch-card:focus-visible{border-color:var(--ink); background:var(--mint)}
+.launch-card img{width:100%; height:156px; object-fit:contain; mix-blend-mode:multiply}
+.launch-card h3{font-family:var(--display); margin:14px 0 8px; font-size:clamp(18px,1.6vw,24px); overflow-wrap:anywhere}
+.launch-card p{font-size:13px; line-height:1.75; margin:0 0 18px; flex:1}
+.launch-action{display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:14px;
+  border-top:1px solid var(--line); font-size:13px; font-weight:700}
+.launch-action small{font-size:10px; font-weight:400}
+.site-empty{font-size:13px; line-height:1.8; margin:0}
+@media (max-width:1000px){.launch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.launch-grid{grid-template-columns:minmax(0,1fr)}}
 .pulse{padding:clamp(46px,7vw,86px) var(--gutter) clamp(40px,6vw,70px); border-bottom:1px solid var(--line)}
 .pulse-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:24px}
 .pulse-head h2{font-family:var(--display); font-weight:500; font-size:clamp(20px,2.6vw,30px);
@@ -466,7 +483,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       <div class="meta" id="heroMeta"></div>
       <h1 class="kin" id="kin"></h1>
       <p class="sub" id="heroSub"></p>
-      <div class="hero-actions"><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
+      <div class="hero-actions"><a href="#sites" data-i18n="hero.sites"></a><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
     </div>
     <figure class="hero-portrait">
       <img src="./assets/portrait.webp" width="1024" height="1024"
@@ -479,6 +496,12 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </header>
 
 <div class="marq" aria-hidden="true"><div class="marq-inner"><div class="track" id="track"></div></div></div>
+
+<section class="sites" id="sites" aria-labelledby="sitesTitle">
+  <div class="sechead"><h2 id="sitesTitle" data-i18n="sites.title"></h2><p data-i18n="sites.lead"></p></div>
+  <div class="site-tabs" id="siteTabs" role="group" aria-label="Website types"></div>
+  <div class="launch-grid" id="launchGrid"></div>
+</section>
 
 <section class="pulse">
   <div class="pulse-intro">
@@ -1825,6 +1848,9 @@ const T={
   "hero.work":"プロジェクトを見る ↗","hero.about":"自己紹介 ↓","hero.touch":"イラストをタップすると、線がふわっと動きます",
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
   "site.action.app":"使ってみる","site.action.guide":"紹介を見る","site.action.page":"サイトを見る","site.newTab":"別タブで開く",
+  "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
+  "sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
+  "sites.empty":"この種類のサイトはまだありません。",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
   "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
   "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
@@ -1856,6 +1882,9 @@ const T={
   "hero.work":"Explore projects ↗","hero.about":"About me ↓","hero.touch":"Tap the illustration to give the lines a little nudge",
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
   "site.action.app":"Try it","site.action.guide":"Meet the app","site.action.page":"Visit site","site.newTab":"Opens in a new tab",
+  "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
+  "sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
+  "sites.empty":"There are no websites in this category yet.",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
   "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
   "sort.note.popular":"Most stars first; forks break ties.",
@@ -1883,6 +1912,7 @@ const T={
   "note":"All public repositories, including forks. Commit counts cover all contributors on the default branch, all time, including merges. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 let FILTER='all';
+let SITE_FILTER='app';
 let SORT='recommended';
 const SORT_KEYS=['recommended','popular','commits','updated'];
 const t=k=>T[LANG][k]??k;
@@ -1897,6 +1927,17 @@ const $=id=>document.getElementById(id);
 let DATA=JSON.parse($('site-data').textContent);
 let LIVE=false;
 let SYNCED_AT='', SOURCE='none';
+function websiteEntries(){
+  const seen=new Set();
+  return DATA.projects.flatMap((p,i)=>{
+    const href=webUrl(p.g?.site);
+    if(!href||p.showcase===false)return [];
+    const key=new URL(href); key.hash=''; key.pathname=key.pathname.replace(/\/+$/,'')||'/';
+    if(seen.has(key.href))return [];
+    seen.add(key.href);
+    return [{p,i,href,group:(DATA.groups||[]).find(group=>group.id===p.group)}];
+  });
+}
 function projectLanguages(project){
   const g=project.g||{};
   if(g.languages&&typeof g.languages==='object')return Object.entries(g.languages)
@@ -2048,6 +2089,7 @@ function render(){
     `<div class="fig"><strong${n===null?'':` data-to="${n}"`}>${n===null?'—':'0'}</strong><span>${t('figs')[i]}</span></div>`).join('')
     +`<div class="fig-languages"><h3>${t('figs')[3]}</h3><div class="language-list">${langs.length?langs.map(name=>`<i>${esc(name)}</i>`).join(''):'—'}</div></div>`;
   countUp();
+  renderSites();
 
   /* filters */
   const keys=['all',...new Set(P.map(p=>p.filter))];
@@ -2057,6 +2099,22 @@ function render(){
 
   renderTiles();
   if(curI>=0) fill(curI);
+}
+function renderSites(){
+  const sites=websiteEntries();
+  if(!sites.some(({p})=>p.siteKind==='app'))SITE_FILTER='other';
+  $('siteTabs').innerHTML=['app','other'].map(key=>{
+    const count=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===key).length;
+    return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}">${t('sites.'+key)} (${count})</button>`;
+  }).join('');
+  const visible=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===SITE_FILTER);
+  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
+    <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
+      aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
+      ${artworkPath(p.image)?`<img src="${esc(p.image)}" alt="" aria-hidden="true" width="1280" height="853" loading="lazy" decoding="async">`:''}
+      <h3>${esc(group?.name||p.name)}</h3><p>${esc(tx(group?.summary||p.summary))}</p>
+      <span class="launch-action"><span>${siteAction(p)} ↗</span><small>${t('site.newTab')}</small></span>
+    </a>`).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
 }
 function renderTiles(){
   $('projectSort').innerHTML=SORT_KEYS.map(key=>`<option value="${key}"${key===SORT?' selected':''}>${t('sort.'+key)}</option>`).join('');
@@ -2198,7 +2256,7 @@ addEventListener('popstate',(event={})=>{
   else{
     if(sheet.classList.contains('open'))close(false);
     if(Number.isFinite(event.state?.pageY))scrollTo({top:event.state.pageY,behavior:'instant'});
-    else if(['#home','#work','#about'].includes(location.hash))$(location.hash.slice(1)).scrollIntoView({behavior:'instant',block:'start'});
+    else if(['#home','#sites','#work','#about'].includes(location.hash))$(location.hash.slice(1)).scrollIntoView({behavior:'instant',block:'start'});
     else scrollTo({top:0,behavior:'instant'});
   }
 });
@@ -2209,6 +2267,8 @@ $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
 },true);
 document.addEventListener('click',e=>{
+  const siteFilter=e.target.closest('.site-fbtn');
+  if(siteFilter){SITE_FILTER=siteFilter.dataset.sites; renderSites(); return}
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
   if(e.target.closest('a[href^="#"]'))rememberPage();
   const f=e.target.closest('.fbtn');

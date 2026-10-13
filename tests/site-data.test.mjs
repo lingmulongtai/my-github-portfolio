@@ -77,6 +77,29 @@ test("website actions distinguish runnable apps and guides and open separately f
   assert.match(cards, /class="tile-open" data-i="0"/);
 });
 
+test("quick-launch collection deduplicates shared websites and omits unsafe or self links", async () => {
+  const projects = [
+    {...config.projects[0],slug:'app',siteKind:'app'},
+    {...config.projects[1],slug:'shared-one',siteKind:'guide'},
+    {...config.projects[2],slug:'shared-two',siteKind:'guide'},
+    {...config.projects[3],slug:'self',showcase:false},
+    {...config.projects[0],slug:'unsafe'},
+  ];
+  const ui = await boot({owner:config.profile.github,projects,stats:{
+    app:{site:'https://app.example/'},'shared-one':{site:'https://guide.example/project/'},
+    'shared-two':{site:'https://guide.example/project'},self:{site:'https://portfolio.example/'},unsafe:{site:'javascript:alert(1)'},
+  }});
+  assert.match(ui.nodes.get('launchGrid').innerHTML, /https:\/\/app.example\//);
+  assert.ok(!ui.nodes.get('launchGrid').innerHTML.includes('guide.example'));
+  new Script("SITE_FILTER='other'; renderSites(); LANG='ja'; render()").runInContext(ui.context);
+  const links = ui.nodes.get('launchGrid').innerHTML;
+  assert.equal((links.match(/class="launch-card"/g)||[]).length, 1);
+  assert.match(links, /target="_blank" rel="noopener"/);
+  assert.ok(!links.includes('portfolio.example'));
+  assert.ok(!links.includes('javascript:'));
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
+});
+
 test("offline mode preserves real project descriptions without invented statistics", async () => {
   const result = await boot(null);
   assert.equal(result.live, false);
