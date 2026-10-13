@@ -189,6 +189,21 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .work-count{margin:0 0 18px; font-size:12px; color:var(--ink)}
 .work-toolbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
 .work-toolbar .work-count{margin:0}
+.view-controls{display:flex; flex-wrap:wrap; gap:6px}
+.viewbtn{min-height:44px; padding:9px 14px; border:1px solid var(--line); border-radius:12px; font-size:12px}
+.viewbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink)}
+.project-group{grid-column:1/-1; padding:24px; border:1px solid var(--line); border-radius:22px; background:var(--mint)}
+.project-group[hidden]{display:none}
+.group-heading{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px}
+.group-heading h3{font-family:var(--display); font-size:26px; margin:0 0 8px}
+.group-heading p{font-size:13px; line-height:1.8; max-width:62ch; margin:0}
+.group-heading small{font-family:var(--body); font-size:12px; font-weight:400; margin-left:12px}
+.group-site{display:flex; align-items:center; min-height:44px; padding:10px 16px; border-radius:12px;
+  background:var(--ink); color:var(--paper); font-size:12px; font-weight:700}
+.bento.group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.group-grid>.tile{grid-column:span 1}
+@media (max-width:760px){.project-group{padding:14px}.group-heading h3{font-size:22px}}
+@media (max-width:520px){.bento.group-grid{grid-template-columns:minmax(0,1fr)}}
 .sort-control{display:flex; align-items:center; gap:10px; font-size:12px}
 .sort-control select{max-width:100%; min-height:44px; padding:8px 32px 8px 12px; border:1px solid var(--line);
   border-radius:12px; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer}
@@ -528,6 +543,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   <div class="filters" id="filters" role="group" aria-label="Project categories"></div>
   <div class="work-toolbar">
     <p class="work-count" id="workCount" role="status" aria-live="polite"></p>
+    <div class="view-controls" id="projectViewControls" role="group" aria-label="Project view"></div>
     <label class="sort-control" for="projectSort"><span data-i18n="sort.label"></span><select id="projectSort"></select></label>
   </div>
   <p class="sort-note" id="sortNote"></p>
@@ -1851,6 +1867,8 @@ const T={
   "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
   "sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
   "sites.empty":"この種類のサイトはまだありません。",
+  "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
+  "view.note.groups":"グループは最上位のリポジトリを基準に並びます。",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
   "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
   "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
@@ -1885,6 +1903,8 @@ const T={
   "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
   "sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
   "sites.empty":"There are no websites in this category yet.",
+  "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
+  "view.note.groups":"Groups follow their highest ranked repository.",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
   "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
   "sort.note.popular":"Most stars first; forks break ties.",
@@ -1913,6 +1933,7 @@ const T={
 let LANG='ja';
 let FILTER='all';
 let SITE_FILTER='app';
+let VIEW='groups';
 let SORT='recommended';
 const SORT_KEYS=['recommended','popular','commits','updated'];
 const t=k=>T[LANG][k]??k;
@@ -1944,19 +1965,36 @@ function projectLanguages(project){
     .filter(([,bytes])=>Number.isFinite(bytes)&&bytes>0).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([name])=>name);
   return g.language?[g.language]:[];
 }
+function projectBuckets(entries){
+  const groups=new Map((DATA.groups||[]).map(group=>[group.id,group]));
+  const seen=new Set(),buckets=[];
+  for(const entry of entries){
+    const group=VIEW==='groups'?groups.get(entry.p.group):null;
+    if(!group){buckets.push({group:null,entries:[entry]});continue}
+    if(seen.has(group.id))continue;
+    seen.add(group.id);
+    buckets.push({group,entries:entries.filter(item=>item.p.group===group.id)});
+  }
+  return buckets;
+}
 function projectOrder(){
   const entries=DATA.projects.map((p,i)=>({p,i}));
   const metric=p=>SORT==='popular'?p.g.stars:SORT==='commits'?p.g.commits:Date.parse(p.g.pushedAt||p.g.pushed);
-  if(SORT==='recommended')return entries;
-  return entries.sort((a,b)=>{
+  if(SORT!=='recommended')entries.sort((a,b)=>{
     const av=metric(a.p),bv=metric(b.p),ak=Number.isFinite(av),bk=Number.isFinite(bv);
     return Number(bk)-Number(ak)||(ak&&bk?bv-av:0)
       ||(SORT==='popular'?(b.p.g.forks||0)-(a.p.g.forks||0):0)||a.i-b.i;
   });
+  return projectBuckets(entries).flatMap(bucket=>bucket.entries);
 }
 function setSort(value){
   SORT=SORT_KEYS.includes(value)?value:'recommended';
   try{localStorage.setItem('project-sort',SORT)}catch(e){}
+  renderTiles();
+}
+function setView(value){
+  VIEW=['groups','repos'].includes(value)?value:'groups';
+  try{localStorage.setItem('project-view',VIEW)}catch(e){}
   renderTiles();
 }
 
@@ -2028,6 +2066,7 @@ async function boot(){
   try{
     const s=localStorage.getItem('lang'); if(['ja','en'].includes(s))LANG=s;
     const sort=localStorage.getItem('project-sort'); if(SORT_KEYS.includes(sort))SORT=sort;
+    const view=localStorage.getItem('project-view'); if(['groups','repos'].includes(view))VIEW=view;
   }
   catch(e){}
   if(!localStorageLang()&&navigator.language&&!navigator.language.startsWith('ja')) LANG='en';
@@ -2117,9 +2156,26 @@ function renderSites(){
     </a>`).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
 }
 function renderTiles(){
+  $('projectViewControls').innerHTML=['groups','repos'].map(key=>`<button class="viewbtn ${VIEW===key?'on':''}"
+    data-view="${key}" aria-pressed="${VIEW===key}">${t('view.'+key)}</button>`).join('');
   $('projectSort').innerHTML=SORT_KEYS.map(key=>`<option value="${key}"${key===SORT?' selected':''}>${t('sort.'+key)}</option>`).join('');
-  $('sortNote').textContent=t('sort.note.'+SORT);
-  $('bento').innerHTML=projectOrder().map(({p,i},rank)=>`
+  $('sortNote').textContent=t('sort.note.'+SORT)+(VIEW==='groups'?' '+t('view.note.groups'):'');
+  const ordered=projectOrder(),ranks=new Map(ordered.map(({i},rank)=>[i,rank]));
+  const tile=({p,i})=>tileMarkup(p,i,ranks.get(i));
+  $('bento').innerHTML=projectBuckets(ordered).map(({group,entries})=>{
+    if(!group)return entries.map(tile).join('');
+    const site=entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
+    return `<section class="project-group" aria-labelledby="group-${esc(group.id)}">
+      <div class="group-heading"><div><h3 id="group-${esc(group.id)}">${esc(group.name)}<small>${entries.length} ${t('group.repositories')}</small></h3>
+        <p>${esc(tx(group.summary))}</p></div>
+        ${site?`<a class="group-site" href="${esc(site)}" target="_blank" rel="noopener"
+          aria-label="${esc(group.name+' — '+t('site.action.guide')+' ('+t('site.newTab')+')')}">${t('site.action.guide')} ↗</a>`:''}</div>
+      <div class="bento group-grid">${entries.map(tile).join('')}</div></section>`;
+  }).join('');
+  applyFilter();
+}
+function tileMarkup(p,i,rank){
+  return `
     <article class="tile s-${esc(SORT==='recommended'?(p.size||'std'):'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
@@ -2136,8 +2192,7 @@ function renderTiles(){
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
       <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
-    </article>`).join('');
-  applyFilter();
+    </article>`;
 }
 function applyFilter(){
   document.querySelectorAll('.fbtn').forEach(button=>{
@@ -2145,6 +2200,7 @@ function applyFilter(){
     button.classList.toggle('on',selected); button.setAttribute('aria-pressed',String(selected));
   });
   document.querySelectorAll('.tile').forEach(tile=>{tile.hidden=FILTER!=='all'&&tile.dataset.f!==FILTER});
+  document.querySelectorAll('.project-group').forEach(group=>{group.hidden=![...group.querySelectorAll('.tile')].some(tile=>!tile.hidden)});
   const count=DATA.projects.filter(project=>FILTER==='all'||project.filter===FILTER).length;
   $('workCount').textContent=`${count} / ${DATA.projects.length} ${t('work.count')}`;
 }
@@ -2267,6 +2323,8 @@ $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
 },true);
 document.addEventListener('click',e=>{
+  const view=e.target.closest('.viewbtn');
+  if(view){setView(view.dataset.view);return}
   const siteFilter=e.target.closest('.site-fbtn');
   if(siteFilter){SITE_FILTER=siteFilter.dataset.sites; renderSites(); return}
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}

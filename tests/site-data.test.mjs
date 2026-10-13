@@ -204,3 +204,37 @@ test("sort selection restores only supported values and works with blocked stora
   new Script("setSort('popular')").runInContext(blocked.context);
   assert.match(blocked.nodes.get('projectSort').innerHTML, /value="popular" selected/);
 });
+
+test("product groups keep every repository identity and follow sorting in both views", async () => {
+  const projects = ['first','family-old','middle','family-new'].map((slug,i)=>({
+    ...config.projects[0],slug,name:slug,group:[1,3].includes(i)?'okuyuki':'',
+  }));
+  const ui = await boot({owner:config.profile.github,projects,stats:{
+    first:{commits:1},'family-old':{commits:2},middle:{commits:3},'family-new':{commits:5},
+  }});
+  const order = () => JSON.parse(new Script('JSON.stringify(projectOrder().map(({p})=>p.slug))').runInContext(ui.context));
+  new Script("setSort('commits')").runInContext(ui.context);
+  assert.deepEqual(order(), ['family-new','family-old','middle','first']);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="project-group"/g)||[]).length, 1);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile-open"/g)||[]).length, 4);
+  new Script("setView('repos')").runInContext(ui.context);
+  assert.deepEqual(order(), ['family-new','middle','family-old','first']);
+  assert.ok(!ui.nodes.get('bento').innerHTML.includes('class="project-group"'));
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.match(ui.nodes.get('projectViewControls').innerHTML, /data-view="repos" aria-pressed="true"/);
+  assert.deepEqual(ui.data.projects.map(p=>p.slug),projects.map(p=>p.slug));
+});
+
+test("product view restores valid preferences and hides groups with no category matches", async () => {
+  const ui = await boot(null,null,{storage:{getItem:key=>key==='project-view'?'repos':'en'}});
+  assert.match(ui.nodes.get('projectViewControls').innerHTML,/data-view="repos" aria-pressed="true"/);
+  const tiles=[{dataset:{f:'mobile'},hidden:false},{dataset:{f:'web'},hidden:false}];
+  const group={hidden:false,querySelectorAll:()=>tiles};
+  ui.context.document.querySelectorAll=selector=>selector==='.tile'?tiles:selector==='.project-group'?[group]:[];
+  new Script("FILTER='desktop'; applyFilter()").runInContext(ui.context);
+  assert.equal(group.hidden,true);
+  new Script("FILTER='mobile'; applyFilter()").runInContext(ui.context);
+  assert.equal(group.hidden,false);
+  assert.equal(tiles[0].hidden,false);
+  assert.equal(tiles[1].hidden,true);
+});
