@@ -66,6 +66,17 @@ test("project artwork is restricted to local assets", async () => {
   assert.ok(!cards.includes("external.example"));
 });
 
+test("website actions distinguish runnable apps and guides and open separately from project details", async () => {
+  const projects = ['app','guide'].map((siteKind,i)=>({...config.projects[i],slug:siteKind,siteKind}));
+  const ui = await boot({owner:config.profile.github,projects,stats:{app:{site:'https://app.example/'},guide:{site:'https://guide.example/'}}});
+  const cards = ui.nodes.get('bento').innerHTML;
+  assert.match(cards, /data-kind="app"[^]*?<span>Try it<\/span>/);
+  assert.match(cards, /data-kind="guide"[^]*?<span>Meet the app<\/span>/);
+  assert.equal((cards.match(/target="_blank" rel="noopener"/g)||[]).length, 2);
+  assert.match(cards, /Opens in a new tab/);
+  assert.match(cards, /class="tile-open" data-i="0"/);
+});
+
 test("offline mode preserves real project descriptions without invented statistics", async () => {
   const result = await boot(null);
   assert.equal(result.live, false);

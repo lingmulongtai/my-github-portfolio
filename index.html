@@ -193,7 +193,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .tile-open{position:absolute; inset:0; z-index:1}
 .tile>:where(:not(.tile-open):not(.site):not(.tile-art)){position:relative; z-index:0; pointer-events:none}
 .tile .no{font-family:var(--display); font-weight:300; font-size:10.5px; line-height:1.55;
-  padding-right:76px; opacity:.75; overflow-wrap:anywhere}
+  padding-right:142px; opacity:.75; overflow-wrap:anywhere}
 .tile h3{font-family:var(--display); font-weight:500; letter-spacing:-.04em; margin:auto 0 9px;
   font-size:clamp(20px,2.3vw,33px); line-height:1.16; overflow-wrap:anywhere}
 .tile .jp{font-size:12.5px; opacity:.8; line-height:1.68; margin:0}
@@ -202,11 +202,11 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
   border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--acid); color:var(--black);
   z-index:0; pointer-events:none}
 .tile:hover .st,.tile:focus-within .st{border-color:currentColor}
-.tile .site{position:absolute; top:14px; right:14px; z-index:3; font-family:var(--display); font-size:10px;
-  border:1px solid currentColor; border-radius:99px; padding:4px 11px;
+.tile .site{position:absolute; top:14px; right:14px; z-index:3; display:flex; align-items:center; gap:10px;
+  min-height:44px; max-width:132px; font-size:12px; font-weight:700; line-height:1.4;
+  border:1px solid var(--ink); border-radius:12px; padding:10px 14px; background:var(--ink); color:var(--paper);
   transition:background .2s}
-.tile .site:hover{background:currentColor}
-.tile .site:hover span{mix-blend-mode:difference; filter:invert(1)}
+.tile .site:hover{background:var(--accent); color:var(--paper)}
 .tile .foot{display:flex; align-items:flex-end; gap:14px; margin-top:16px;
   padding-top:13px; border-top:1px solid currentColor}
 .tile .foot .lbl{font-family:var(--display); font-size:10px; opacity:.62; line-height:1.5; white-space:nowrap}
@@ -223,9 +223,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .tile.has-image:hover,.tile.has-image:focus-within{background:#fff; border-color:var(--ink)}
 .tile.has-image:hover .tile-art,.tile.has-image:focus-within .tile-art{transform:translateY(-4px)}
 .tile.has-image .st{margin-bottom:6px}
-.tile.has-image .site{background:var(--paper); border-color:var(--line)}
-.tile.has-image .site:hover{background:var(--mint); color:var(--ink)}
-.tile.has-image .site:hover span{mix-blend-mode:normal; filter:none}
+.tile .site[data-kind="guide"],.tile .site[data-kind="page"]{background:var(--mint); color:var(--ink)}
+.tile .site[data-kind="guide"]:hover,.tile .site[data-kind="page"]:hover{background:var(--ink); color:var(--paper)}
 .tile.has-image .foot{border-color:var(--line)}
 .tile.has-image .foot .lbl{opacity:.75}
 .tile.s-hero .tile-art,.tile.s-tall .tile-art{height:280px}
@@ -1825,6 +1824,7 @@ const T={
   "work.lead":"気になるカードから、つくったものと技術の話を。",
   "hero.work":"プロジェクトを見る ↗","hero.about":"自己紹介 ↓","hero.touch":"イラストをタップすると、線がふわっと動きます",
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
+  "site.action.app":"使ってみる","site.action.guide":"紹介を見る","site.action.page":"サイトを見る","site.newTab":"別タブで開く",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
   "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
   "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
@@ -1855,6 +1855,7 @@ const T={
   "work.lead":"Explore what I build and the ideas behind each project.",
   "hero.work":"Explore projects ↗","hero.about":"About me ↓","hero.touch":"Tap the illustration to give the lines a little nudge",
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
+  "site.action.app":"Try it","site.action.guide":"Meet the app","site.action.page":"Visit site","site.newTab":"Opens in a new tab",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
   "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
   "sort.note.popular":"Most stars first; forks break ties.",
@@ -1889,6 +1890,7 @@ const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
+const siteAction=project=>t('site.action.'+(['app','guide','page'].includes(project.siteKind)?project.siteKind:'page'));
 
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
@@ -2064,7 +2066,8 @@ function renderTiles(){
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
-      ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"><span>SITE ↗</span></a>`:''}
+      ${p.g.site?`<a class="site" data-kind="${esc(p.siteKind||'page')}" href="${esc(p.g.site)}" target="_blank" rel="noopener"
+        aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}"><span>${siteAction(p)}</span><b aria-hidden="true">↗</b></a>`:''}
       ${artworkPath(p.image)?`<img class="tile-art" src="${esc(p.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <h3>${esc(p.name)}</h3>
       <p class="jp">${esc(tx(p.summary))}</p>
@@ -2153,7 +2156,8 @@ function fill(i){
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
   $('sLog').innerHTML=g.pushed?`<li><time>${esc(g.pushed)}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
   const L=[];
-  if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener">${t('l.site')}</a>`);
+  if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener"
+    aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">${siteAction(p)} ↗</a>`);
   if(g.url) L.push(`<a class="slink" href="${esc(g.url)}" target="_blank" rel="noopener">${t('l.repo')}</a>`);
   if(webUrl(p.links?.docs)) L.push(`<a class="slink" href="${esc(webUrl(p.links.docs))}" target="_blank" rel="noopener">${t('l.docs')}</a>`);
   $('sLinks').innerHTML=L.join('');
