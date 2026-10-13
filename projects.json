@@ -86,6 +86,40 @@
       "image": "assets/projects/aerogrid-3d.webp"
     },
     {
+      "slug": "oceanfpv",
+      "repo": "lingmulongtai/OceanFPV",
+      "name": "OceanFPV",
+      "size": "tall",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "ブラウザゲーム",
+        "en": "BROWSER GAME"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "海・船・島を自由に飛び回る、ブラウザのFPVドローンゲーム",
+        "en": "Fly an FPV drone over oceans, ships and islands in your browser"
+      },
+      "desc": {
+        "ja": "ブラウザだけで遊べるFPVドローン飛行ゲームです。海・船・島を探索し、Xboxコントローラー、USB FPV送信機、キーボード・マウスで操作できます。",
+        "en": "A browser-based FPV drone game for exploring oceans, ships and islands. Supports Xbox controllers, USB FPV transmitters, and keyboard and mouse controls."
+      },
+      "stack": [
+        "TypeScript"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/OceanFPV/blob/main/README.md",
+        "site": ""
+      },
+      "fork": false,
+      "image": "assets/projects/oceanfpv.webp",
+      "siteKind": "app"
+    },
+    {
       "slug": "keylume",
       "repo": "lingmulongtai/Keylume",
       "name": "Keylume",
