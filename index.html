@@ -134,6 +134,7 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .site-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px}
 .site-fbtn{min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px}
 .site-fbtn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.site-fbtn:disabled{opacity:.5; cursor:default}
 .launch-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
 .launch-card{display:flex; flex-direction:column; min-width:0; padding:20px; background:#fff;
   border:1px solid var(--line); border-radius:18px; transition:border-color .2s,background .2s}
@@ -2144,7 +2145,7 @@ function renderSites(){
   if(!sites.some(({p})=>p.siteKind==='app'))SITE_FILTER='other';
   $('siteTabs').innerHTML=['app','other'].map(key=>{
     const count=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===key).length;
-    return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}">${t('sites.'+key)} (${count})</button>`;
+    return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
   }).join('');
   const visible=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===SITE_FILTER);
   $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
@@ -2324,9 +2325,12 @@ $('bento').addEventListener('error',e=>{
 },true);
 document.addEventListener('click',e=>{
   const view=e.target.closest('.viewbtn');
-  if(view){setView(view.dataset.view);return}
+  if(view){setView(view.dataset.view);$('projectViewControls').querySelector(`[data-view="${VIEW}"]`)?.focus({preventScroll:true});return}
   const siteFilter=e.target.closest('.site-fbtn');
-  if(siteFilter){SITE_FILTER=siteFilter.dataset.sites; renderSites(); return}
+  if(siteFilter){
+    SITE_FILTER=siteFilter.dataset.sites; renderSites();
+    $('siteTabs').querySelector(`[data-sites="${SITE_FILTER}"]`)?.focus({preventScroll:true});return;
+  }
   const o=e.target.closest('.tile-open'); if(o){open(+o.dataset.i); return}
   if(e.target.closest('a[href^="#"]'))rememberPage();
   const f=e.target.closest('.fbtn');

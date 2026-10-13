@@ -100,6 +100,16 @@ test("quick-launch collection deduplicates shared websites and omits unsafe or s
   assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
 });
 
+test("guide-only collections disable the empty browser-app tab and retain the selected category", async () => {
+  const ui = await boot({owner:config.profile.github,projects:[{...config.projects[0],siteKind:'guide'}],stats:{
+    [config.projects[0].slug]:{site:'https://guide.example/'},
+  }});
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="app" aria-pressed="false" disabled/);
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
+  assert.match(ui.nodes.get('launchGrid').innerHTML, /guide.example/);
+});
+
 test("offline mode preserves real project descriptions without invented statistics", async () => {
   const result = await boot(null);
   assert.equal(result.live, false);
