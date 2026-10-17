@@ -691,18 +691,18 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "en": "Public"
       },
       "summary": {
-        "ja": "航空機の位置と気象を重ねて見る3Dアトラス",
-        "en": "A 3D atlas combining aircraft positions and weather"
+        "ja": "航空機・天気・衛星軌道を重ねる3Dアトラス",
+        "en": "A 3D atlas of aircraft, weather and predicted satellite orbits"
       },
       "desc": {
-        "ja": "世界規模のデモと、指定地点から最大250海里の航空機を取得するLive Betaを分離。検索・追跡・高度・速度・データ鮮度を表示します。現在のライブモードでは衛星は扱いません。",
-        "en": "Separates a worldwide demo from a Live Beta that retrieves aircraft within 250 nautical miles of a selected location. It shows tracking, altitude, speed, and data freshness. Live satellite data is currently disabled."
+        "ja": "Three.jsで描く地球上に、指定地点から最大250海里の航空機、気象、軌道要素からの衛星位置予測を表示。世界規模のデモとLive Betaを分離し、出典・鮮度・取得失敗を明示します。",
+        "en": "A Three.js globe showing aircraft within 250 nautical miles of a selected location, weather and satellite positions predicted from orbital elements. Separates Global Demo from Live Beta and exposes sources, freshness and failures."
       },
       "stack": [
         "TypeScript",
         "React",
-        "Cesium",
-        "deck.gl",
+        "Three.js",
+        "satellite.js",
         "Node.js",
         "Express"
       ],
@@ -1743,33 +1743,36 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       "repo": "lingmulongtai/KUAS-Photography-Club",
       "name": "KUAS-Photography-Club",
       "size": "std",
-      "filter": "docs",
+      "filter": "web",
       "year": "2025",
       "tag": {
-        "ja": "ドキュメント",
-        "en": "DOCUMENTATION"
+        "ja": "写真部の公式サイト",
+        "en": "CLUB WEBSITE"
       },
       "status": {
         "ja": "公開",
         "en": "Public"
       },
       "summary": {
-        "ja": "KUAS写真サークルの紹介と運営ドキュメント",
-        "en": "Introduction and operating documentation for the KUAS Photography Club"
+        "ja": "京都先端科学大学写真部の活動・予定・参加案内",
+        "en": "Activities, schedules and participation information for the KUAS Photography Club"
       },
       "desc": {
-        "ja": "活動目的、撮影会、参加方法などを日英で紹介し、運営方針や共有資料を整理するためのリポジトリです。",
-        "en": "Introduces the club, photo walks, and participation in Japanese and English, and organizes operating guidelines and shared resources."
+        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
+        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
       },
       "stack": [
-        "Markdown"
+        "TypeScript",
+        "Astro",
+        "Three.js"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/kuas-photography-club.webp"
+      "image": "assets/projects/kuas-photography-club.webp",
+      "siteKind": "guide"
     },
     {
       "slug": "my-github-portfolio",
