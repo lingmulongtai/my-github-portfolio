@@ -21,7 +21,7 @@
   --display:"Unbounded","Zen Kaku Gothic New",system-ui,sans-serif;
   --body:"Zen Kaku Gothic New",system-ui,sans-serif;
   --pad:clamp(16px,3.4vw,40px);
-  --content:1600px; --gutter:max(var(--pad),calc((100% - var(--content))/2)); --nav-height:60px;
+  --content:1600px; --gutter:max(var(--pad),calc((100% - var(--content))/2)); --nav-height:64px;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -46,14 +46,15 @@ button:active,a:active{opacity:.75}
 
 /* nav */
 nav{position:fixed; top:0; left:0; right:0; z-index:300; display:flex; align-items:center; gap:18px;
-  padding:16px var(--gutter); font-family:var(--display); font-size:11.5px; font-weight:500;
+  min-height:64px; padding:8px var(--gutter); font-family:var(--display); font-size:11.5px; font-weight:500; line-height:1.4;
   background:var(--paper); color:var(--black); border-bottom:1px solid var(--line)}
 nav .sp{margin-left:auto}
 .navlinks{display:contents}
-nav a,nav button{opacity:.9; transition:opacity .2s}
+nav a,nav button{display:inline-flex; align-items:center; justify-content:center; min-height:44px;
+  opacity:.9; transition:opacity .2s}
 nav a:hover,nav button:hover,nav a:focus-visible,nav button:focus-visible{opacity:1}
 .lang{display:flex; border:1px solid var(--line); border-radius:99px; overflow:hidden}
-.lang button{padding:3px 10px; font-size:10.5px; opacity:.9; border-radius:0}
+.lang button{padding:0 10px; font-size:10.5px; opacity:.9; border-radius:0}
 .lang button.on{background:var(--mint); color:var(--ink); opacity:1}
 nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 @media (max-width:760px){
