@@ -67,7 +67,7 @@ test("project artwork is restricted to local assets", async () => {
 });
 
 test("website actions distinguish runnable apps and guides and open separately from project details", async () => {
-  const projects = ['app','guide'].map((siteKind,i)=>({...config.projects[i],slug:siteKind,siteKind}));
+  const projects = ['app','guide'].map((siteKind,i)=>({...config.projects[i],slug:siteKind,siteKind,links:{}}));
   const ui = await boot({owner:config.profile.github,projects,stats:{app:{site:'https://app.example/'},guide:{site:'https://guide.example/'}}});
   const cards = ui.nodes.get('bento').innerHTML;
   assert.match(cards, /data-kind="app"[^]*?<span>Try it<\/span>/);
@@ -84,12 +84,17 @@ test("quick-launch collection deduplicates shared websites and omits unsafe or s
     {...config.projects[2],slug:'shared-two',siteKind:'guide'},
     {...config.projects[3],slug:'self',showcase:false},
     {...config.projects[0],slug:'unsafe'},
-  ];
+  ].map(project => ({...project,links:{}}));
   const ui = await boot({owner:config.profile.github,projects,stats:{
     app:{site:'https://app.example/'},'shared-one':{site:'https://guide.example/project/'},
     'shared-two':{site:'https://guide.example/project'},self:{site:'https://portfolio.example/'},unsafe:{site:'javascript:alert(1)'},
   }});
-  assert.match(ui.nodes.get('launchGrid').innerHTML, /https:\/\/app.example\//);
+  const initial = ui.nodes.get('launchGrid').innerHTML;
+  assert.match(initial, /https:\/\/app.example\//);
+  assert.match(initial, /https:\/\/guide.example\/project\//);
+  assert.equal((initial.match(/class="launch-card"/g)||[]).length, 2);
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="all" aria-pressed="true">All \(2\)/);
+  new Script("SITE_FILTER='app'; renderSites()").runInContext(ui.context);
   assert.ok(!ui.nodes.get('launchGrid').innerHTML.includes('guide.example'));
   new Script("SITE_FILTER='other'; renderSites(); LANG='ja'; render()").runInContext(ui.context);
   const links = ui.nodes.get('launchGrid').innerHTML;
@@ -104,10 +109,29 @@ test("guide-only collections disable the empty browser-app tab and retain the se
   const ui = await boot({owner:config.profile.github,projects:[{...config.projects[0],siteKind:'guide'}],stats:{
     [config.projects[0].slug]:{site:'https://guide.example/'},
   }});
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="all" aria-pressed="true"/);
   assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="app" aria-pressed="false" disabled/);
-  new Script("LANG='ja'; render()").runInContext(ui.context);
+  new Script("SITE_FILTER='app'; renderSites()").runInContext(ui.context);
+  assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="all" aria-pressed="true"/);
+  new Script("SITE_FILTER='other'; renderSites(); LANG='ja'; render()").runInContext(ui.context);
   assert.match(ui.nodes.get('siteTabs').innerHTML, /data-sites="other" aria-pressed="true"/);
   assert.match(ui.nodes.get('launchGrid').innerHTML, /guide.example/);
+});
+
+test("the club website uses its current featured repository instead of the legacy duplicate", async () => {
+  const club = config.projects.find(p => p.repo === 'lingmulongtai/KUAS-Photography-Club');
+  const legacy = config.projects.find(p => p.repo === 'lingmulongtai/Photography-Club-Website');
+  assert.equal(club.links.site, 'https://kuas-photography-club.vercel.app/');
+  assert.ok(config.projects.indexOf(club) < 3);
+  const ui = await boot({owner:config.profile.github,projects:[legacy,club],stats:{
+    [legacy.slug]:{site:club.links.site},[club.slug]:{site:club.links.site},
+  }});
+  const links = ui.nodes.get('launchGrid').innerHTML;
+  assert.equal((links.match(/class="launch-card"/g)||[]).length, 1);
+  assert.match(links, /<h3>KUAS Photography Club<\/h3>/);
+  assert.match(links, /assets\/projects\/kuas-photography-club.webp/);
+  assert.ok(!links.includes('Photography-Club-Website'));
+  assert.match(ui.nodes.get('bento').innerHTML, /Photography-Club-Website/);
 });
 
 test("offline mode preserves real project descriptions without invented statistics", async () => {

@@ -4,40 +4,34 @@
   const canvas = document.getElementById("heroCanvas");
   const toggle = document.getElementById("heroMotionToggle");
   const touchHint = document.getElementById("touchHint");
-  const portrait = hero?.querySelector(".hero-portrait img");
-  const copy = hero?.querySelector(".hero-copy");
   const ctx = canvas?.getContext("2d");
-  if (!ctx || !portrait || !copy || !toggle) return;
+  if (!ctx || !hero || !toggle) return;
 
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const preferenceKey = "portfolio.hero-motion-paused";
-  const mask = document.createElement("canvas");
-  const maskCtx = mask.getContext("2d");
   const tau = Math.PI * 2;
   const colors = { blue: "#428faa", gold: "#e9b744", teal: "#478f89",
     mint: "#d6e7dd", pale: "#e5eee6", butter: "#f3e4b5" };
   const waves = [
-    { x: 90, y: 439, length: 145, wavelength: 70, amplitude: 7, color: "blue", angle: -.12, rate: .70, phase: .3 },
-    { x: 277, y: 464, length: 90, wavelength: 58, amplitude: 6.5, color: "gold", angle: .08, rate: -.58, phase: 2.5 },
-    { x: 448, y: 434, length: 125, wavelength: 66, amplitude: 8, color: "blue", angle: -.07, rate: .47, phase: 4.9 },
-    { x: 646, y: 467, length: 97, wavelength: 56, amplitude: 6, color: "gold", angle: .08, rate: -.80, phase: 1.4 },
-    { x: 866, y: 443, length: 134, wavelength: 74, amplitude: 8, color: "blue", angle: .05, rate: .55, phase: 3.1 },
-    { x: 987, y: 392, length: 62, wavelength: 48, amplitude: 7, color: "gold", angle: 1.2, rate: -.63, phase: 5.2 },
-    { x: 502, y: 48, length: 75, wavelength: 56, amplitude: 6, color: "gold", angle: -.13, rate: -.44, phase: 1.9 },
-    { x: 652, y: 32, length: 112, wavelength: 69, amplitude: 6.5, color: "blue", angle: .08, rate: .64, phase: 4.3 },
-    { x: 872, y: 41, length: 78, wavelength: 59, amplitude: 6, color: "gold", angle: -.12, rate: -.72, phase: .8 },
-    { x: 980, y: 245, length: 106, wavelength: 64, amplitude: 7.5, color: "blue", angle: 1.42, rate: .52, phase: 3.7 },
+    { x: 120, y: 55, length: 92, wavelength: 62, amplitude: 7, color: "blue", angle: -.12, rate: .70, phase: .3 },
+    { x: 438, y: 53, length: 78, wavelength: 58, amplitude: 6.5, color: "gold", angle: .08, rate: -.58, phase: 2.5 },
+    { x: 35, y: 220, length: 72, wavelength: 60, amplitude: 7, color: "gold", angle: 1.25, rate: .47, phase: 4.9 },
+    { x: 43, y: 395, length: 74, wavelength: 56, amplitude: 6, color: "blue", angle: 1.42, rate: -.80, phase: 1.4 },
+    { x: 566, y: 238, length: 86, wavelength: 66, amplitude: 7, color: "blue", angle: 1.42, rate: .55, phase: 3.1 },
+    { x: 557, y: 415, length: 62, wavelength: 48, amplitude: 7, color: "gold", angle: 1.2, rate: -.63, phase: 5.2 },
+    { x: 160, y: 552, length: 88, wavelength: 56, amplitude: 6, color: "gold", angle: -.13, rate: -.44, phase: 1.9 },
+    { x: 410, y: 550, length: 102, wavelength: 69, amplitude: 6.5, color: "blue", angle: .08, rate: .64, phase: 4.3 },
   ];
   const dots = [
-    [127, 47, 0], [343, 31, 1], [495, 86, 2], [570, 137, 0], [625, 67, 1], [969, 172, 2],
-    [972, 257, 0], [953, 343, 1], [784, 423, 2], [596, 392, 0], [489, 463, 1], [369, 450, 2],
-    [255, 476, 0], [109, 405, 1], [34, 362, 2], [664, 422, 0], [866, 34, 1], [410, 52, 2],
+    [60, 128, 0], [235, 35, 1], [340, 47, 2], [535, 130, 0], [568, 330, 1],
+    [518, 509, 2], [290, 570, 0], [80, 498, 1], [30, 312, 2],
   ];
   let paused = false;
   try { paused = localStorage.getItem(preferenceKey) === "true"; } catch {}
   let frame = 0, elapsed = 3.2, lastPaint = 0, onscreen = false;
   let touchStart = null, tap = null, layoutKey = "";
-  let width = 0, height = 0, dpr = 1, scale = 1, offsetX = 0, offsetY = 0, inkWidth = 5.5, stacked = false;
+  let width = 0, height = 0, dpr = 1, scale = 1, offsetX = 0, offsetY = 0;
+  const inkWidth = 5.5;
 
   function blob(x, y, rx, ry, color, seed, rotation) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.beginPath();
@@ -86,11 +80,10 @@
   function draw() {
     if (!width || !height) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
-    if (stacked) blob(width + 15, 105, 65, 37, colors.butter, 0, 0);
     ctx.save(); ctx.translate(offsetX, offsetY); ctx.scale(scale, scale);
-    blob(920, 70, 145, 100, colors.butter, 1, .18);
-    blob(80, 498, 270, 91, colors.mint, 2, -.08);
-    blob(1000, 376, 76, 165, colors.pale, 4, .15);
+    blob(446, 140, 112, 85, colors.butter, 1, .18);
+    blob(153, 452, 115, 71, colors.mint, 2, -.08);
+    blob(489, 407, 61, 102, colors.pale, 4, .15);
     waves.forEach(drawWave);
     dots.forEach(([x, y, color], i) => {
       ctx.fillStyle = [colors.blue, colors.gold, colors.teal][color];
@@ -105,44 +98,29 @@
       else {
         ctx.save(); ctx.globalAlpha = .8 * (1 - age / 1.4);
         for (let i = 0; i < 6; i++) {
-          const angle = i / 6 * tau + .2, radius = 20 + age * 35;
+          const angle = i / 6 * tau + .2, radius = (20 + age * 35) * scale;
           ctx.fillStyle = i % 2 ? colors.gold : colors.blue;
           ctx.beginPath(); ctx.arc(tap.x + Math.cos(angle) * radius, tap.y + Math.sin(angle) * radius, inkWidth * scale / 2, 0, tau); ctx.fill();
         }
         ctx.restore();
       }
     }
-    ctx.save(); ctx.globalCompositeOperation = "destination-out";
-    ctx.drawImage(mask, 0, 0, width, height); ctx.restore();
   }
 
   function measure() {
-    const bounds = canvas.getBoundingClientRect(), image = portrait.getBoundingClientRect(), text = copy.getBoundingClientRect();
+    const bounds = canvas.getBoundingClientRect();
     width = bounds.width; height = bounds.height;
-    if (!width || !height || !image.width) return;
+    if (!width || !height) return;
     dpr = Math.min(devicePixelRatio || 1, 1.5);
-    const nextKey = [width, height, dpr, image.left - bounds.left, image.top - bounds.top, image.width,
-      text.left - bounds.left, text.top - bounds.top, text.width, text.height].map(value => Math.round(value * 10)).join(',');
+    const nextKey = [width, height, dpr].join(',');
     if (nextKey === layoutKey) return;
     layoutKey = nextKey;
-    canvas.width = mask.width = Math.round(width * dpr);
-    canvas.height = mask.height = Math.round(height * dpr);
-    stacked = image.top >= text.bottom;
-    scale = stacked ? image.width / 410 : width / 1024;
-    offsetX = image.left - bounds.left + image.width * .5 - 790 * scale;
-    offsetY = image.top - bounds.top + image.height * .5 - 241 * scale;
-    inkWidth = 5.5 * Math.min(1, image.width / 410 / scale);
-
-    // Cache the mask between layout changes so text and the face stay clear without a per-frame blur.
-    maskCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    maskCtx.save(); maskCtx.fillStyle = "black"; maskCtx.shadowColor = "black"; maskCtx.shadowBlur = 20 * dpr;
-    maskCtx.fillRect(text.left - bounds.left - 4, text.top - bounds.top - 4, text.width + 8, text.height + 8);
-    maskCtx.restore();
-    const x = image.left - bounds.left + image.width * .54, y = image.top - bounds.top + image.height * .46;
-    const radius = image.width * .37;
-    const face = maskCtx.createRadialGradient(x, y, radius * .34, x, y, radius);
-    face.addColorStop(0, "rgba(0,0,0,.96)"); face.addColorStop(.62, "rgba(0,0,0,.9)"); face.addColorStop(1, "rgba(0,0,0,0)");
-    maskCtx.fillStyle = face; maskCtx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    // Fit the complete composition, including its quiet edge, at every viewport size.
+    scale = Math.min(width, height) / 600;
+    offsetX = (width - 600 * scale) / 2;
+    offsetY = (height - 600 * scale) / 2;
     draw();
   }
 
@@ -194,7 +172,9 @@
     if (!start || start.id !== event.pointerId || !canAnimate() || event.timeStamp - start.time > 450 ||
         Math.hypot(event.clientX - start.x, event.clientY - start.y) > 10) return;
     const bounds = canvas.getBoundingClientRect();
-    tap = { x: event.clientX - bounds.left, y: event.clientY - bounds.top, time: elapsed };
+    const inset = 74 * scale;
+    tap = { x: Math.max(inset, Math.min(width - inset, event.clientX - bounds.left)),
+      y: Math.max(inset, Math.min(height - inset, event.clientY - bounds.top)), time: elapsed };
     draw();
   }, { passive: true });
   reduced.addEventListener("change", sync);
@@ -203,7 +183,7 @@
   new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ["class"] });
   new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
   const resize = new ResizeObserver(measure);
-  [hero, portrait, copy].forEach(element => resize.observe(element));
+  resize.observe(canvas);
   addEventListener("resize", measure);
   measure(); sync();
 })();

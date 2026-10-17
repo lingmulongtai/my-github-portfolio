@@ -63,18 +63,18 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "航空機の位置と気象を重ねて見る3Dアトラス",
-        "en": "A 3D atlas combining aircraft positions and weather"
+        "ja": "航空機・天気・衛星軌道を重ねる3Dアトラス",
+        "en": "A 3D atlas of aircraft, weather and predicted satellite orbits"
       },
       "desc": {
-        "ja": "世界規模のデモと、指定地点から最大250海里の航空機を取得するLive Betaを分離。検索・追跡・高度・速度・データ鮮度を表示します。現在のライブモードでは衛星は扱いません。",
-        "en": "Separates a worldwide demo from a Live Beta that retrieves aircraft within 250 nautical miles of a selected location. It shows tracking, altitude, speed, and data freshness. Live satellite data is currently disabled."
+        "ja": "Three.jsで描く地球上に、指定地点から最大250海里の航空機、気象、軌道要素からの衛星位置予測を表示。世界規模のデモとLive Betaを分離し、出典・鮮度・取得失敗を明示します。",
+        "en": "A Three.js globe showing aircraft within 250 nautical miles of a selected location, weather and satellite positions predicted from orbital elements. Separates Global Demo from Live Beta and exposes sources, freshness and failures."
       },
       "stack": [
         "TypeScript",
         "React",
-        "Cesium",
-        "deck.gl",
+        "Three.js",
+        "satellite.js",
         "Node.js",
         "Express"
       ],
@@ -85,6 +85,42 @@
       "fork": false,
       "image": "assets/projects/aerogrid-3d.webp",
       "siteKind": "app"
+    },
+    {
+      "slug": "kuas-photography-club",
+      "repo": "lingmulongtai/KUAS-Photography-Club",
+      "name": "KUAS Photography Club",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "写真部の公式サイト",
+        "en": "CLUB WEBSITE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "京都先端科学大学写真部の活動・予定・参加案内",
+        "en": "Activities, schedules and participation information for the KUAS Photography Club"
+      },
+      "desc": {
+        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
+        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
+      },
+      "stack": [
+        "TypeScript",
+        "Astro",
+        "Three.js"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
+        "site": "https://kuas-photography-club.vercel.app/"
+      },
+      "fork": false,
+      "image": "assets/projects/kuas-photography-club.webp",
+      "siteKind": "page"
     },
     {
       "slug": "oceanfpv",
@@ -894,7 +930,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/photography-club-website.webp"
+      "image": "assets/projects/photography-club-website.webp",
+      "showcase": false
     },
     {
       "slug": "my-portfolio",
@@ -1111,39 +1148,6 @@
       "image": "assets/projects/ip1.webp"
     },
     {
-      "slug": "kuas-photography-club",
-      "repo": "lingmulongtai/KUAS-Photography-Club",
-      "name": "KUAS-Photography-Club",
-      "size": "std",
-      "filter": "docs",
-      "year": "2025",
-      "tag": {
-        "ja": "ドキュメント",
-        "en": "DOCUMENTATION"
-      },
-      "status": {
-        "ja": "公開",
-        "en": "Public"
-      },
-      "summary": {
-        "ja": "KUAS写真サークルの紹介と運営ドキュメント",
-        "en": "Introduction and operating documentation for the KUAS Photography Club"
-      },
-      "desc": {
-        "ja": "活動目的、撮影会、参加方法などを日英で紹介し、運営方針や共有資料を整理するためのリポジトリです。",
-        "en": "Introduces the club, photo walks, and participation in Japanese and English, and organizes operating guidelines and shared resources."
-      },
-      "stack": [
-        "Markdown"
-      ],
-      "links": {
-        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
-        "site": ""
-      },
-      "fork": false,
-      "image": "assets/projects/kuas-photography-club.webp"
-    },
-    {
       "slug": "my-github-portfolio",
       "repo": "lingmulongtai/my-github-portfolio",
       "name": "my-github-portfolio",
@@ -1217,40 +1221,40 @@
       "showcase": false
     },
     {
-      "slug": "win-codexbar",
-      "repo": "lingmulongtai/Win-CodexBar",
-      "name": "Win-CodexBar",
+      "slug": "win-codexbar-mobile-connect",
+      "repo": "lingmulongtai/Win-CodexBar-Mobile-Connect",
+      "name": "Win-CodexBar + Mobile Connect",
       "size": "std",
       "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "Windowsアプリのフォーク",
-        "en": "WINDOWS APP FORK"
+        "ja": "Windows・Android連携",
+        "en": "WINDOWS / ANDROID COMPANION"
       },
       "status": {
         "ja": "フォーク",
         "en": "Fork"
       },
       "summary": {
-        "ja": "AIコーディングツールの利用枠やコストをWindowsトレイで確認",
-        "en": "Monitor AI coding-tool quotas and costs from the Windows tray"
+        "ja": "WindowsのAI利用枠・履歴をAndroidへ暗号化共有",
+        "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
       },
       "desc": {
-        "ja": "AIコーディングツールの利用状況・残量・コストをWindowsのシステムトレイから確認するアプリのフォークです。Tauri・React・Rustで構成されています。サイトボタンは元プロジェクトの配布ページに移動します。",
-        "en": "A fork of a Windows tray app for monitoring AI coding-tool usage, quotas and costs, built with Tauri, React and Rust. The website button leads to the upstream project’s downloads."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AIサービスの利用枠・リセット時刻・履歴・推定コストを確認し、LANやTailscale経由でCodexBar Androidへ暗号化して共有します。Windows版を独自配布しています。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, reset times, history and estimated costs. Shares encrypted snapshots with CodexBar for Android over LAN or Tailscale, with its own Windows releases."
       },
       "stack": [
-        "Tauri",
-        "React",
         "Rust",
+        "Tauri 2",
+        "React",
         "TypeScript"
       ],
       "links": {
-        "docs": "https://github.com/lingmulongtai/Win-CodexBar/blob/main/README.md",
-        "site": ""
+        "docs": "https://github.com/lingmulongtai/Win-CodexBar-Mobile-Connect/blob/main/README.md",
+        "site": "https://github.com/lingmulongtai/Win-CodexBar-Mobile-Connect#readme"
       },
       "fork": true,
-      "image": "assets/projects/win-codexbar.webp",
+      "image": "assets/projects/win-codexbar-mobile-connect.webp",
       "siteKind": "guide"
     }
   ],

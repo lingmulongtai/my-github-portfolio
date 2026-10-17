@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="./assets/hero-motion.js?v=2" defer></script>
+<script src="./assets/hero-motion.js?v=3" defer></script>
 <script src="./assets/page-motion.js" defer></script>
 <style>
 :root{
@@ -76,9 +76,9 @@ nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 /* hero */
 header{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
   padding:calc(var(--nav-height) + clamp(26px,5vh,58px)) var(--gutter) 78px; position:relative; isolation:isolate;
-  background:var(--paper); overflow:clip}
-.hero-art{position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%);
-  width:min(100%,calc(var(--content) + 2 * var(--pad))); z-index:-1; pointer-events:none}
+  background:var(--paper)}
+.hero-visual{position:relative; isolation:isolate; aspect-ratio:1; display:grid; place-items:center; background:var(--paper)}
+.hero-art{position:absolute; inset:0; z-index:-1; pointer-events:none}
 .hero-art canvas{display:block; width:100%; height:100%}
 .hero-motion-toggle{position:absolute; left:var(--gutter); bottom:18px; padding:8px 12px;
   border:1px solid var(--line); border-radius:99px; background:var(--paper); color:var(--ink);
@@ -89,8 +89,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .hero-layout{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
   align-items:center; gap:clamp(24px,4vw,64px); width:100%; max-width:1600px; margin:0 auto}
 .hero-copy{min-width:0; container-type:inline-size}
-.hero-portrait{width:min(100%,540px); margin:0; justify-self:center}
-.hero-portrait img{display:block; width:100%; height:auto; border-radius:24px; mix-blend-mode:multiply}
+.hero-portrait{width:min(100%,600px); margin:0; justify-self:center}
+.hero-portrait img{display:block; width:86%; height:auto; mix-blend-mode:multiply}
 .meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
   font-weight:300; opacity:.72; margin-bottom:28px}
 .kin{font-family:var(--display); font-weight:800; line-height:.98; letter-spacing:-.055em;
@@ -399,7 +399,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   .meta{gap:6px 16px; font-size:9px; line-height:1.7; margin-bottom:20px}
   .kin{font-size:clamp(40px,18cqw,106px)}
   .sub{margin-top:22px; font-size:14px; line-height:1.85}
-  .hero-portrait{width:min(80%,330px)}
+  .hero-portrait{width:min(100%,390px)}
   .hero-actions{margin-top:20px}
   .hero-motion-toggle{min-height:44px; bottom:16px}
   .scrolltip{bottom:31px; font-size:9px}
@@ -493,7 +493,6 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </nav>
 
 <header id="home">
-  <div class="hero-art" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
   <div class="hero-layout">
     <div class="hero-copy">
       <div class="meta" id="heroMeta"></div>
@@ -502,8 +501,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       <div class="hero-actions"><a href="#sites" data-i18n="hero.sites"></a><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
     </div>
     <figure class="hero-portrait">
-      <img src="./assets/portrait.webp" width="1024" height="1024"
-        alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
+      <div class="hero-visual">
+        <div class="hero-art" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
+        <img src="./assets/portrait.webp" width="1024" height="1024"
+          alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
+      </div>
       <figcaption class="touch-hint" id="touchHint" hidden data-i18n="hero.touch"></figcaption>
     </figure>
   </div>
@@ -689,18 +691,18 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "en": "Public"
       },
       "summary": {
-        "ja": "航空機の位置と気象を重ねて見る3Dアトラス",
-        "en": "A 3D atlas combining aircraft positions and weather"
+        "ja": "航空機・天気・衛星軌道を重ねる3Dアトラス",
+        "en": "A 3D atlas of aircraft, weather and predicted satellite orbits"
       },
       "desc": {
-        "ja": "世界規模のデモと、指定地点から最大250海里の航空機を取得するLive Betaを分離。検索・追跡・高度・速度・データ鮮度を表示します。現在のライブモードでは衛星は扱いません。",
-        "en": "Separates a worldwide demo from a Live Beta that retrieves aircraft within 250 nautical miles of a selected location. It shows tracking, altitude, speed, and data freshness. Live satellite data is currently disabled."
+        "ja": "Three.jsで描く地球上に、指定地点から最大250海里の航空機、気象、軌道要素からの衛星位置予測を表示。世界規模のデモとLive Betaを分離し、出典・鮮度・取得失敗を明示します。",
+        "en": "A Three.js globe showing aircraft within 250 nautical miles of a selected location, weather and satellite positions predicted from orbital elements. Separates Global Demo from Live Beta and exposes sources, freshness and failures."
       },
       "stack": [
         "TypeScript",
         "React",
-        "Cesium",
-        "deck.gl",
+        "Three.js",
+        "satellite.js",
         "Node.js",
         "Express"
       ],
@@ -711,6 +713,42 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       "fork": false,
       "image": "assets/projects/aerogrid-3d.webp",
       "siteKind": "app"
+    },
+    {
+      "slug": "kuas-photography-club",
+      "repo": "lingmulongtai/KUAS-Photography-Club",
+      "name": "KUAS Photography Club",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "写真部の公式サイト",
+        "en": "CLUB WEBSITE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "京都先端科学大学写真部の活動・予定・参加案内",
+        "en": "Activities, schedules and participation information for the KUAS Photography Club"
+      },
+      "desc": {
+        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
+        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
+      },
+      "stack": [
+        "TypeScript",
+        "Astro",
+        "Three.js"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
+        "site": "https://kuas-photography-club.vercel.app/"
+      },
+      "fork": false,
+      "image": "assets/projects/kuas-photography-club.webp",
+      "siteKind": "page"
     },
     {
       "slug": "oceanfpv",
@@ -1520,7 +1558,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/photography-club-website.webp"
+      "image": "assets/projects/photography-club-website.webp",
+      "showcase": false
     },
     {
       "slug": "my-portfolio",
@@ -1737,39 +1776,6 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       "image": "assets/projects/ip1.webp"
     },
     {
-      "slug": "kuas-photography-club",
-      "repo": "lingmulongtai/KUAS-Photography-Club",
-      "name": "KUAS-Photography-Club",
-      "size": "std",
-      "filter": "docs",
-      "year": "2025",
-      "tag": {
-        "ja": "ドキュメント",
-        "en": "DOCUMENTATION"
-      },
-      "status": {
-        "ja": "公開",
-        "en": "Public"
-      },
-      "summary": {
-        "ja": "KUAS写真サークルの紹介と運営ドキュメント",
-        "en": "Introduction and operating documentation for the KUAS Photography Club"
-      },
-      "desc": {
-        "ja": "活動目的、撮影会、参加方法などを日英で紹介し、運営方針や共有資料を整理するためのリポジトリです。",
-        "en": "Introduces the club, photo walks, and participation in Japanese and English, and organizes operating guidelines and shared resources."
-      },
-      "stack": [
-        "Markdown"
-      ],
-      "links": {
-        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
-        "site": ""
-      },
-      "fork": false,
-      "image": "assets/projects/kuas-photography-club.webp"
-    },
-    {
       "slug": "my-github-portfolio",
       "repo": "lingmulongtai/my-github-portfolio",
       "name": "my-github-portfolio",
@@ -1843,40 +1849,40 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       "showcase": false
     },
     {
-      "slug": "win-codexbar",
-      "repo": "lingmulongtai/Win-CodexBar",
-      "name": "Win-CodexBar",
+      "slug": "win-codexbar-mobile-connect",
+      "repo": "lingmulongtai/Win-CodexBar-Mobile-Connect",
+      "name": "Win-CodexBar + Mobile Connect",
       "size": "std",
       "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "Windowsアプリのフォーク",
-        "en": "WINDOWS APP FORK"
+        "ja": "Windows・Android連携",
+        "en": "WINDOWS / ANDROID COMPANION"
       },
       "status": {
         "ja": "フォーク",
         "en": "Fork"
       },
       "summary": {
-        "ja": "AIコーディングツールの利用枠やコストをWindowsトレイで確認",
-        "en": "Monitor AI coding-tool quotas and costs from the Windows tray"
+        "ja": "WindowsのAI利用枠・履歴をAndroidへ暗号化共有",
+        "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
       },
       "desc": {
-        "ja": "AIコーディングツールの利用状況・残量・コストをWindowsのシステムトレイから確認するアプリのフォークです。Tauri・React・Rustで構成されています。サイトボタンは元プロジェクトの配布ページに移動します。",
-        "en": "A fork of a Windows tray app for monitoring AI coding-tool usage, quotas and costs, built with Tauri, React and Rust. The website button leads to the upstream project’s downloads."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AIサービスの利用枠・リセット時刻・履歴・推定コストを確認し、LANやTailscale経由でCodexBar Androidへ暗号化して共有します。Windows版を独自配布しています。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, reset times, history and estimated costs. Shares encrypted snapshots with CodexBar for Android over LAN or Tailscale, with its own Windows releases."
       },
       "stack": [
-        "Tauri",
-        "React",
         "Rust",
+        "Tauri 2",
+        "React",
         "TypeScript"
       ],
       "links": {
-        "docs": "https://github.com/lingmulongtai/Win-CodexBar/blob/main/README.md",
-        "site": ""
+        "docs": "https://github.com/lingmulongtai/Win-CodexBar-Mobile-Connect/blob/main/README.md",
+        "site": "https://github.com/lingmulongtai/Win-CodexBar-Mobile-Connect#readme"
       },
       "fork": true,
-      "image": "assets/projects/win-codexbar.webp",
+      "image": "assets/projects/win-codexbar-mobile-connect.webp",
       "siteKind": "guide"
     }
   ],
@@ -1903,7 +1909,7 @@ const T={
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
   "site.action.app":"使ってみる","site.action.guide":"紹介を見る","site.action.page":"サイトを見る","site.newTab":"別タブで開く",
   "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
-  "sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
+  "sites.all":"すべて","sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
   "sites.empty":"この種類のサイトはまだありません。",
   "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
   "view.note.groups":"グループは最上位のリポジトリを基準に並びます。",
@@ -1939,7 +1945,7 @@ const T={
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
   "site.action.app":"Try it","site.action.guide":"Meet the app","site.action.page":"Visit site","site.newTab":"Opens in a new tab",
   "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
-  "sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
+  "sites.all":"All","sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
   "sites.empty":"There are no websites in this category yet.",
   "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
   "view.note.groups":"Groups follow their highest ranked repository.",
@@ -1970,7 +1976,7 @@ const T={
   "note":"All public repositories, including forks. Commit counts cover all contributors on the default branch, all time, including merges. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 let FILTER='all';
-let SITE_FILTER='app';
+let SITE_FILTER='all';
 let VIEW='groups';
 let SORT='recommended';
 const SORT_KEYS=['recommended','popular','commits','updated'];
@@ -2179,12 +2185,14 @@ function render(){
 }
 function renderSites(){
   const sites=websiteEntries();
-  if(!sites.some(({p})=>p.siteKind==='app'))SITE_FILTER='other';
-  $('siteTabs').innerHTML=['app','other'].map(key=>{
-    const count=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===key).length;
+  const counts={all:sites.length,app:sites.filter(({p})=>p.siteKind==='app').length};
+  counts.other=counts.all-counts.app;
+  if(!counts[SITE_FILTER])SITE_FILTER='all';
+  $('siteTabs').innerHTML=['all','app','other'].map(key=>{
+    const count=counts[key];
     return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
   }).join('');
-  const visible=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===SITE_FILTER);
+  const visible=sites.filter(({p})=>SITE_FILTER==='all'||(p.siteKind==='app'?'app':'other')===SITE_FILTER);
   $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
     <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
       aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
