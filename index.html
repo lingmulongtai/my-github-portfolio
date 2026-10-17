@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="./assets/hero-motion.js?v=2" defer></script>
+<script src="./assets/hero-motion.js?v=3" defer></script>
 <script src="./assets/page-motion.js" defer></script>
 <style>
 :root{
@@ -76,9 +76,9 @@ nav .k{border:1px solid var(--line); border-radius:99px; padding:3px 10px}
 /* hero */
 header{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
   padding:calc(var(--nav-height) + clamp(26px,5vh,58px)) var(--gutter) 78px; position:relative; isolation:isolate;
-  background:var(--paper); overflow:clip}
-.hero-art{position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%);
-  width:min(100%,calc(var(--content) + 2 * var(--pad))); z-index:-1; pointer-events:none}
+  background:var(--paper)}
+.hero-visual{position:relative; isolation:isolate; aspect-ratio:1; display:grid; place-items:center; background:var(--paper)}
+.hero-art{position:absolute; inset:0; z-index:-1; pointer-events:none}
 .hero-art canvas{display:block; width:100%; height:100%}
 .hero-motion-toggle{position:absolute; left:var(--gutter); bottom:18px; padding:8px 12px;
   border:1px solid var(--line); border-radius:99px; background:var(--paper); color:var(--ink);
@@ -89,8 +89,8 @@ header{min-height:100svh; display:flex; flex-direction:column; justify-content:c
 .hero-layout{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
   align-items:center; gap:clamp(24px,4vw,64px); width:100%; max-width:1600px; margin:0 auto}
 .hero-copy{min-width:0; container-type:inline-size}
-.hero-portrait{width:min(100%,540px); margin:0; justify-self:center}
-.hero-portrait img{display:block; width:100%; height:auto; border-radius:24px; mix-blend-mode:multiply}
+.hero-portrait{width:min(100%,600px); margin:0; justify-self:center}
+.hero-portrait img{display:block; width:86%; height:auto; mix-blend-mode:multiply}
 .meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
   font-weight:300; opacity:.72; margin-bottom:28px}
 .kin{font-family:var(--display); font-weight:800; line-height:.98; letter-spacing:-.055em;
@@ -399,7 +399,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   .meta{gap:6px 16px; font-size:9px; line-height:1.7; margin-bottom:20px}
   .kin{font-size:clamp(40px,18cqw,106px)}
   .sub{margin-top:22px; font-size:14px; line-height:1.85}
-  .hero-portrait{width:min(80%,330px)}
+  .hero-portrait{width:min(100%,390px)}
   .hero-actions{margin-top:20px}
   .hero-motion-toggle{min-height:44px; bottom:16px}
   .scrolltip{bottom:31px; font-size:9px}
@@ -493,7 +493,6 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 </nav>
 
 <header id="home">
-  <div class="hero-art" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
   <div class="hero-layout">
     <div class="hero-copy">
       <div class="meta" id="heroMeta"></div>
@@ -502,8 +501,11 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       <div class="hero-actions"><a href="#sites" data-i18n="hero.sites"></a><a href="#work" data-i18n="hero.work"></a><a href="#about" data-i18n="hero.about"></a></div>
     </div>
     <figure class="hero-portrait">
-      <img src="./assets/portrait.webp" width="1024" height="1024"
-        alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
+      <div class="hero-visual">
+        <div class="hero-art" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
+        <img src="./assets/portrait.webp" width="1024" height="1024"
+          alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
+      </div>
       <figcaption class="touch-hint" id="touchHint" hidden data-i18n="hero.touch"></figcaption>
     </figure>
   </div>
