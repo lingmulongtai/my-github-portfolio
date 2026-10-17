@@ -87,6 +87,42 @@
       "siteKind": "app"
     },
     {
+      "slug": "kuas-photography-club",
+      "repo": "lingmulongtai/KUAS-Photography-Club",
+      "name": "KUAS Photography Club",
+      "size": "std",
+      "filter": "web",
+      "year": "2025",
+      "tag": {
+        "ja": "写真部の公式サイト",
+        "en": "CLUB WEBSITE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "京都先端科学大学写真部の活動・予定・参加案内",
+        "en": "Activities, schedules and participation information for the KUAS Photography Club"
+      },
+      "desc": {
+        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
+        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
+      },
+      "stack": [
+        "TypeScript",
+        "Astro",
+        "Three.js"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
+        "site": "https://kuas-photography-club.vercel.app/"
+      },
+      "fork": false,
+      "image": "assets/projects/kuas-photography-club.webp",
+      "siteKind": "page"
+    },
+    {
       "slug": "oceanfpv",
       "repo": "lingmulongtai/OceanFPV",
       "name": "OceanFPV",
@@ -894,7 +930,8 @@
         "site": ""
       },
       "fork": false,
-      "image": "assets/projects/photography-club-website.webp"
+      "image": "assets/projects/photography-club-website.webp",
+      "showcase": false
     },
     {
       "slug": "my-portfolio",
@@ -1109,42 +1146,6 @@
       },
       "fork": false,
       "image": "assets/projects/ip1.webp"
-    },
-    {
-      "slug": "kuas-photography-club",
-      "repo": "lingmulongtai/KUAS-Photography-Club",
-      "name": "KUAS-Photography-Club",
-      "size": "std",
-      "filter": "web",
-      "year": "2025",
-      "tag": {
-        "ja": "写真部の公式サイト",
-        "en": "CLUB WEBSITE"
-      },
-      "status": {
-        "ja": "公開",
-        "en": "Public"
-      },
-      "summary": {
-        "ja": "京都先端科学大学写真部の活動・予定・参加案内",
-        "en": "Activities, schedules and participation information for the KUAS Photography Club"
-      },
-      "desc": {
-        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
-        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
-      },
-      "stack": [
-        "TypeScript",
-        "Astro",
-        "Three.js"
-      ],
-      "links": {
-        "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
-        "site": ""
-      },
-      "fork": false,
-      "image": "assets/projects/kuas-photography-club.webp",
-      "siteKind": "guide"
     },
     {
       "slug": "my-github-portfolio",
