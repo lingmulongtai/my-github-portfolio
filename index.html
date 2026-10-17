@@ -1909,7 +1909,7 @@ const T={
   "work.filterHint":"カテゴリを横にスワイプ →","work.details":"詳しく見る","work.count":"件を表示",
   "site.action.app":"使ってみる","site.action.guide":"紹介を見る","site.action.page":"サイトを見る","site.newTab":"別タブで開く",
   "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
-  "sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
+  "sites.all":"すべて","sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
   "sites.empty":"この種類のサイトはまだありません。",
   "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
   "view.note.groups":"グループは最上位のリポジトリを基準に並びます。",
@@ -1945,7 +1945,7 @@ const T={
   "work.filterHint":"Swipe through categories →","work.details":"View project","work.count":"projects shown",
   "site.action.app":"Try it","site.action.guide":"Meet the app","site.action.page":"Visit site","site.newTab":"Opens in a new tab",
   "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
-  "sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
+  "sites.all":"All","sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
   "sites.empty":"There are no websites in this category yet.",
   "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
   "view.note.groups":"Groups follow their highest ranked repository.",
@@ -1976,7 +1976,7 @@ const T={
   "note":"All public repositories, including forks. Commit counts cover all contributors on the default branch, all time, including merges. Unavailable metrics are shown as —.","noteDemo":"GitHub statistics are unavailable. Missing metrics are shown as —."}};
 let LANG='ja';
 let FILTER='all';
-let SITE_FILTER='app';
+let SITE_FILTER='all';
 let VIEW='groups';
 let SORT='recommended';
 const SORT_KEYS=['recommended','popular','commits','updated'];
@@ -2185,12 +2185,14 @@ function render(){
 }
 function renderSites(){
   const sites=websiteEntries();
-  if(!sites.some(({p})=>p.siteKind==='app'))SITE_FILTER='other';
-  $('siteTabs').innerHTML=['app','other'].map(key=>{
-    const count=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===key).length;
+  const counts={all:sites.length,app:sites.filter(({p})=>p.siteKind==='app').length};
+  counts.other=counts.all-counts.app;
+  if(!counts[SITE_FILTER])SITE_FILTER='all';
+  $('siteTabs').innerHTML=['all','app','other'].map(key=>{
+    const count=counts[key];
     return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
   }).join('');
-  const visible=sites.filter(({p})=>(p.siteKind==='app'?'app':'other')===SITE_FILTER);
+  const visible=sites.filter(({p})=>SITE_FILTER==='all'||(p.siteKind==='app'?'app':'other')===SITE_FILTER);
   $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
     <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
       aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
