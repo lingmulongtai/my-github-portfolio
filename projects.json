@@ -389,16 +389,18 @@
         "en": "Fork"
       },
       "summary": {
-        "ja": "複数AIサービスの利用枠をまとめて確認するAndroidアプリ",
-        "en": "An Android app for monitoring usage quotas across AI services"
+        "ja": "AIの利用枠・履歴・PC利用状況をまとめるAndroidダッシュボード",
+        "en": "An Android dashboard for AI quotas, history and shared PC usage"
       },
       "desc": {
-        "ja": "CodexBar Android版のフォークを拡張。プロバイダー別の残量・リセット時刻・履歴、ホーム画面ウィジェット、継続通知をまとめています。",
-        "en": "An extended fork of CodexBar for Android. Tracks provider quotas, reset times, and usage history, with home-screen widgets and persistent notifications."
+        "ja": "CodexBar Android版を拡張したフォーク。Material 3 Expressive・Liquid Glass・Instrumentの3デザインで、利用枠・リセット時刻・履歴を表示します。スマホ・タブレット、ウィジェット・通知、Windowsからの暗号化共有とPC推定コストに対応します。",
+        "en": "An extended CodexBar Android fork with Material 3 Expressive, Liquid Glass and Instrument designs. Shows quotas, reset times and history across phones, tablets, widgets and notifications, with encrypted Windows sharing and estimated PC costs."
       },
       "stack": [
         "Kotlin",
-        "Android",
+        "Jetpack Compose",
+        "WorkManager",
+        "Glance",
         "DataStore",
         "Android Keystore"
       ],
@@ -1240,8 +1242,8 @@
         "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
       },
       "desc": {
-        "ja": "Win-CodexBarを基に独立保守するフォーク。AIサービスの利用枠・リセット時刻・履歴・推定コストを確認し、LANやTailscale経由でCodexBar Androidへ暗号化して共有します。Windows版を独自配布しています。",
-        "en": "An independently maintained Win-CodexBar fork for AI quotas, reset times, history and estimated costs. Shares encrypted snapshots with CodexBar for Android over LAN or Tailscale, with its own Windows releases."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でCodexBar Androidへ暗号化共有します。Gemini Appsの専用ブラウザー接続とWindows版の独自配布に対応します。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with CodexBar for Android over LAN or Tailscale, with dedicated-browser Gemini Apps sign-in and its own Windows releases."
       },
       "stack": [
         "Rust",
