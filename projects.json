@@ -962,17 +962,18 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "写真ギャラリーとLightroomプリセットのポートフォリオ",
-        "en": "A photography portfolio with a gallery and Lightroom presets"
+        "ja": "写真ギャラリー・ジャーナル・Lightroomプリセットのポートフォリオ",
+        "en": "A photography portfolio with a gallery, journal and Lightroom presets"
       },
       "desc": {
-        "ja": "写真ギャラリー、プロフィール、プリセットのダウンロード、問い合わせ導線をまとめた静的サイトです。",
-        "en": "A static site bringing together a photography gallery, profile, Lightroom preset downloads, and contact links."
+        "ja": "ReactとViteで構成し、写真のカテゴリ表示・ライトボックス、ジャーナル、Lightroomプリセットのダウンロード、プロフィール・問い合わせ導線をまとめています。",
+        "en": "Built with React and Vite, combining category filters and a photo lightbox with a journal, downloadable Lightroom presets, a profile and contact links."
       },
       "stack": [
-        "HTML",
-        "CSS",
+        "React",
+        "Vite",
         "JavaScript",
+        "CSS",
         "Lightroom XMP"
       ],
       "links": {
