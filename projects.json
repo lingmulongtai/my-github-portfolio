@@ -408,6 +408,7 @@
       },
       "fork": true,
       "image": "assets/projects/codexbar-android.webp",
+      "group": "codexbar-mobile-connect",
       "siteKind": "guide"
     },
     {
@@ -1255,10 +1256,20 @@
       },
       "fork": true,
       "image": "assets/projects/win-codexbar-mobile-connect.webp",
+      "group": "codexbar-mobile-connect",
       "siteKind": "guide"
     }
   ],
   "groups": [
+    {
+      "id": "codexbar-mobile-connect",
+      "name": "CodexBar + Mobile Connect",
+      "projectUrl": "https://github.com/users/lingmulongtai/projects/3",
+      "summary": {
+        "ja": "AndroidとWindowsでAI使用量・履歴を確認。Android単体での取得と、LAN・TailscaleでのPC連携をまとめたプロジェクト。",
+        "en": "AI usage and history on Android and Windows: standalone Android monitoring and PC sharing over LAN or Tailscale, together."
+      }
+    },
     {
       "id": "okuyuki",
       "name": "Okuyuki",
