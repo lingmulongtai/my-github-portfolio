@@ -437,18 +437,20 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "写真・動画にEXIF情報付きフレームを合成",
-        "en": "Add customizable frames and EXIF captions to photos and videos"
+        "ja": "写真・動画・空間写真に、撮影情報付きフレームを合成",
+        "en": "Add frames and camera details to photos, videos and spatial photos"
       },
       "desc": {
-        "ja": "ブラウザ内でプレビュー・一括処理・画像や動画の出力を実行。撮影情報、余白、文字、色、SNS用比率を調整できます。",
-        "en": "Preview, batch-process, and export photos and videos in the browser. Customize camera information, margins, typography, colors, and social-media aspect ratios."
+        "ja": "HEIC/HEIFを含む写真・動画をブラウザ内で一括処理。撮影情報・余白・色・位置表示を調整し、空間写真の左右プレビューやSBS出力にも対応します。形式・コーデックの対応はブラウザに依存します。",
+        "en": "Batch-process photos, including HEIC/HEIF, and videos locally in the browser. Adjust camera details, margins, colors and location overlays, with stereo previews and side-by-side output for spatial photos. Format and codec support depends on the browser."
       },
       "stack": [
         "JavaScript",
         "HTML",
         "CSS",
         "Canvas",
+        "Web Workers",
+        "libheif (WASM)",
         "exifr",
         "JSZip"
       ],
