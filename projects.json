@@ -667,12 +667,12 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "秋学期の時間割・授業計画・教材をまとめる履修ダッシュボード",
-        "en": "A fall-semester dashboard for timetables, course plans, and materials"
+        "ja": "時間割・いまの授業・課題をまとめる秋学期ダッシュボード",
+        "en": "An autumn-term dashboard for timetables, current classes and assignments"
       },
       "desc": {
-        "ja": "2026年度秋学期の履修科目、週ごとの授業内容、成績評価、教材をまとめた静的サイトです。",
-        "en": "A static site collecting fall 2026 courses, weekly class plans, grading criteria, and study materials."
+        "ja": "2026年度秋学期の時間割・授業計画・評価・教材を集約。現在と次の授業、実日付の授業計画、試験・課題の予定を日本時間で表示し、日英切替や休講日・提出期限の確認に対応します。",
+        "en": "Brings together autumn 2026 timetables, lesson plans, grading and materials. Shows current and next classes, dated lessons, exams and assignments in Japan time, with Japanese/English views, class closures and submission deadlines."
       },
       "stack": [
         "HTML",
