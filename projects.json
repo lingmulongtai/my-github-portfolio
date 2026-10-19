@@ -142,11 +142,14 @@
         "en": "Fly an FPV drone over oceans, ships and islands in your browser"
       },
       "desc": {
-        "ja": "ブラウザだけで遊べるFPVドローン飛行ゲームです。海・船・島を探索し、Xboxコントローラー、USB FPV送信機、キーボード・マウスで操作できます。",
-        "en": "A browser-based FPV drone game for exploring oceans, ships and islands. Supports Xbox controllers, USB FPV transmitters, and keyboard and mouse controls."
+        "ja": "WebGL2対応ブラウザで、FFTの海・航行する船・実測地形の島を飛ぶFPVゲーム。ANGLE/ACRO、自由飛行・タイムトライアルを備え、キーボード・マウスやXbox・USB FPV送信機で操作します。スマートフォンでは接続コントローラーが必要です。",
+        "en": "A WebGL2 FPV game over FFT oceans, moving ships and islands based on measured terrain. Offers ANGLE/ACRO, free flight and time trials with keyboard, mouse, Xbox or USB FPV controllers. Phones require a connected controller."
       },
       "stack": [
-        "TypeScript"
+        "TypeScript",
+        "Three.js",
+        "WebGL2",
+        "Gamepad API"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/OceanFPV/blob/main/README.md",
@@ -201,24 +204,30 @@
       "filter": "web",
       "year": "2026",
       "tag": {
-        "ja": "育成研究ゲーム",
-        "en": "REARING RESEARCH GAME"
+        "ja": "育成ゲーム・アルファ",
+        "en": "LIFE SIMULATION · ALPHA"
       },
       "status": {
         "ja": "公開",
         "en": "Public"
       },
       "summary": {
-        "ja": "ハエの神経接続モデルで、卵から毎週1匹を育てる研究ゲーム",
-        "en": "A weekly egg-to-fly rearing game using a fly neural-connectivity model"
+        "ja": "毎週1匹のショウジョウバエを育て、世代をつなぐ育成ゲーム",
+        "en": "Raise a fruit fly each week and carry its lineage into the next generation"
       },
       "desc": {
-        "ja": "ツユラボは、毎週1匹のハエを卵から育てる育成研究ゲームです。ハエの神経接続モデルを使った成長と学習の仕組みを探ります。",
-        "en": "Tsuyu Labo is a research game about raising one fly from an egg each week, exploring growth and learning through a fly neural-connectivity model."
+        "ja": "ごはん・しつけ・掃除を通じて卵から成虫へ育てるアルファ版。コロニー・交配・パズルと、育成記録を参照するAIの相棒を備えます。神経の配線をもとにしたモデルを使用し、Web版とAndroidアルファを公開しています。",
+        "en": "An alpha game about raising flies from egg to adult through feeding, training and cleaning. Includes colonies, breeding, puzzles and an AI companion grounded in care records. Uses a model based on neural wiring, with web and Android alpha versions."
       },
       "stack": [
+        "TypeScript",
+        "Next.js",
+        "React",
         "Python",
-        "TypeScript"
+        "FastAPI",
+        "PyTorch",
+        "PostgreSQL",
+        "Redis"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/tsuyulabo/blob/main/README.md",
@@ -389,16 +398,18 @@
         "en": "Fork"
       },
       "summary": {
-        "ja": "複数AIサービスの利用枠をまとめて確認するAndroidアプリ",
-        "en": "An Android app for monitoring usage quotas across AI services"
+        "ja": "AIの利用枠・履歴・PC利用状況をまとめるAndroidダッシュボード",
+        "en": "An Android dashboard for AI quotas, history and shared PC usage"
       },
       "desc": {
-        "ja": "CodexBar Android版のフォークを拡張。プロバイダー別の残量・リセット時刻・履歴、ホーム画面ウィジェット、継続通知をまとめています。",
-        "en": "An extended fork of CodexBar for Android. Tracks provider quotas, reset times, and usage history, with home-screen widgets and persistent notifications."
+        "ja": "CodexBar Android版を拡張したフォーク。Material 3 Expressive・Liquid Glass・Instrumentの3デザインで、利用枠・リセット時刻・履歴を表示します。スマホ・タブレット、ウィジェット・通知、Windowsからの暗号化共有とPC推定コストに対応します。",
+        "en": "An extended CodexBar Android fork with Material 3 Expressive, Liquid Glass and Instrument designs. Shows quotas, reset times and history across phones, tablets, widgets and notifications, with encrypted Windows sharing and estimated PC costs."
       },
       "stack": [
         "Kotlin",
-        "Android",
+        "Jetpack Compose",
+        "WorkManager",
+        "Glance",
         "DataStore",
         "Android Keystore"
       ],
@@ -426,18 +437,20 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "写真・動画にEXIF情報付きフレームを合成",
-        "en": "Add customizable frames and EXIF captions to photos and videos"
+        "ja": "写真・動画・空間写真に、撮影情報付きフレームを合成",
+        "en": "Add frames and camera details to photos, videos and spatial photos"
       },
       "desc": {
-        "ja": "ブラウザ内でプレビュー・一括処理・画像や動画の出力を実行。撮影情報、余白、文字、色、SNS用比率を調整できます。",
-        "en": "Preview, batch-process, and export photos and videos in the browser. Customize camera information, margins, typography, colors, and social-media aspect ratios."
+        "ja": "HEIC/HEIFを含む写真・動画をブラウザ内で一括処理。撮影情報・余白・色・位置表示を調整し、空間写真の左右プレビューやSBS出力にも対応します。形式・コーデックの対応はブラウザに依存します。",
+        "en": "Batch-process photos, including HEIC/HEIF, and videos locally in the browser. Adjust camera details, margins, colors and location overlays, with stereo previews and side-by-side output for spatial photos. Format and codec support depends on the browser."
       },
       "stack": [
         "JavaScript",
         "HTML",
         "CSS",
         "Canvas",
+        "Web Workers",
+        "libheif (WASM)",
         "exifr",
         "JSZip"
       ],
@@ -496,8 +509,8 @@
       "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "デスクトップアプリ",
-        "en": "DESKTOP APP"
+        "ja": "Windowsアプリ・MVP",
+        "en": "WINDOWS MVP"
       },
       "status": {
         "ja": "公開",
@@ -508,8 +521,8 @@
         "en": "A Windows tray app for monitoring AI service usage"
       },
       "desc": {
-        "ja": "トレイパネル、デスクトップウィジェット、プロバイダー別の利用率・リセット時刻・履歴を表示。手動入力やCLI・APIを使う取得経路を備えます。",
-        "en": "Shows provider usage, reset times, and history in a tray panel and desktop widgets. Supports manual input and data collection through CLI tools and APIs."
+        "ja": "AI利用状況をトレイとデスクトップウィジェットに表示するWindows向けMVP。手動入力を中心に、CodexのCLI連携と組織向けCopilotメトリクス取得を備えます。対応範囲が限られるプロバイダーは未対応状態を明示します。",
+        "en": "A Windows MVP with tray and desktop-widget views for AI usage. Centers on manual entry, with best-effort Codex CLI integration and organizational Copilot metrics; unsupported provider paths are shown explicitly."
       },
       "stack": [
         "C#",
@@ -654,12 +667,12 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "秋学期の時間割・授業計画・教材をまとめる履修ダッシュボード",
-        "en": "A fall-semester dashboard for timetables, course plans, and materials"
+        "ja": "時間割・いまの授業・課題をまとめる秋学期ダッシュボード",
+        "en": "An autumn-term dashboard for timetables, current classes and assignments"
       },
       "desc": {
-        "ja": "2026年度秋学期の履修科目、週ごとの授業内容、成績評価、教材をまとめた静的サイトです。",
-        "en": "A static site collecting fall 2026 courses, weekly class plans, grading criteria, and study materials."
+        "ja": "2026年度秋学期の時間割・授業計画・評価・教材を集約。現在と次の授業、実日付の授業計画、試験・課題の予定を日本時間で表示し、日英切替や休講日・提出期限の確認に対応します。",
+        "en": "Brings together autumn 2026 timetables, lesson plans, grading and materials. Shows current and next classes, dated lessons, exams and assignments in Japan time, with Japanese/English views, class closures and submission deadlines."
       },
       "stack": [
         "HTML",
@@ -831,30 +844,30 @@
       "filter": "mobile",
       "year": "2026",
       "tag": {
-        "ja": "モバイルアプリ",
-        "en": "MOBILE APP"
+        "ja": "記録用プレビュー",
+        "en": "RECORDER PREVIEW"
       },
       "status": {
         "ja": "公開",
         "en": "Public"
       },
       "summary": {
-        "ja": "端末の動きに連動するモーションキューアプリ",
-        "en": "A motion-cue app with dots that respond to device movement"
+        "ja": "モーションキューを目指すAndroid開発とセンサー記録プレビュー",
+        "en": "A native Android motion-cue project with a sensor-recording preview"
       },
       "desc": {
-        "ja": "画面端のドット表示、オン・オフ・自動モード、設定画面、通知からの切り替えを備えるモバイルアプリの実装です。",
-        "en": "A mobile implementation with motion-responsive dots along the screen edges, on/off/automatic modes, settings, and notification controls."
+        "ja": "Kotlinネイティブ版へ移行中。端末のセンサー記録をZIPで保存・共有するアルファ版を配布し、開発用JVMリプレイを実装しています。モーションキュー・車両判定・手ぶれ除去は未実装で、実走行ログを集める段階です。",
+        "en": "A native Kotlin rewrite with an alpha for recording sensor data and saving or sharing ZIP files, plus developer JVM replay tools. Motion cues, vehicle detection and hand-motion filtering are not included; real driving recordings remain the next validation step."
       },
       "stack": [
-        "TypeScript",
-        "React Native",
-        "Expo",
-        "Expo Sensors",
-        "Reanimated"
+        "Kotlin",
+        "Android",
+        "Jetpack Compose",
+        "Coroutines",
+        "Android Sensors"
       ],
       "links": {
-        "docs": "",
+        "docs": "https://github.com/lingmulongtai/Cadence/blob/main/README.md",
         "site": ""
       },
       "fork": false,
@@ -949,17 +962,18 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "写真ギャラリーとLightroomプリセットのポートフォリオ",
-        "en": "A photography portfolio with a gallery and Lightroom presets"
+        "ja": "写真ギャラリー・ジャーナル・Lightroomプリセットのポートフォリオ",
+        "en": "A photography portfolio with a gallery, journal and Lightroom presets"
       },
       "desc": {
-        "ja": "写真ギャラリー、プロフィール、プリセットのダウンロード、問い合わせ導線をまとめた静的サイトです。",
-        "en": "A static site bringing together a photography gallery, profile, Lightroom preset downloads, and contact links."
+        "ja": "ReactとViteで構成し、写真のカテゴリ表示・ライトボックス、ジャーナル、Lightroomプリセットのダウンロード、プロフィール・問い合わせ導線をまとめています。",
+        "en": "Built with React and Vite, combining category filters and a photo lightbox with a journal, downloadable Lightroom presets, a profile and contact links."
       },
       "stack": [
-        "HTML",
-        "CSS",
+        "React",
+        "Vite",
         "JavaScript",
+        "CSS",
         "Lightroom XMP"
       ],
       "links": {
@@ -1201,16 +1215,18 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "制作分野と技術への関心を紹介するGitHubプロフィール",
-        "en": "A GitHub profile introducing projects, technical interests, and tools"
+        "ja": "実データの活動グラフと制作分野を紹介するGitHubプロフィール",
+        "en": "A GitHub profile with real activity graphs and project highlights"
       },
       "desc": {
-        "ja": "AIアプリ、Webツール、組み込みシステム、クリエイティブ技術への取り組みを紹介するプロフィールREADMEです。",
-        "en": "A profile README introducing work on AI applications, web tools, embedded systems, and creative technology."
+        "ja": "GitHubの実データを使う年間活動グラフ・開発統計と、ASCII風の肖像SVGを掲載するプロフィールREADMEです。活動グラフと統計はGitHub Actionsで定期更新し、制作分野や主要プロジェクトへの入口もまとめています。",
+        "en": "A profile README with contribution graphs and developer statistics drawn from real GitHub data, alongside an ASCII-style SVG portrait. GitHub Actions refreshes the activity graphs and stats regularly, with technical interests and project links."
       },
       "stack": [
+        "Python",
+        "SVG",
         "Markdown",
-        "HTML"
+        "GitHub Actions"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/lingmulongtai/blob/main/README.md",
@@ -1240,8 +1256,8 @@
         "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
       },
       "desc": {
-        "ja": "Win-CodexBarを基に独立保守するフォーク。AIサービスの利用枠・リセット時刻・履歴・推定コストを確認し、LANやTailscale経由でCodexBar Androidへ暗号化して共有します。Windows版を独自配布しています。",
-        "en": "An independently maintained Win-CodexBar fork for AI quotas, reset times, history and estimated costs. Shares encrypted snapshots with CodexBar for Android over LAN or Tailscale, with its own Windows releases."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でCodexBar Androidへ暗号化共有します。Gemini Appsの専用ブラウザー接続とWindows版の独自配布に対応します。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with CodexBar for Android over LAN or Tailscale, with dedicated-browser Gemini Apps sign-in and its own Windows releases."
       },
       "stack": [
         "Rust",
