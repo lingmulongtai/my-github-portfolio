@@ -1215,16 +1215,18 @@
         "en": "Public"
       },
       "summary": {
-        "ja": "制作分野と技術への関心を紹介するGitHubプロフィール",
-        "en": "A GitHub profile introducing projects, technical interests, and tools"
+        "ja": "実データの活動グラフと制作分野を紹介するGitHubプロフィール",
+        "en": "A GitHub profile with real activity graphs and project highlights"
       },
       "desc": {
-        "ja": "AIアプリ、Webツール、組み込みシステム、クリエイティブ技術への取り組みを紹介するプロフィールREADMEです。",
-        "en": "A profile README introducing work on AI applications, web tools, embedded systems, and creative technology."
+        "ja": "GitHubの実データを使う年間活動グラフ・開発統計と、ASCII風の肖像SVGを掲載するプロフィールREADMEです。活動グラフと統計はGitHub Actionsで定期更新し、制作分野や主要プロジェクトへの入口もまとめています。",
+        "en": "A profile README with contribution graphs and developer statistics drawn from real GitHub data, alongside an ASCII-style SVG portrait. GitHub Actions refreshes the activity graphs and stats regularly, with technical interests and project links."
       },
       "stack": [
+        "Python",
+        "SVG",
         "Markdown",
-        "HTML"
+        "GitHub Actions"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/lingmulongtai/blob/main/README.md",
