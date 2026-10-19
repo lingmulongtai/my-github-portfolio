@@ -1050,6 +1050,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       },
       "fork": true,
       "image": "assets/projects/codexbar-android.webp",
+      "group": "codexbar-mobile-connect",
       "siteKind": "guide"
     },
     {
@@ -1902,10 +1903,20 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
       },
       "fork": true,
       "image": "assets/projects/win-codexbar-mobile-connect.webp",
+      "group": "codexbar-mobile-connect",
       "siteKind": "guide"
     }
   ],
   "groups": [
+    {
+      "id": "codexbar-mobile-connect",
+      "name": "CodexBar + Mobile Connect",
+      "projectUrl": "https://github.com/users/lingmulongtai/projects/3",
+      "summary": {
+        "ja": "AndroidとWindowsでAI使用量・履歴を確認。Android単体での取得と、LAN・TailscaleでのPC連携をまとめたプロジェクト。",
+        "en": "AI usage and history on Android and Windows: standalone Android monitoring and PC sharing over LAN or Tailscale, together."
+      }
+    },
     {
       "id": "okuyuki",
       "name": "Okuyuki",
@@ -2229,12 +2240,14 @@ function renderTiles(){
   const tile=({p,i})=>tileMarkup(p,i,ranks.get(i));
   $('bento').innerHTML=projectBuckets(ordered).map(({group,entries})=>{
     if(!group)return entries.map(tile).join('');
-    const site=entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
+    const project=webUrl(group.projectUrl);
+    const site=project||entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
+    const label=project?'GitHub Project':t('site.action.guide');
     return `<section class="project-group" aria-labelledby="group-${esc(group.id)}">
       <div class="group-heading"><div><h3 id="group-${esc(group.id)}">${esc(group.name)}<small>${entries.length} ${t('group.repositories')}</small></h3>
         <p>${esc(tx(group.summary))}</p></div>
         ${site?`<a class="group-site" href="${esc(site)}" target="_blank" rel="noopener"
-          aria-label="${esc(group.name+' — '+t('site.action.guide')+' ('+t('site.newTab')+')')}">${t('site.action.guide')} ↗</a>`:''}</div>
+          aria-label="${esc(group.name+' — '+label+' ('+t('site.newTab')+')')}">${label} ↗</a>`:''}</div>
       <div class="bento group-grid">${entries.map(tile).join('')}</div></section>`;
   }).join('');
   applyFilter();

@@ -259,6 +259,23 @@ test("product groups keep every repository identity and follow sorting in both v
   assert.deepEqual(ui.data.projects.map(p=>p.slug),projects.map(p=>p.slug));
 });
 
+test("product groups open a configured project and fall back safely to the member website", async () => {
+  const project = { ...config.projects[0], slug: 'grouped', group: 'okuyuki' };
+  const ui = await boot({ owner: config.profile.github, projects: [project], stats: {
+    grouped: { site: 'https://guide.example/' },
+  } });
+  const url = 'https://github.com/users/lingmulongtai/projects/3';
+  new Script(`DATA.groups.find(g=>g.id==='okuyuki').projectUrl=${JSON.stringify(url)}; renderTiles()`)
+    .runInContext(ui.context);
+  assert.match(ui.nodes.get('bento').innerHTML, /class="group-site" href="https:\/\/github\.com\/users\/lingmulongtai\/projects\/3" target="_blank" rel="noopener"/);
+  assert.match(ui.nodes.get('bento').innerHTML, />GitHub Project ↗<\/a>/);
+  new Script("LANG='ja'; render(); DATA.groups.find(g=>g.id==='okuyuki').projectUrl='javascript:alert(1)'; renderTiles()")
+    .runInContext(ui.context);
+  assert.match(ui.nodes.get('bento').innerHTML, /class="group-site" href="https:\/\/guide\.example\/"/);
+  assert.match(ui.nodes.get('bento').innerHTML, />紹介を見る ↗<\/a>/);
+  assert.ok(!ui.nodes.get('bento').innerHTML.includes('javascript:'));
+});
+
 test("product view restores valid preferences and hides groups with no category matches", async () => {
   const ui = await boot(null,null,{storage:{getItem:key=>key==='project-view'?'repos':'en'}});
   assert.match(ui.nodes.get('projectViewControls').innerHTML,/data-view="repos" aria-pressed="true"/);
