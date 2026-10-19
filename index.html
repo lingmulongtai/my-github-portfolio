@@ -773,11 +773,14 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
         "en": "Fly an FPV drone over oceans, ships and islands in your browser"
       },
       "desc": {
-        "ja": "ブラウザだけで遊べるFPVドローン飛行ゲームです。海・船・島を探索し、Xboxコントローラー、USB FPV送信機、キーボード・マウスで操作できます。",
-        "en": "A browser-based FPV drone game for exploring oceans, ships and islands. Supports Xbox controllers, USB FPV transmitters, and keyboard and mouse controls."
+        "ja": "WebGL2対応ブラウザで、FFTの海・航行する船・実測地形の島を飛ぶFPVゲーム。ANGLE/ACRO、自由飛行・タイムトライアルを備え、キーボード・マウスやXbox・USB FPV送信機で操作します。スマートフォンでは接続コントローラーが必要です。",
+        "en": "A WebGL2 FPV game over FFT oceans, moving ships and islands based on measured terrain. Offers ANGLE/ACRO, free flight and time trials with keyboard, mouse, Xbox or USB FPV controllers. Phones require a connected controller."
       },
       "stack": [
-        "TypeScript"
+        "TypeScript",
+        "Three.js",
+        "WebGL2",
+        "Gamepad API"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/OceanFPV/blob/main/README.md",
