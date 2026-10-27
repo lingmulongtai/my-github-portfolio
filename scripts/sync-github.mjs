@@ -91,6 +91,7 @@ export function projectFromRepository(repo, override = {}) {
     desc: override.desc || { ja: summary || "詳細はリポジトリをご覧ください。", en: summary || "See the repository for details." },
     stack: override.stack || (repo.language ? [repo.language] : []),
     image: override.image || "",
+    sitePreview: override.sitePreview || null,
     group: override.group || "",
     siteKind: ["app", "guide", "page"].includes(override.siteKind) ? override.siteKind : "page",
     showcase: override.showcase !== false,
