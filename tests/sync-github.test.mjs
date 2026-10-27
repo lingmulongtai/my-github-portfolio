@@ -1,12 +1,46 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { collectPortfolio, commitCountFromPage, listPublicRepositories, projectFromRepository, websiteUrl } from "../scripts/sync-github.mjs";
+import { collectPortfolio, commitCountFromPage, get, listPublicRepositories, PENDING_ACTIVITY, projectFromRepository, websiteUrl } from "../scripts/sync-github.mjs";
 
 const repo = (name, fields = {}) => ({
   name, full_name: `owner/${name}`, owner: { login: "owner" }, private: false,
   created_at: "2026-01-01T00:00:00Z", pushed_at: "2026-09-19T00:00:00Z",
   html_url: `https://github.com/owner/${name}`, language: "JavaScript",
   stargazers_count: 0, forks_count: 0, ...fields,
+});
+
+test("GitHub 202 activity is deferred while 204 remains unavailable", async () => {
+  const originalFetch = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => ({ status: 202 });
+    assert.equal(await get('/repos/owner/pending/stats/commit_activity', { deferPending: true }), PENDING_ACTIVITY);
+    globalThis.fetch = async () => ({ status: 204 });
+    assert.equal(await get('/repos/owner/empty/stats/commit_activity', { deferPending: true }), null);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
+test("pending annual activity is retried after collection, without inventing unavailable data", async () => {
+  const attempts = new Map(), delays = [], order = [];
+  const snapshot = await collectPortfolio('owner', [], async (path, options) => {
+    if (path.startsWith('/users/')) return [repo('recover'), repo('pending'), repo('empty')];
+    if (!path.endsWith('/stats/commit_activity')) return path.endsWith('/languages') ? {} : 7;
+    assert.equal(options.deferPending, true);
+    const name = path.split('/')[3];
+    const attempt = (attempts.get(name) || 0) + 1;
+    attempts.set(name, attempt); order.push(`${name}:${attempt}`);
+    if (name === 'empty') return null;
+    if (name === 'recover' && attempt === 2) return [{ week: 1, days: [1,0,0,0,0,0,0], total: 1 }];
+    return PENDING_ACTIVITY;
+  }, async ms => { delays.push(ms); });
+  assert.deepEqual(delays, [10000, 20000, 30000, 40000]);
+  assert.ok(order.indexOf('empty:1') < order.indexOf('recover:2'));
+  assert.equal(attempts.get('empty'), 1);
+  assert.equal(attempts.get('recover'), 2);
+  assert.equal(attempts.get('pending'), 5);
+  assert.equal(snapshot.stats.recover.weeks[0].total, 1);
+  assert.deepEqual(snapshot.stats.pending.weeks, []);
+  assert.deepEqual(snapshot.stats.empty.weeks, []);
+  assert.equal(snapshot.stats.pending.commits, 7);
 });
 
 test("discovers every page, including forks and the profile repository", async () => {

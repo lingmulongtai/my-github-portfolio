@@ -9,6 +9,8 @@ const headers = {
   "User-Agent": "portfolio-sync",
   ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
 };
+export const PENDING_ACTIVITY = Symbol("pending activity");
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export function commitCountFromPage(page, link = "") {
   if (!Array.isArray(page)) throw new Error("Invalid commit list");
@@ -24,14 +26,15 @@ export function commitCountFromPage(page, link = "") {
   return count;
 }
 
-async function get(path, { countCommits = false } = {}) {
+export async function get(path, { countCommits = false, deferPending = false } = {}) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const response = await fetch("https://api.github.com" + path, {
       headers,
       signal: AbortSignal.timeout(15000),
     });
     if (response.status === 202) {
-      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
+      if (deferPending) return PENDING_ACTIVITY;
+      if (attempt < 2) await wait(2000 * (attempt + 1));
       continue;
     }
     if (response.status === 409 && countCommits) {
@@ -99,7 +102,7 @@ export function projectFromRepository(repo, override = {}) {
   };
 }
 
-export async function collectPortfolio(login, overrides = [], request = get) {
+export async function collectPortfolio(login, overrides = [], request = get, delay = wait) {
   const repos = await listPublicRepositories(login, request);
   const byRepo = new Map(overrides.map((project, index) => [project.repo.toLowerCase(), { project, index }]));
   repos.sort((a, b) => (byRepo.get(a.full_name.toLowerCase())?.index ?? Infinity)
@@ -108,23 +111,25 @@ export async function collectPortfolio(login, overrides = [], request = get) {
     || a.name.localeCompare(b.name));
   const projects = repos.map(repo => projectFromRepository(repo, byRepo.get(repo.full_name.toLowerCase())?.project));
   const stats = {};
+  let pending = [];
+  const optional = async (repo, path, options) => {
+    try { return await request(path, options); }
+    catch (error) {
+      console.warn(`Metric unavailable for ${repo.full_name}: ${error.message}`);
+      return null;
+    }
+  };
 
   // Statistics may be pending; repository discovery must still include every project.
   for (let offset = 0; offset < repos.length; offset += 4) {
     const entries = await Promise.all(repos.slice(offset, offset + 4).map(async (repo, index) => {
       const project = projects[offset + index];
-      const optional = async (path, options) => {
-        try { return await request(path, options); }
-        catch (error) {
-          console.warn(`Metric unavailable for ${repo.full_name}: ${error.message}`);
-          return null;
-        }
-      };
       const [activity, commits, languages] = await Promise.all([
-        optional(`/repos/${repo.full_name}/stats/commit_activity`),
-        optional(`/repos/${repo.full_name}/commits?per_page=1`, { countCommits: true }),
-        optional(`/repos/${repo.full_name}/languages`),
+        optional(repo, `/repos/${repo.full_name}/stats/commit_activity`, { deferPending: true }),
+        optional(repo, `/repos/${repo.full_name}/commits?per_page=1`, { countCommits: true }),
+        optional(repo, `/repos/${repo.full_name}/languages`),
       ]);
+      if (activity === PENDING_ACTIVITY) pending.push({ repo, slug: project.slug });
       const weeks = Array.isArray(activity) ? activity.map(({ week, days, total }) => ({ week, days, total })) : [];
       const languageMap = languages && !Array.isArray(languages) && typeof languages === "object" ? languages : null;
       const primaryLanguage = repo.language || Object.entries(languageMap || {})
@@ -152,6 +157,24 @@ export async function collectPortfolio(login, overrides = [], request = get) {
       console.log(`ok ${slug} — ${value.weeks.length} weeks`);
     }
   }
+  // A push invalidates GitHub's statistics cache; retry only its 202 responses
+  // after the other repositories have had time to populate the cache.
+  for (const pause of [10000, 20000, 30000, 40000]) {
+    if (!pending.length) break;
+    console.log(`Annual activity pending for ${pending.length} repositories; retrying in ${pause / 1000}s`);
+    await delay(pause);
+    const results = await Promise.all(pending.map(async item => ({ ...item, activity:
+      await optional(item.repo, `/repos/${item.repo.full_name}/stats/commit_activity`, { deferPending: true }) })));
+    pending = [];
+    for (const { repo, slug, activity } of results) {
+      if (activity === PENDING_ACTIVITY) pending.push({ repo, slug });
+      else if (Array.isArray(activity)) {
+        stats[slug].weeks = activity.map(({ week, days, total }) => ({ week, days, total }));
+        console.log(`Recovered annual activity for ${repo.full_name}: ${stats[slug].weeks.length} weeks`);
+      }
+    }
+  }
+  for (const { repo } of pending) console.warn(`Annual activity still pending for ${repo.full_name}`);
   return { owner: login, syncedAt: new Date().toISOString(), projects, stats };
 }
 
