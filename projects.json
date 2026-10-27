@@ -106,13 +106,14 @@
         "en": "Activities, schedules and participation information for the KUAS Photography Club"
       },
       "desc": {
-        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
-        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
+        "ja": "活動・予定・見学案内を日英で公開する写真部サイト。Three.jsの3D風景と写真学習コンテンツに加え、Googleカレンダー連携と運営向けの撮影会・写真投稿を備えます。",
+        "en": "A bilingual club website for activities, schedules and visits, with Three.js scenery, photography learning content, Google Calendar integration and organizer tools for photo-walk and photo posts."
       },
       "stack": [
         "TypeScript",
         "Astro",
-        "Three.js"
+        "Three.js",
+        "Vercel Functions"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
@@ -179,8 +180,8 @@
         "en": "A tray app for Launchkey lighting, piano playback, and MIDI practice"
       },
       "desc": {
-        "ja": "Launchkey MK4 61向けの非公式ツール。LED編集、内蔵ピアノ、MIDI練習、パッドドラム、ルーパーを備え、実機検証前のプレビューとして公開しています。",
-        "en": "An unofficial tool for the Launchkey MK4 61, with LED editing, a built-in piano, MIDI practice, pad drums, and a looper. Published as a preview pending hardware verification."
+        "ja": "Launchkey MK4 61向けの非公式ツール。LED編集、内蔵ピアノ、MIDI練習、パッドドラム、ルーパーを備え、実機での受け入れ確認が未完了のプレビューとして公開しています。",
+        "en": "An unofficial tool for the Launchkey MK4 61, with LED editing, a built-in piano, MIDI practice, pad drums and a looper. Published as a preview with hardware acceptance still incomplete."
       },
       "stack": [
         "Rust",
@@ -1245,20 +1246,20 @@
       "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "Windows・Android連携",
-        "en": "WINDOWS / ANDROID COMPANION"
+        "ja": "Windows・端末間連携",
+        "en": "WINDOWS / DEVICE SHARING"
       },
       "status": {
         "ja": "フォーク",
         "en": "Fork"
       },
       "summary": {
-        "ja": "WindowsのAI利用枠・履歴をAndroidへ暗号化共有",
-        "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
+        "ja": "WindowsのAI利用状況を、Android・Windows・Macへ暗号化共有",
+        "en": "Monitor AI usage on Windows and share encrypted snapshots with Android, Windows and Mac"
       },
       "desc": {
-        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でCodexBar Androidへ暗号化共有します。Gemini Appsの専用ブラウザー接続とWindows版の独自配布に対応します。",
-        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with CodexBar for Android over LAN or Tailscale, with dedicated-browser Gemini Apps sign-in and its own Windows releases."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でAndroidや別のWindows・Macと暗号化共有します。保存したPC接続からの受信、Gemini Appsの専用ブラウザー接続、独自のWindows配布に対応します。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with Android and other Windows or Mac computers over LAN or Tailscale, receives saved PC connections, and includes dedicated-browser Gemini Apps sign-in and its own Windows releases."
       },
       "stack": [
         "Rust",
@@ -1274,6 +1275,83 @@
       "image": "assets/projects/win-codexbar-mobile-connect.webp",
       "group": "codexbar-mobile-connect",
       "siteKind": "guide"
+    },
+    {
+      "slug": "codexbar-mac-mobile-connect",
+      "repo": "lingmulongtai/CodexBar-Mac-Mobile-Connect",
+      "name": "CodexBar + Mobile Connect · Mac",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "macOS・端末間連携",
+        "en": "MACOS / DEVICE SHARING"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "MacのAI利用状況を、Windows・Mac・Androidと暗号化共有",
+        "en": "AI usage on Mac, shared securely with Windows, Mac and Android"
+      },
+      "desc": {
+        "ja": "Windows版と共通のソース・暗号化プロトコルを使うmacOS 14以降向けアプリの配布・設定リポジトリ。Apple Silicon・Intel用DMGを公開し、LAN・Tailscale経由で使用量・リセット時刻・履歴を共有します。共通ソースはWin-CodexBar由来。配布はad-hoc署名で、ユーザーのMac実機での受け入れ確認は未実施です。",
+        "en": "Distribution and configuration for macOS 14+, sharing the Windows application source and encrypted protocol derived from Win-CodexBar. Offers Apple Silicon and Intel DMGs and shares usage, resets and history over LAN or Tailscale. Builds are ad-hoc signed; acceptance on a user's physical Mac remains unverified."
+      },
+      "stack": [
+        "Shell",
+        "Rust",
+        "Tauri 2",
+        "React",
+        "TypeScript",
+        "macOS Keychain"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/CodexBar-Mac-Mobile-Connect/blob/main/README.md",
+        "site": "https://github.com/lingmulongtai/CodexBar-Mac-Mobile-Connect#readme"
+      },
+      "fork": false,
+      "image": "assets/projects/codexbar-mac-mobile-connect.webp",
+      "group": "codexbar-mobile-connect",
+      "siteKind": "guide"
+    },
+    {
+      "slug": "sakura-avenue",
+      "repo": "lingmulongtai/sakura-avenue",
+      "name": "SAKURA AVENUE",
+      "size": "std",
+      "filter": "web",
+      "year": "2026",
+      "tag": {
+        "ja": "ロボコン・非公式ルール解説",
+        "en": "UNOFFICIAL ROBOTICS GUIDE"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "ロボコンのルールを、アニメーション・図解・シミュレーターで学ぶ",
+        "en": "Explore robotics competition rules through animation, diagrams and a simulator"
+      },
+      "desc": {
+        "ja": "関西春ロボコン2027「SAKURA AVENUE」のルールを日英で学べる非公式解説サイト。アニメーション・図解・シミュレーターと、提供されたルールブック原本を掲載します。HTML・CSS・JavaScript・SVGだけで動作します。正式な判断は公式ルールブックを参照してください。",
+        "en": "An unofficial Japanese/English guide to the SAKURA AVENUE rules for Kansai Spring Robocon 2027, with animations, diagrams, a simulator and the supplied rulebook. Runs on HTML, CSS, JavaScript and SVG. Refer to the official rulebook for authoritative rulings."
+      },
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "SVG"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/sakura-avenue/blob/main/README.md",
+        "site": "https://lingmulongtai.github.io/sakura-avenue/"
+      },
+      "fork": false,
+      "image": "assets/projects/sakura-avenue.webp",
+      "siteKind": "app"
     }
   ],
   "groups": [
@@ -1282,8 +1360,8 @@
       "name": "CodexBar + Mobile Connect",
       "projectUrl": "https://github.com/users/lingmulongtai/projects/3",
       "summary": {
-        "ja": "AndroidとWindowsでAI使用量・履歴を確認。Android単体での取得と、LAN・TailscaleでのPC連携をまとめたプロジェクト。",
-        "en": "AI usage and history on Android and Windows: standalone Android monitoring and PC sharing over LAN or Tailscale, together."
+        "ja": "Android・Windows・MacでAI使用量と履歴を確認。単体での取得と、LAN・Tailscaleでの暗号化共有をまとめたプロジェクト。",
+        "en": "AI usage and history on Android, Windows and Mac, with standalone monitoring and encrypted sharing over LAN or Tailscale."
       }
     },
     {

@@ -251,9 +251,13 @@ test("product groups keep every repository identity and follow sorting in both v
   assert.deepEqual(order(), ['family-new','family-old','middle','first']);
   assert.equal((ui.nodes.get('bento').innerHTML.match(/class="project-group"/g)||[]).length, 1);
   assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile-open"/g)||[]).length, 4);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="group-art"/g)||[]).length, 1);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile group-member"/g)||[]).length, 2);
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile-art"/g)||[]).length, 2);
   new Script("setView('repos')").runInContext(ui.context);
   assert.deepEqual(order(), ['family-new','middle','family-old','first']);
   assert.ok(!ui.nodes.get('bento').innerHTML.includes('class="project-group"'));
+  assert.equal((ui.nodes.get('bento').innerHTML.match(/class="tile-art"/g)||[]).length, 4);
   new Script("LANG='ja'; render()").runInContext(ui.context);
   assert.match(ui.nodes.get('projectViewControls').innerHTML, /data-view="repos" aria-pressed="true"/);
   assert.deepEqual(ui.data.projects.map(p=>p.slug),projects.map(p=>p.slug));
