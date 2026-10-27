@@ -1275,6 +1275,46 @@
       "image": "assets/projects/win-codexbar-mobile-connect.webp",
       "group": "codexbar-mobile-connect",
       "siteKind": "guide"
+    },
+    {
+      "slug": "codexbar-mac-mobile-connect",
+      "repo": "lingmulongtai/CodexBar-Mac-Mobile-Connect",
+      "name": "CodexBar + Mobile Connect · Mac",
+      "size": "std",
+      "filter": "desktop",
+      "year": "2026",
+      "tag": {
+        "ja": "macOS・端末間連携",
+        "en": "MACOS / DEVICE SHARING"
+      },
+      "status": {
+        "ja": "公開",
+        "en": "Public"
+      },
+      "summary": {
+        "ja": "MacのAI利用状況を、Windows・Mac・Androidと暗号化共有",
+        "en": "AI usage on Mac, shared securely with Windows, Mac and Android"
+      },
+      "desc": {
+        "ja": "Windows版と共通のソース・暗号化プロトコルを使うmacOS 14以降向けアプリの配布・設定リポジトリ。Apple Silicon・Intel用DMGを公開し、LAN・Tailscale経由で使用量・リセット時刻・履歴を共有します。共通ソースはWin-CodexBar由来。配布はad-hoc署名で、ユーザーのMac実機での受け入れ確認は未実施です。",
+        "en": "Distribution and configuration for macOS 14+, sharing the Windows application source and encrypted protocol derived from Win-CodexBar. Offers Apple Silicon and Intel DMGs and shares usage, resets and history over LAN or Tailscale. Builds are ad-hoc signed; acceptance on a user's physical Mac remains unverified."
+      },
+      "stack": [
+        "Shell",
+        "Rust",
+        "Tauri 2",
+        "React",
+        "TypeScript",
+        "macOS Keychain"
+      ],
+      "links": {
+        "docs": "https://github.com/lingmulongtai/CodexBar-Mac-Mobile-Connect/blob/main/README.md",
+        "site": "https://github.com/lingmulongtai/CodexBar-Mac-Mobile-Connect#readme"
+      },
+      "fork": false,
+      "image": "assets/projects/codexbar-mac-mobile-connect.webp",
+      "group": "codexbar-mobile-connect",
+      "siteKind": "guide"
     }
   ],
   "groups": [
@@ -1283,8 +1323,8 @@
       "name": "CodexBar + Mobile Connect",
       "projectUrl": "https://github.com/users/lingmulongtai/projects/3",
       "summary": {
-        "ja": "AndroidとWindowsでAI使用量・履歴を確認。Android単体での取得と、LAN・TailscaleでのPC連携をまとめたプロジェクト。",
-        "en": "AI usage and history on Android and Windows: standalone Android monitoring and PC sharing over LAN or Tailscale, together."
+        "ja": "Android・Windows・MacでAI使用量と履歴を確認。単体での取得と、LAN・Tailscaleでの暗号化共有をまとめたプロジェクト。",
+        "en": "AI usage and history on Android, Windows and Mac, with standalone monitoring and encrypted sharing over LAN or Tailscale."
       }
     },
     {

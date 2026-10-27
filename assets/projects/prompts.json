@@ -167,6 +167,16 @@
       "slug": "win-codexbar-mobile-connect",
       "path": "assets/projects/win-codexbar-mobile-connect.webp",
       "subject": "An unbranded desktop monitor with a small usage gauge beside an upright smartphone with three unlabeled usage bars, connected by one loose teal curve with a small closed mustard padlock. Conceptual Windows and Android encrypted usage sharing, no text or logos."
+    },
+    {
+      "slug": "codexbar-mac-mobile-connect",
+      "path": "assets/projects/codexbar-mac-mobile-connect.webp",
+      "subject": "An unbranded open slim laptop with a simple usage-meter ring and small abstract history bars on its display, connected by a curved teal brush line through a tiny mustard closed padlock to a small upright smartphone with three usage-meter bars. Clearly a laptop, not the desktop monitor in the reference. Friendly metaphor for encrypted AI usage sharing between a Mac laptop, other computers and an Android phone. Preserve the restrained ink and paper aesthetic.",
+      "prompt": "Use case: illustration-story. Create ONE original landscape 3:2 conceptual illustration for a personal software portfolio project card. The provided portrait and desktop-phone illustration are STYLE REFERENCES ONLY; do not draw a person. Match expressive irregular charcoal-black ink outlines, dry-brush felt-tip shading, relaxed hand-drawn editorial character, clean white paper, only muted teal and warm mustard-yellow accents. Complete recognizable subject inside middle 75 percent of canvas with wide breathing room, bottom quarter mostly white. No text, letters, numerals, logos, watermarks, border, collage, split panels, neon, photorealism or 3D render. Subject: An unbranded open slim laptop with a simple usage-meter ring and small abstract history bars on its display, connected by a curved teal brush line through a tiny mustard closed padlock to a small upright smartphone with three usage-meter bars. Clearly a laptop, not the desktop monitor in the reference. Friendly metaphor for encrypted AI usage sharing between a Mac laptop, other computers and an Android phone. Preserve the restrained ink and paper aesthetic.",
+      "referenceImages": [
+        "assets/portrait.webp",
+        "assets/projects/win-codexbar-mobile-connect.webp"
+      ]
     }
   ]
 }
