@@ -177,6 +177,15 @@
         "assets/portrait.webp",
         "assets/projects/win-codexbar-mobile-connect.webp"
       ]
+    },
+    {
+      "slug": "sakura-avenue",
+      "path": "assets/projects/sakura-avenue.webp",
+      "subject": "A small unbranded two-wheeled student competition robot seen at a gentle three-quarter angle, beside a simple winding tabletop course with a few round game pieces and a small cherry blossom branch. The robot and course are a general conceptual metaphor for an unofficial robotics competition rules explainer and simulator, not an exact diagram of the rules. Keep all objects clearly legible, minimal, friendly and spacious. Mostly charcoal ink with muted teal course strokes, warm mustard accents and only a tiny pale blush on a couple of blossoms.",
+      "prompt": "Use case: illustration-story. Create ONE original landscape 3:2 conceptual illustration for a personal software portfolio project card. The provided portrait and desktop-phone illustration are STYLE REFERENCES ONLY; do not draw a person. Match expressive irregular charcoal-black ink outlines, dry-brush felt-tip shading, relaxed hand-drawn editorial character, clean white paper, only muted teal and warm mustard-yellow accents. Complete recognizable subject inside middle 75 percent of canvas with wide breathing room, bottom quarter mostly white. No text, letters, numerals, logos, watermarks, border, collage, split panels, neon, photorealism or 3D render. Subject: A small unbranded two-wheeled student competition robot seen at a gentle three-quarter angle, beside a simple winding tabletop course with a few round game pieces and a small cherry blossom branch. The robot and course are a general conceptual metaphor for an unofficial robotics competition rules explainer and simulator, not an exact diagram of the rules. Keep all objects clearly legible, minimal, friendly and spacious. Mostly charcoal ink with muted teal course strokes, warm mustard accents and only a tiny pale blush on a couple of blossoms.",
+      "referenceImages": [
+        "assets/portrait.webp"
+      ]
     }
   ]
 }
