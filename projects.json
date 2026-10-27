@@ -106,13 +106,14 @@
         "en": "Activities, schedules and participation information for the KUAS Photography Club"
       },
       "desc": {
-        "ja": "写真部の活動紹介、撮影会記録、予定、見学・参加案内を日英で公開するサイトです。Three.jsの3D風景と、写真・撮影を学ぶコンテンツを備えています。",
-        "en": "A Japanese and English club website with activities, photo-walk records, schedules and participation guidance, featuring Three.js scenery and photography learning content."
+        "ja": "活動・予定・見学案内を日英で公開する写真部サイト。Three.jsの3D風景と写真学習コンテンツに加え、Googleカレンダー連携と運営向けの撮影会・写真投稿を備えます。",
+        "en": "A bilingual club website for activities, schedules and visits, with Three.js scenery, photography learning content, Google Calendar integration and organizer tools for photo-walk and photo posts."
       },
       "stack": [
         "TypeScript",
         "Astro",
-        "Three.js"
+        "Three.js",
+        "Vercel Functions"
       ],
       "links": {
         "docs": "https://github.com/lingmulongtai/KUAS-Photography-Club/blob/main/README.md",
@@ -179,8 +180,8 @@
         "en": "A tray app for Launchkey lighting, piano playback, and MIDI practice"
       },
       "desc": {
-        "ja": "Launchkey MK4 61向けの非公式ツール。LED編集、内蔵ピアノ、MIDI練習、パッドドラム、ルーパーを備え、実機検証前のプレビューとして公開しています。",
-        "en": "An unofficial tool for the Launchkey MK4 61, with LED editing, a built-in piano, MIDI practice, pad drums, and a looper. Published as a preview pending hardware verification."
+        "ja": "Launchkey MK4 61向けの非公式ツール。LED編集、内蔵ピアノ、MIDI練習、パッドドラム、ルーパーを備え、実機での受け入れ確認が未完了のプレビューとして公開しています。",
+        "en": "An unofficial tool for the Launchkey MK4 61, with LED editing, a built-in piano, MIDI practice, pad drums and a looper. Published as a preview with hardware acceptance still incomplete."
       },
       "stack": [
         "Rust",
@@ -1245,20 +1246,20 @@
       "filter": "desktop",
       "year": "2026",
       "tag": {
-        "ja": "Windows・Android連携",
-        "en": "WINDOWS / ANDROID COMPANION"
+        "ja": "Windows・端末間連携",
+        "en": "WINDOWS / DEVICE SHARING"
       },
       "status": {
         "ja": "フォーク",
         "en": "Fork"
       },
       "summary": {
-        "ja": "WindowsのAI利用枠・履歴をAndroidへ暗号化共有",
-        "en": "Monitor AI usage on Windows and share encrypted quotas and history with Android"
+        "ja": "WindowsのAI利用状況を、Android・Windows・Macへ暗号化共有",
+        "en": "Monitor AI usage on Windows and share encrypted snapshots with Android, Windows and Mac"
       },
       "desc": {
-        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でCodexBar Androidへ暗号化共有します。Gemini Appsの専用ブラウザー接続とWindows版の独自配布に対応します。",
-        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with CodexBar for Android over LAN or Tailscale, with dedicated-browser Gemini Apps sign-in and its own Windows releases."
+        "ja": "Win-CodexBarを基に独立保守するフォーク。AI利用枠、7日・30日の保存履歴、推定コストを表示し、LAN・Tailscale経由でAndroidや別のWindows・Macと暗号化共有します。保存したPC接続からの受信、Gemini Appsの専用ブラウザー接続、独自のWindows配布に対応します。",
+        "en": "An independently maintained Win-CodexBar fork for AI quotas, saved 7/30-day history and estimated costs. Shares encrypted data with Android and other Windows or Mac computers over LAN or Tailscale, receives saved PC connections, and includes dedicated-browser Gemini Apps sign-in and its own Windows releases."
       },
       "stack": [
         "Rust",
