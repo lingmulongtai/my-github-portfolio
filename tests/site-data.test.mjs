@@ -219,6 +219,24 @@ test("all-time counts stay separate from annual activity and language names are 
   assert.match(ui.nodes.get('syncInfo').textContent, /Last synced.*JST/);
 });
 
+test("repository update dates use Japan time and label older date-only snapshots as UTC", async () => {
+  const projects=['late','early','old','unknown'].map(slug=>({...config.projects[0],slug,name:slug,links:{}}));
+  const ui=await boot({owner:config.profile.github,projects,stats:{
+    late:{pushed:'2026-10-27',pushedAt:'2026-10-27T19:23:23Z'},
+    early:{pushed:'2026-10-27',pushedAt:'2026-10-27T14:59:59Z'},
+    old:{pushed:'2026-10-27'},unknown:{pushedAt:'invalid',pushed:'<script>'},
+  }});
+  for(const lang of ['en','ja']){
+    new Script(`LANG='${lang}'; render()`).runInContext(ui.context);
+    const cards=ui.nodes.get('bento').innerHTML;
+    assert.match(cards, /2026-10-28 JST/);
+    assert.match(cards, /2026-10-27 JST/);
+    assert.match(cards, /2026-10-27 UTC/);
+    assert.ok(!cards.includes('<script>'));
+    assert.equal(new Script("updatedDisplay(DATA.projects[3].g)").runInContext(ui.context),'—');
+  }
+});
+
 test("old snapshots are visibly stale while the browser API identifies its limited metrics", async () => {
   const ui = await boot({ owner: config.profile.github, syncedAt: '2020-01-01T00:00:00Z', projects: [config.projects[0]], stats: {} });
   assert.match(ui.nodes.get('srcBadge').textContent, /UPDATE PENDING/);

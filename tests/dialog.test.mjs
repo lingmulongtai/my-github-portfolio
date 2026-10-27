@@ -5,6 +5,7 @@ import { Script, createContext } from "node:vm";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const code = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const dateFormatter = code.slice(code.indexOf('function updatedDisplay('), code.indexOf('const motionPreference='));
 const interactions = code.slice(code.indexOf("const sheet=$("), code.indexOf("/* ===================== motion"));
 const config = JSON.parse(readFileSync(new URL("../projects.json", import.meta.url), "utf8"));
 
@@ -51,9 +52,22 @@ function setup() {
     FILTER: 'all', projectLanguages: () => [],
   });
   context.projectOrder = () => context.DATA.projects.map((p, i) => ({ p, i }));
-  const api = new Script(interactions + "\n({ open, close, palOpen, palClose })").runInContext(context);
+  const api = new Script(dateFormatter + interactions + "\n({ open, close, palOpen, palClose })").runInContext(context);
   return { ...api, node, document, routes, events, context, scrolls, remembered };
 }
+
+test("details and event dates use Japan time and preserve date-only UTC fallback", () => {
+  const ui=setup();
+  ui.context.DATA.projects[0].g.pushedAt='2026-10-27T19:23:23Z';
+  ui.context.DATA.projects[0].g.pushed='2026-10-27';
+  ui.open(0);
+  assert.match(ui.node('sTable').innerHTML,/2026-10-28 JST/);
+  assert.match(ui.node('sLog').innerHTML,/2026-10-28 JST/);
+  ui.context.DATA.projects[0].g.pushedAt='';
+  ui.open(0);
+  assert.match(ui.node('sTable').innerHTML,/2026-10-27 UTC/);
+  assert.match(ui.node('sLog').innerHTML,/2026-10-27 UTC/);
+});
 
 test("project navigation restores the original launcher when the modal closes", () => {
   const ui = setup(), launcher = ui.document.activeElement;

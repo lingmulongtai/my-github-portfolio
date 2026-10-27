@@ -2099,6 +2099,16 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
 const siteAction=project=>t('site.action.'+(['app','guide','page'].includes(project.siteKind)?project.siteKind:'page'));
+function updatedDisplay(g){
+  const timestamp=Date.parse(g.pushedAt||'');
+  if(Number.isFinite(timestamp)){
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'})
+      .formatToParts(new Date(timestamp));
+    const value=Object.fromEntries(parts.map(part=>[part.type,part.value]));
+    return `${value.year}-${value.month}-${value.day} JST`;
+  }
+  return /^\d{4}-\d{2}-\d{2}$/.test(g.pushed||'')?`${g.pushed} UTC`:'—';
+}
 
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
@@ -2364,7 +2374,7 @@ function tileMarkup(p,i,rank){
       <span class="tile-languages">${projectLanguages(p).map(name=>`<i>${esc(name)}</i>`).join('')}</span>
       <span class="foot">
         <span class="lbl">${t('f.commits')}<b>${p.g.commits?.toLocaleString()??'—'}</b></span>
-        <span class="lbl">${t('f.updated')}<b>${esc(p.g.pushed||'—')}</b></span>
+        <span class="lbl">${t('f.updated')}<b>${esc(updatedDisplay(p.g))}</b></span>
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
       <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
@@ -2431,7 +2441,7 @@ function fill(i){
     <tr><td>${t('t.status')}</td><td>${esc(tx(p.status))}</td></tr>
     <tr><td>${t('t.lang')}</td><td>${esc(projectLanguages(p).join(' / ')||'—')}</td></tr>
     <tr><td>${t('t.lic')}</td><td>${esc(g.license||'—')}</td></tr>
-    <tr><td>${t('t.updated')}</td><td>${g.pushed||'—'}</td></tr>
+    <tr><td>${t('t.updated')}</td><td>${esc(updatedDisplay(g))}</td></tr>
     <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${esc(s)}</i>`).join('')}</div></td></tr>
     <tr><td>${t('t.team')}</td><td>${esc(DATA.profile.github)}</td></tr>`;
   $('sMetrics').innerHTML=`
@@ -2444,7 +2454,7 @@ function fill(i){
   const cells=[]; g.weeks.forEach(w=>(w.days||[0,0,0,0,0,0,0]).forEach(d=>cells.push(d)));
   const cm=Math.max(1,...cells);
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
-  $('sLog').innerHTML=g.pushed?`<li><time>${esc(g.pushed)}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
+  $('sLog').innerHTML=updatedDisplay(g)!=='—'?`<li><time>${esc(updatedDisplay(g))}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
   const L=[];
   if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener"
     aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">${siteAction(p)} ↗</a>`);
