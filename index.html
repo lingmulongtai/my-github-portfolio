@@ -243,7 +243,7 @@ header{display:flex; flex-direction:column; gap:16px;
 .tile .site:hover{background:var(--accent); color:var(--paper)}
 .tile .foot{display:flex; align-items:flex-end; gap:14px; margin-top:16px;
   padding-top:13px; border-top:1px solid currentColor}
-.tile .foot .lbl{font-family:var(--display); font-size:10px; opacity:.62; line-height:1.5; white-space:nowrap}
+.tile .foot .lbl{font-family:var(--display); font-size:10px; opacity:.62; line-height:1.5; min-width:0}
 .tile .foot .lbl b{display:block; font-weight:500; font-size:13px; opacity:1; letter-spacing:-.02em;
   font-variant-numeric:tabular-nums}
 .sparkbar{display:flex; gap:2px; align-items:flex-end; height:30px; flex:1; margin-left:auto; max-width:132px}
@@ -2025,7 +2025,7 @@ const T={
   "sites.all":"すべて","sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
   "sites.empty":"この種類のサイトはまだありません。",
   "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
-  "view.note.groups":"グループは最上位のリポジトリを基準に並びます。",
+  "view.note.groups":"グループは表示中のカテゴリで最上位のリポジトリを基準に並びます。",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
   "sort.note.recommended":"おすすめ順は紹介用に選んだ順番です。新しいプロジェクトはその後に更新順で並びます。",
   "sort.note.popular":"スター数の多い順。同数ならフォーク数で比較します。",
@@ -2061,7 +2061,7 @@ const T={
   "sites.all":"All","sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
   "sites.empty":"There are no websites in this category yet.",
   "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
-  "view.note.groups":"Groups follow their highest ranked repository.",
+  "view.note.groups":"Groups follow their highest ranked repository in the selected category.",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
   "sort.note.recommended":"A curated introduction, followed by new projects in most recently pushed order.",
   "sort.note.popular":"Most stars first; forks break ties.",
@@ -2099,6 +2099,16 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
 const siteAction=project=>t('site.action.'+(['app','guide','page'].includes(project.siteKind)?project.siteKind:'page'));
+function updatedDisplay(g){
+  const timestamp=Date.parse(g.pushedAt||'');
+  if(Number.isFinite(timestamp)){
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'})
+      .formatToParts(new Date(timestamp));
+    const value=Object.fromEntries(parts.map(part=>[part.type,part.value]));
+    return `${value.year}-${value.month}-${value.day} JST`;
+  }
+  return /^\d{4}-\d{2}-\d{2}$/.test(g.pushed||'')?`${g.pushed} UTC`:'—';
+}
 
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const $=id=>document.getElementById(id);
@@ -2131,6 +2141,11 @@ function projectBuckets(entries){
     if(seen.has(group.id))continue;
     seen.add(group.id);
     buckets.push({group,entries:entries.filter(item=>item.p.group===group.id)});
+  }
+  if(VIEW==='groups'&&FILTER!=='all'){
+    const positions=new Map(entries.map((entry,index)=>[entry.i,index]));
+    const rank=bucket=>positions.get((bucket.entries.find(({p})=>p.filter===FILTER)||bucket.entries[0]).i);
+    buckets.sort((a,b)=>rank(a)-rank(b));
   }
   return buckets;
 }
@@ -2306,13 +2321,17 @@ function renderSites(){
     return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
   }).join('');
   const visible=sites.filter(({p})=>SITE_FILTER==='all'||(p.siteKind==='app'?'app':'other')===SITE_FILTER);
-  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
+  const groupCounts=new Map();
+  sites.forEach(({group})=>{if(group)groupCounts.set(group.id,(groupCounts.get(group.id)||0)+1)});
+  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>{
+    const shared=group&&groupCounts.get(group.id)===1?group:null;
+    return `
     <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
-      aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
+      aria-label="${esc((shared?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
       ${artworkPath(p.image)?`<img src="${esc(p.image)}" alt="" aria-hidden="true" width="1280" height="853" loading="lazy" decoding="async">`:''}
-      <h3>${esc(group?.name||p.name)}</h3><p>${esc(tx(group?.summary||p.summary))}</p>
+      <h3>${esc(shared?.name||p.name)}</h3><p>${esc(tx(shared?.summary||p.summary))}</p>
       <span class="launch-action"><span>${siteAction(p)} ↗</span><small>${t('site.newTab')}</small></span>
-    </a>`).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
+    </a>`}).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
 }
 function renderTiles(){
   $('projectViewControls').innerHTML=['groups','repos'].map(key=>`<button class="viewbtn ${VIEW===key?'on':''}"
@@ -2355,7 +2374,7 @@ function tileMarkup(p,i,rank){
       <span class="tile-languages">${projectLanguages(p).map(name=>`<i>${esc(name)}</i>`).join('')}</span>
       <span class="foot">
         <span class="lbl">${t('f.commits')}<b>${p.g.commits?.toLocaleString()??'—'}</b></span>
-        <span class="lbl">${t('f.updated')}<b>${esc(p.g.pushed||'—')}</b></span>
+        <span class="lbl">${t('f.updated')}<b>${esc(updatedDisplay(p.g))}</b></span>
         <span class="sparkbar">${sparks(p.g.bars)}</span>
       </span>
       <span class="tile-more" aria-hidden="true">${t('work.details')}<b>↗</b></span>
@@ -2422,7 +2441,7 @@ function fill(i){
     <tr><td>${t('t.status')}</td><td>${esc(tx(p.status))}</td></tr>
     <tr><td>${t('t.lang')}</td><td>${esc(projectLanguages(p).join(' / ')||'—')}</td></tr>
     <tr><td>${t('t.lic')}</td><td>${esc(g.license||'—')}</td></tr>
-    <tr><td>${t('t.updated')}</td><td>${g.pushed||'—'}</td></tr>
+    <tr><td>${t('t.updated')}</td><td>${esc(updatedDisplay(g))}</td></tr>
     <tr><td>${t('t.stack')}</td><td><div class="chips">${p.stack.map(s=>`<i>${esc(s)}</i>`).join('')}</div></td></tr>
     <tr><td>${t('t.team')}</td><td>${esc(DATA.profile.github)}</td></tr>`;
   $('sMetrics').innerHTML=`
@@ -2435,7 +2454,7 @@ function fill(i){
   const cells=[]; g.weeks.forEach(w=>(w.days||[0,0,0,0,0,0,0]).forEach(d=>cells.push(d)));
   const cm=Math.max(1,...cells);
   $('sHeat').innerHTML=cells.map(v=>`<i style="opacity:${(.08+(v/cm)*.92).toFixed(2)}"></i>`).join('');
-  $('sLog').innerHTML=g.pushed?`<li><time>${esc(g.pushed)}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
+  $('sLog').innerHTML=updatedDisplay(g)!=='—'?`<li><time>${esc(updatedDisplay(g))}</time><span><b>${esc(p.name)}</b> — ${t('ev')[0]}</span></li>`:`<li>${t('noEvents')}</li>`;
   const L=[];
   if(g.site) L.push(`<a class="slink primary" href="${esc(g.site)}" target="_blank" rel="noopener"
     aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">${siteAction(p)} ↗</a>`);
@@ -2501,7 +2520,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('a[href^="#"]'))rememberPage();
   const f=e.target.closest('.fbtn');
   if(f){
-    FILTER=f.dataset.k; applyFilter();
+    FILTER=f.dataset.k; renderTiles();
     return;
   }
   const l=e.target.closest('.lang button');

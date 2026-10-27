@@ -118,6 +118,25 @@ test("guide-only collections disable the empty browser-app tab and retain the se
   assert.match(ui.nodes.get('launchGrid').innerHTML, /guide.example/);
 });
 
+test("grouped websites with different destinations identify each platform while shared sites stay grouped", async () => {
+  const projects = config.projects.filter(p => ['codexbar-android','win-codexbar-mobile-connect',
+    'codexbar-mac-mobile-connect','okuyuki-site','okuyuki-android'].includes(p.slug));
+  const stats = Object.fromEntries(projects.map(p => [p.slug, { site: p.slug.startsWith('okuyuki-')
+    ? 'https://okuyuki.example/' : `https://${p.slug}.example/` }]));
+  const ui = await boot({owner:config.profile.github,projects,stats});
+  for (const lang of ['en','ja']) {
+    new Script(`LANG='${lang}'; render()`).runInContext(ui.context);
+    const cards = ui.nodes.get('launchGrid').innerHTML;
+    assert.equal((cards.match(/class="launch-card"/g)||[]).length, 4);
+    for (const project of projects.filter(p=>p.group==='codexbar-mobile-connect')) {
+      assert.ok(cards.includes(`<h3>${project.name}</h3>`));
+      assert.ok(cards.includes(project.summary[lang]));
+      assert.ok(cards.includes(`aria-label="${project.name} —`));
+    }
+    assert.match(cards, /<h3>Okuyuki<\/h3>/);
+  }
+});
+
 test("the club website uses its current featured repository instead of the legacy duplicate", async () => {
   const club = config.projects.find(p => p.repo === 'lingmulongtai/KUAS-Photography-Club');
   const legacy = config.projects.find(p => p.repo === 'lingmulongtai/Photography-Club-Website');
@@ -200,6 +219,24 @@ test("all-time counts stay separate from annual activity and language names are 
   assert.match(ui.nodes.get('syncInfo').textContent, /Last synced.*JST/);
 });
 
+test("repository update dates use Japan time and label older date-only snapshots as UTC", async () => {
+  const projects=['late','early','old','unknown'].map(slug=>({...config.projects[0],slug,name:slug,links:{}}));
+  const ui=await boot({owner:config.profile.github,projects,stats:{
+    late:{pushed:'2026-10-27',pushedAt:'2026-10-27T19:23:23Z'},
+    early:{pushed:'2026-10-27',pushedAt:'2026-10-27T14:59:59Z'},
+    old:{pushed:'2026-10-27'},unknown:{pushedAt:'invalid',pushed:'<script>'},
+  }});
+  for(const lang of ['en','ja']){
+    new Script(`LANG='${lang}'; render()`).runInContext(ui.context);
+    const cards=ui.nodes.get('bento').innerHTML;
+    assert.match(cards, /2026-10-28 JST/);
+    assert.match(cards, /2026-10-27 JST/);
+    assert.match(cards, /2026-10-27 UTC/);
+    assert.ok(!cards.includes('<script>'));
+    assert.equal(new Script("updatedDisplay(DATA.projects[3].g)").runInContext(ui.context),'—');
+  }
+});
+
 test("old snapshots are visibly stale while the browser API identifies its limited metrics", async () => {
   const ui = await boot({ owner: config.profile.github, syncedAt: '2020-01-01T00:00:00Z', projects: [config.projects[0]], stats: {} });
   assert.match(ui.nodes.get('srcBadge').textContent, /UPDATE PENDING/);
@@ -278,6 +315,30 @@ test("product groups open a configured project and fall back safely to the membe
   assert.match(ui.nodes.get('bento').innerHTML, /class="group-site" href="https:\/\/guide\.example\/"/);
   assert.match(ui.nodes.get('bento').innerHTML, />紹介を見る ↗<\/a>/);
   assert.ok(!ui.nodes.get('bento').innerHTML.includes('javascript:'));
+});
+
+test("category sorting ranks groups by their visible members and retains every repository", async () => {
+  const projects = ['quest','website','high','middle','low'].map((slug,i)=>({
+    ...config.projects[0], slug, name:slug, filter:i===0?'mobile':'web', group:i<2?'okuyuki':'',
+  }));
+  const counts=[29,3,14,13,6];
+  const stats=Object.fromEntries(projects.map((p,i)=>[p.slug,{commits:counts[i],stars:counts[i],
+    pushedAt:`2026-10-${String(counts[i]).padStart(2,'0')}T00:00:00Z`} ]));
+  const ui=await boot({owner:config.profile.github,projects,stats});
+  const visibleOrder=()=>JSON.parse(new Script("JSON.stringify(projectOrder().filter(({p})=>p.filter===FILTER).map(({p})=>p.slug))").runInContext(ui.context));
+  for(const sort of ['commits','popular','updated']){
+    new Script(`FILTER='web'; setSort('${sort}')`).runInContext(ui.context);
+    assert.deepEqual(visibleOrder(),['high','middle','low','website']);
+    const cards=ui.nodes.get('bento').innerHTML;
+    assert.ok(cards.indexOf('aria-label="low"')<cards.indexOf('class="project-group"'));
+    assert.equal((cards.match(/class="tile-open"/g)||[]).length,5);
+  }
+  new Script("FILTER='all'; renderTiles()").runInContext(ui.context);
+  assert.match(ui.nodes.get('bento').innerHTML,/aria-label="quest"/);
+  new Script("FILTER='web'; setView('repos')").runInContext(ui.context);
+  assert.deepEqual(visibleOrder(),['high','middle','low','website']);
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.deepEqual(visibleOrder(),['high','middle','low','website']);
 });
 
 test("product view restores valid preferences and hides groups with no category matches", async () => {
