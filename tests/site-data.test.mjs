@@ -299,6 +299,30 @@ test("product groups open a configured project and fall back safely to the membe
   assert.ok(!ui.nodes.get('bento').innerHTML.includes('javascript:'));
 });
 
+test("category sorting ranks groups by their visible members and retains every repository", async () => {
+  const projects = ['quest','website','high','middle','low'].map((slug,i)=>({
+    ...config.projects[0], slug, name:slug, filter:i===0?'mobile':'web', group:i<2?'okuyuki':'',
+  }));
+  const counts=[29,3,14,13,6];
+  const stats=Object.fromEntries(projects.map((p,i)=>[p.slug,{commits:counts[i],stars:counts[i],
+    pushedAt:`2026-10-${String(counts[i]).padStart(2,'0')}T00:00:00Z`} ]));
+  const ui=await boot({owner:config.profile.github,projects,stats});
+  const visibleOrder=()=>JSON.parse(new Script("JSON.stringify(projectOrder().filter(({p})=>p.filter===FILTER).map(({p})=>p.slug))").runInContext(ui.context));
+  for(const sort of ['commits','popular','updated']){
+    new Script(`FILTER='web'; setSort('${sort}')`).runInContext(ui.context);
+    assert.deepEqual(visibleOrder(),['high','middle','low','website']);
+    const cards=ui.nodes.get('bento').innerHTML;
+    assert.ok(cards.indexOf('aria-label="low"')<cards.indexOf('class="project-group"'));
+    assert.equal((cards.match(/class="tile-open"/g)||[]).length,5);
+  }
+  new Script("FILTER='all'; renderTiles()").runInContext(ui.context);
+  assert.match(ui.nodes.get('bento').innerHTML,/aria-label="quest"/);
+  new Script("FILTER='web'; setView('repos')").runInContext(ui.context);
+  assert.deepEqual(visibleOrder(),['high','middle','low','website']);
+  new Script("LANG='ja'; render()").runInContext(ui.context);
+  assert.deepEqual(visibleOrder(),['high','middle','low','website']);
+});
+
 test("product view restores valid preferences and hides groups with no category matches", async () => {
   const ui = await boot(null,null,{storage:{getItem:key=>key==='project-view'?'repos':'en'}});
   assert.match(ui.nodes.get('projectViewControls').innerHTML,/data-view="repos" aria-pressed="true"/);
