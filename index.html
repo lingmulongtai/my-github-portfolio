@@ -194,18 +194,18 @@ header{display:flex; flex-direction:column; gap:16px;
 .view-controls{display:flex; flex-wrap:wrap; gap:6px}
 .viewbtn{min-height:44px; padding:9px 14px; border:1px solid var(--line); border-radius:12px; font-size:12px}
 .viewbtn.on{background:var(--mint); color:var(--ink); border-color:var(--ink)}
-.project-group{grid-column:1/-1; padding:24px; border:1px solid var(--line); border-radius:22px; background:var(--mint)}
+.project-group{grid-column:span 2; min-width:0; padding:20px; border:2px solid var(--line); border-radius:12px;
+  background:var(--mint); display:flex; flex-direction:column; gap:12px}
 .project-group[hidden]{display:none}
-.group-heading{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px}
-.group-heading h3{font-family:var(--display); font-size:26px; margin:0 0 8px}
-.group-heading p{font-size:13px; line-height:1.8; max-width:62ch; margin:0}
-.group-heading small{font-family:var(--body); font-size:12px; font-weight:400; margin-left:12px}
-.group-site{display:flex; align-items:center; min-height:44px; padding:10px 16px; border-radius:12px;
-  background:var(--ink); color:var(--paper); font-size:12px; font-weight:700}
-.bento.group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.group-grid>.tile{grid-column:span 1}
-@media (max-width:760px){.project-group{padding:14px}.group-heading h3{font-size:22px}}
-@media (max-width:520px){.bento.group-grid{grid-template-columns:minmax(0,1fr)}}
+.group-heading h3{font-family:var(--display); font-size:25px; line-height:1.16; overflow-wrap:anywhere; margin:0 0 8px}
+.group-heading p{font-size:12.5px; line-height:1.68; margin:0}
+.group-heading small{display:block; font-family:var(--body); font-size:11px; font-weight:400; margin-bottom:8px}
+.group-art{display:block; width:100%; height:112px; object-fit:contain; mix-blend-mode:multiply}
+.group-site{display:flex; align-items:center; justify-content:space-between; min-height:44px; padding:10px 12px; border-radius:10px;
+  background:var(--ink); color:var(--paper); font-size:12px; font-weight:700; margin-top:auto}
+.group-grid{display:grid; gap:6px}
+@media (max-width:900px){.project-group{grid-column:span 1}}
+@media (max-width:760px){.project-group{padding:16px; border-radius:18px}.group-heading h3{font-size:23px}}
 .sort-control{display:flex; align-items:center; gap:10px; font-size:12px}
 .sort-control select{max-width:100%; min-height:44px; padding:8px 32px 8px 12px; border:1px solid var(--line);
   border-radius:12px; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer}
@@ -250,7 +250,7 @@ header{display:flex; flex-direction:column; gap:16px;
 .sparkbar i{flex:1; background:currentColor; opacity:.45; border-radius:1px}
 .tile.has-image{isolation:isolate; background:#fff; color:var(--black);
   border-color:var(--line)}
-.tile .tile-art{display:block; width:100%; height:220px; flex:none; margin:0 0 18px;
+.tile .tile-art{display:block; width:100%; height:168px; flex:none; margin:0 0 18px;
   object-fit:contain; pointer-events:none; mix-blend-mode:multiply;
   transition:transform .45s cubic-bezier(.16,1,.3,1)}
 .tile .tile-art[hidden]{display:none}
@@ -261,7 +261,6 @@ header{display:flex; flex-direction:column; gap:16px;
 .tile .site[data-kind="guide"]:hover,.tile .site[data-kind="page"]:hover{background:var(--ink); color:var(--paper)}
 .tile.has-image .foot{border-color:var(--line)}
 .tile.has-image .foot .lbl{opacity:.75}
-.tile.s-hero .tile-art,.tile.s-tall .tile-art{height:280px}
 @media (prefers-reduced-motion:reduce){.tile .tile-art{transition:none}}
 .s-hero{grid-column:span 4; min-height:336px}
 .s-tall{grid-column:span 2; min-height:336px}
@@ -274,6 +273,12 @@ header{display:flex; flex-direction:column; gap:16px;
 @media (max-width:520px){.bento{grid-template-columns:1fr}
   .s-hero,.s-tall,.s-wide,.s-std{grid-column:span 1}
   .tile.has-image .tile-art{height:180px}}
+.group-grid>.group-member{grid-column:auto; flex-direction:row; align-items:center; gap:8px; min-height:48px;
+  padding:4px 0 4px 12px; border-width:1px; border-radius:10px; background:var(--paper)}
+.group-member:hover,.group-member:focus-within{transform:none; border-color:var(--ink)}
+.group-member h4{min-width:0; flex:1; font-size:12px; line-height:1.5; overflow-wrap:anywhere; margin:0}
+.group-member .site{position:relative; inset:auto; flex:none; justify-content:center; width:44px; min-height:44px;
+  padding:8px; border:0; border-radius:8px; background:transparent; color:var(--ink)}
 
 /* about */
 .about{padding:clamp(70px,10vw,124px) var(--gutter); margin-top:78px; border-top:1px solid var(--line);
@@ -2243,18 +2248,24 @@ function renderTiles(){
     const project=webUrl(group.projectUrl);
     const site=project||entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
     const label=project?'GitHub Project':t('site.action.guide');
+    const art=entries.map(({p})=>artworkPath(p.image)).find(Boolean);
     return `<section class="project-group" aria-labelledby="group-${esc(group.id)}">
-      <div class="group-heading"><div><h3 id="group-${esc(group.id)}">${esc(group.name)}<small>${entries.length} ${t('group.repositories')}</small></h3>
-        <p>${esc(tx(group.summary))}</p></div>
+      ${art?`<img class="group-art" src="${esc(art)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
+      <div class="group-heading"><small>${entries.length} ${t('group.repositories')}</small>
+        <h3 id="group-${esc(group.id)}">${esc(group.name)}</h3><p>${esc(tx(group.summary))}</p></div>
+      <div class="group-grid">${entries.map(({p,i})=>`<article class="tile group-member" data-f="${esc(p.filter)}">
+        <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button><h4>${esc(p.name)}</h4>
+        ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"
+          aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}"><span aria-hidden="true">↗</span></a>`:''}
+      </article>`).join('')}</div>
         ${site?`<a class="group-site" href="${esc(site)}" target="_blank" rel="noopener"
-          aria-label="${esc(group.name+' — '+label+' ('+t('site.newTab')+')')}">${label} ↗</a>`:''}</div>
-      <div class="bento group-grid">${entries.map(tile).join('')}</div></section>`;
+          aria-label="${esc(group.name+' — '+label+' ('+t('site.newTab')+')')}">${label} ↗</a>`:''}</section>`;
   }).join('');
   applyFilter();
 }
 function tileMarkup(p,i,rank){
   return `
-    <article class="tile s-${esc(SORT==='recommended'?(p.size||'std'):'std')}${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
+    <article class="tile s-std${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
