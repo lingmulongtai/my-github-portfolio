@@ -9,20 +9,20 @@ const code = html.match(/<script>([\s\S]*?)<\/script>/)[1];
 const loading = code.slice(0, code.indexOf("/* ===================== render"));
 const rendering = code.slice(code.indexOf("function render("), code.indexOf("/* ===================== sheet"));
 
-async function boot(snapshot, apiRepos, { storage = { getItem: () => "en" } } = {}) {
+async function boot(snapshot, apiRepos, { storage = { getItem: () => "en" }, config: initial = config } = {}) {
   const nodes = new Map();
   const context = createContext({
     matchMedia: () => ({ matches: true }),
     document: {
       getElementById: id => {
-        if (!nodes.has(id)) nodes.set(id, { textContent: id === "site-data" ? JSON.stringify(config) : "",
+        if (!nodes.has(id)) nodes.set(id, { textContent: id === "site-data" ? JSON.stringify(initial) : "",
           innerHTML: "", setAttribute() {}, classList: { toggle() {} } });
         return nodes.get(id);
       },
       querySelectorAll: () => [], documentElement: {},
     },
     fetch: async url => {
-      if (url === "./projects.json") return { ok: true, json: async () => structuredClone(config) };
+      if (url === "./projects.json") return { ok: true, json: async () => structuredClone(initial) };
       if (url === "./data/github.json") return { ok: Boolean(snapshot), json: async () => structuredClone(snapshot) };
       return { ok: Boolean(apiRepos), json: async () => structuredClone(apiRepos) };
     },
@@ -75,6 +75,31 @@ test("website actions distinguish runnable apps and guides and open separately f
   assert.equal((cards.match(/target="_blank" rel="noopener"/g)||[]).length, 2);
   assert.match(cards, /Opens in a new tab/);
   assert.match(cards, /class="tile-open" data-i="0"/);
+});
+
+test("website previews require a matching destination and a safe local path", async () => {
+  const project={...config.projects[0],slug:'screen',name:'Screen',links:{},
+    sitePreview:{image:'assets/site-previews/screen.webp',url:'https://screen.example/',kind:'demo'}};
+  const bootSite=async p=>boot({owner:config.profile.github,projects:[p],stats:{screen:{site:'https://screen.example/'}}});
+  const ui=await bootSite(project);
+  assert.match(ui.nodes.get('launchGrid').innerHTML,/class="launch-preview" src="assets\/site-previews\/screen.webp"/);
+  assert.match(ui.nodes.get('launchGrid').innerHTML,/Demo preview/);
+  assert.match(ui.nodes.get('launchGrid').innerHTML,/class="launch-art"[^>]* hidden/);
+  const changed=await bootSite({...project,sitePreview:{...project.sitePreview,url:'https://different.example/'}});
+  assert.ok(!changed.nodes.get('launchGrid').innerHTML.includes('launch-preview'));
+  assert.match(changed.nodes.get('launchGrid').innerHTML,/Concept illustration/);
+  const unsafe=await bootSite({...project,sitePreview:{...project.sitePreview,image:'https://tracker.example/img.webp'}});
+  assert.ok(!unsafe.nodes.get('launchGrid').innerHTML.includes('tracker.example'));
+  assert.match(unsafe.nodes.get('launchGrid').innerHTML,/class="launch-art"/);
+});
+
+test("browser API fallback retains the curated site preview for its matching repository", async () => {
+  const original=config.projects[0], account=config.profile.github;
+  const repo={name:original.repo.split('/')[1],full_name:original.repo,private:false,owner:{login:account},
+    homepage:'https://screen.example/',html_url:`https://github.com/${original.repo}`};
+  const initial={...config,projects:[{...original,sitePreview:{image:'assets/site-previews/screen.webp',url:repo.homepage}}]};
+  const ui=await boot(null,[repo],{config:initial});
+  assert.match(ui.nodes.get('launchGrid').innerHTML,/assets\/site-previews\/screen.webp/);
 });
 
 test("quick-launch collection deduplicates shared websites and omits unsafe or self links", async () => {

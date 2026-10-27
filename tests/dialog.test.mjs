@@ -56,6 +56,16 @@ function setup() {
   return { ...api, node, document, routes, events, context, scrolls, remembered };
 }
 
+test("a failed site preview shows its illustration without leaving a broken image", () => {
+  const ui=setup(), art={hidden:true}, note={textContent:''};
+  const card={querySelector:s=>s==='.launch-art'?art:s==='.preview-note'?note:null};
+  const target={hidden:false,classList:{contains:s=>s==='launch-preview'},closest:()=>card};
+  ui.node('launchGrid').fire('error',{target});
+  assert.equal(target.hidden,true);
+  assert.equal(art.hidden,false);
+  assert.equal(note.textContent,'preview.illustration');
+});
+
 test("details and event dates use Japan time and preserve date-only UTC fallback", () => {
   const ui=setup();
   ui.context.DATA.projects[0].g.pushedAt='2026-10-27T19:23:23Z';

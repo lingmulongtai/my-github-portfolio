@@ -140,7 +140,12 @@ header{display:flex; flex-direction:column; gap:16px;
 .launch-card{display:flex; flex-direction:column; min-width:0; padding:20px; background:#fff;
   border:1px solid var(--line); border-radius:18px; transition:border-color .2s,background .2s}
 .launch-card:hover,.launch-card:focus-visible{border-color:var(--ink); background:var(--mint)}
-.launch-card img{width:100%; height:156px; object-fit:contain; mix-blend-mode:multiply}
+.launch-media{position:relative; width:100%; aspect-ratio:16/10; overflow:hidden; border:1px solid var(--line);
+  border-radius:10px; background:var(--mint)}
+.launch-media img{display:block; width:100%; height:100%; object-fit:contain}
+.launch-media img[hidden]{display:none}
+.launch-media .launch-art{mix-blend-mode:multiply}
+.preview-note{display:block; margin-top:8px; font-size:10px; line-height:1.5; opacity:.7}
 .launch-card h3{font-family:var(--display); margin:14px 0 8px; font-size:clamp(18px,1.6vw,24px); overflow-wrap:anywhere}
 .launch-card p{font-size:13px; line-height:1.75; margin:0 0 18px; flex:1}
 .launch-action{display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:14px;
@@ -2024,6 +2029,7 @@ const T={
   "hero.sites":"すぐ使えるサイト ↗","sites.title":"使えるサイト・アプリ","sites.lead":"気になるものを、そのまま開いてみてください。",
   "sites.all":"すべて","sites.app":"ブラウザで使う","sites.other":"紹介・作品を見る","sites.unavailable":"サイト情報を取得できませんでした。下の一覧からリポジトリをご覧ください。",
   "sites.empty":"この種類のサイトはまだありません。",
+  "preview.screen":"サイトの画面例","preview.demo":"デモ画面の例","preview.development":"開発版の画面例","preview.repository":"紹介ページの画面例","preview.illustration":"イメージイラスト",
   "view.groups":"プロジェクト別","view.repos":"リポジトリ一覧","group.repositories":"リポジトリ",
   "view.note.groups":"グループは表示中のカテゴリで最上位のリポジトリを基準に並びます。",
   "sort.label":"並び順","sort.recommended":"おすすめ順","sort.popular":"人気順","sort.commits":"コミット数順","sort.updated":"更新順",
@@ -2060,6 +2066,7 @@ const T={
   "hero.sites":"Try something ↗","sites.title":"Open something I built","sites.lead":"Jump straight into an app, or explore a project website.",
   "sites.all":"All","sites.app":"Use in your browser","sites.other":"Introductions & portfolios","sites.unavailable":"Website data is unavailable. You can still browse repositories below.",
   "sites.empty":"There are no websites in this category yet.",
+  "preview.screen":"Website preview","preview.demo":"Demo preview","preview.development":"Development preview","preview.repository":"Repository preview","preview.illustration":"Concept illustration",
   "view.groups":"By project","view.repos":"All repositories","group.repositories":"repositories",
   "view.note.groups":"Groups follow their highest ranked repository in the selected category.",
   "sort.label":"Sort by","sort.recommended":"Recommended","sort.popular":"Popularity","sort.commits":"Commit count","sort.updated":"Recently updated",
@@ -2098,6 +2105,10 @@ const tx=o=>typeof o==='string'?o:(o?.[LANG]??o?.ja??'');
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function webUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
 const artworkPath=value=>/^assets\/projects\/[a-z0-9-]+\.webp$/.test(value||'')?value:'';
+function previewPath(preview,href){
+  return /^assets\/site-previews\/[a-z0-9-]+\.webp$/.test(preview?.image||'')
+    && webUrl(preview?.url) && webUrl(preview.url)===webUrl(href)?preview.image:'';
+}
 const siteAction=project=>t('site.action.'+(['app','guide','page'].includes(project.siteKind)?project.siteKind:'page'));
 function updatedDisplay(g){
   const timestamp=Date.parse(g.pushedAt||'');
@@ -2203,7 +2214,7 @@ async function loadGithub(){
       return {slug:r.name.toLowerCase(),repo:r.full_name,name:p?.name||r.name,size:p?.size||'std',filter:p?.filter||'other',
         year:(r.created_at||'').slice(0,4),tag:p?.tag||{ja:r.language||'GitHub',en:r.language||'GITHUB'},
         status:r.archived?{ja:'アーカイブ',en:'Archived'}:r.fork?{ja:'フォーク',en:'Fork'}:{ja:'公開',en:'Public'},
-        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',
+        summary:p?.summary||description,desc:p?.desc||description,stack:p?.stack||(r.language?[r.language]:[]),links:p?.links||{},image:p?.image||'',sitePreview:p?.sitePreview||null,
         group:p?.group||'',siteKind:['app','guide','page'].includes(p?.siteKind)?p.siteKind:'page',showcase:p?.showcase!==false,fork:r.fork};
     });
     const out={};
@@ -2325,10 +2336,15 @@ function renderSites(){
   sites.forEach(({group})=>{if(group)groupCounts.set(group.id,(groupCounts.get(group.id)||0)+1)});
   $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>{
     const shared=group&&groupCounts.get(group.id)===1?group:null;
+    const preview=previewPath(p.sitePreview,href), artwork=artworkPath(p.image);
+    const kind=['demo','development','repository'].includes(p.sitePreview?.kind)?p.sitePreview.kind:'screen';
     return `
     <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
       aria-label="${esc((shared?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
-      ${artworkPath(p.image)?`<img src="${esc(p.image)}" alt="" aria-hidden="true" width="1280" height="853" loading="lazy" decoding="async">`:''}
+      ${preview||artwork?`<span class="launch-media">
+        ${preview?`<img class="launch-preview" src="${esc(preview)}" alt="" aria-hidden="true" loading="lazy" decoding="async">`:''}
+        ${artwork?`<img class="launch-art" src="${esc(artwork)}" alt="" aria-hidden="true" loading="lazy" decoding="async"${preview?' hidden':''}>`:''}
+      </span><small class="preview-note">${t('preview.'+(preview?kind:'illustration'))}</small>`:''}
       <h3>${esc(shared?.name||p.name)}</h3><p>${esc(tx(shared?.summary||p.summary))}</p>
       <span class="launch-action"><span>${siteAction(p)} ↗</span><small>${t('site.newTab')}</small></span>
     </a>`}).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
@@ -2507,6 +2523,14 @@ addEventListener('popstate',(event={})=>{
 $('projectSort').addEventListener('change',e=>setSort(e.target.value));
 $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
+},true);
+$('launchGrid').addEventListener('error',e=>{
+  if(!e.target.classList.contains('launch-preview'))return;
+  e.target.hidden=true;
+  const card=e.target.closest('.launch-card'),art=card?.querySelector('.launch-art'),note=card?.querySelector('.preview-note');
+  if(art)art.hidden=false;
+  if(note){if(art)note.textContent=t('preview.illustration');else note.hidden=true}
+  if(!art&&e.target.parentElement)e.target.parentElement.hidden=true;
 },true);
 document.addEventListener('click',e=>{
   const view=e.target.closest('.viewbtn');

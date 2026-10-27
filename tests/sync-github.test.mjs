@@ -106,9 +106,11 @@ test("total default-branch commits use pagination, including one-commit and empt
 test("public presentation metadata survives synchronization without changing repository identity", () => {
   const project = projectFromRepository(repo('component'), {
     group: 'product', siteKind: 'guide', showcase: false,
+    sitePreview: {image:'assets/site-previews/component.webp',url:'https://component.example/'},
   });
   assert.equal(project.repo, 'owner/component');
   assert.equal(project.group, 'product');
+  assert.deepEqual(project.sitePreview,{image:'assets/site-previews/component.webp',url:'https://component.example/'});
   assert.equal(project.siteKind, 'guide');
   assert.equal(project.showcase, false);
   assert.equal(projectFromRepository(repo('new')).showcase, true);
