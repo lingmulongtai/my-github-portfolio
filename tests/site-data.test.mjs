@@ -118,6 +118,25 @@ test("guide-only collections disable the empty browser-app tab and retain the se
   assert.match(ui.nodes.get('launchGrid').innerHTML, /guide.example/);
 });
 
+test("grouped websites with different destinations identify each platform while shared sites stay grouped", async () => {
+  const projects = config.projects.filter(p => ['codexbar-android','win-codexbar-mobile-connect',
+    'codexbar-mac-mobile-connect','okuyuki-site','okuyuki-android'].includes(p.slug));
+  const stats = Object.fromEntries(projects.map(p => [p.slug, { site: p.slug.startsWith('okuyuki-')
+    ? 'https://okuyuki.example/' : `https://${p.slug}.example/` }]));
+  const ui = await boot({owner:config.profile.github,projects,stats});
+  for (const lang of ['en','ja']) {
+    new Script(`LANG='${lang}'; render()`).runInContext(ui.context);
+    const cards = ui.nodes.get('launchGrid').innerHTML;
+    assert.equal((cards.match(/class="launch-card"/g)||[]).length, 4);
+    for (const project of projects.filter(p=>p.group==='codexbar-mobile-connect')) {
+      assert.ok(cards.includes(`<h3>${project.name}</h3>`));
+      assert.ok(cards.includes(project.summary[lang]));
+      assert.ok(cards.includes(`aria-label="${project.name} —`));
+    }
+    assert.match(cards, /<h3>Okuyuki<\/h3>/);
+  }
+});
+
 test("the club website uses its current featured repository instead of the legacy duplicate", async () => {
   const club = config.projects.find(p => p.repo === 'lingmulongtai/KUAS-Photography-Club');
   const legacy = config.projects.find(p => p.repo === 'lingmulongtai/Photography-Club-Website');

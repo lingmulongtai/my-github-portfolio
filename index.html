@@ -2306,13 +2306,17 @@ function renderSites(){
     return `<button class="site-fbtn ${SITE_FILTER===key?'on':''}" data-sites="${key}" aria-pressed="${SITE_FILTER===key}"${count?'':' disabled'}>${t('sites.'+key)} (${count})</button>`;
   }).join('');
   const visible=sites.filter(({p})=>SITE_FILTER==='all'||(p.siteKind==='app'?'app':'other')===SITE_FILTER);
-  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>`
+  const groupCounts=new Map();
+  sites.forEach(({group})=>{if(group)groupCounts.set(group.id,(groupCounts.get(group.id)||0)+1)});
+  $('launchGrid').innerHTML=visible.length?visible.map(({p,href,group})=>{
+    const shared=group&&groupCounts.get(group.id)===1?group:null;
+    return `
     <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
-      aria-label="${esc((group?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
+      aria-label="${esc((shared?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
       ${artworkPath(p.image)?`<img src="${esc(p.image)}" alt="" aria-hidden="true" width="1280" height="853" loading="lazy" decoding="async">`:''}
-      <h3>${esc(group?.name||p.name)}</h3><p>${esc(tx(group?.summary||p.summary))}</p>
+      <h3>${esc(shared?.name||p.name)}</h3><p>${esc(tx(shared?.summary||p.summary))}</p>
       <span class="launch-action"><span>${siteAction(p)} ↗</span><small>${t('site.newTab')}</small></span>
-    </a>`).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
+    </a>`}).join(''):`<p class="site-empty">${t(sites.length?'sites.empty':'sites.unavailable')}</p>`;
 }
 function renderTiles(){
   $('projectViewControls').innerHTML=['groups','repos'].map(key=>`<button class="viewbtn ${VIEW===key?'on':''}"
