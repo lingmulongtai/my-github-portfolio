@@ -20,19 +20,21 @@
 
   const mm = gsap.matchMedia();
   mm.add("(prefers-reduced-motion: no-preference)", () => {
+    let active = true;
     /* ---------- smooth scroll ---------- */
     let lenis = null;
+    let raf, lockWatch, onAnchorClick;
     if (Lenis) {
       lenis = new Lenis({ lerp: .1, wheelMultiplier: 1 });
       lenis.on("scroll", ScrollTrigger.update);
-      const raf = time => lenis.raf(time * 1000);
+      raf = time => lenis.raf(time * 1000);
       gsap.ticker.add(raf);
       gsap.ticker.lagSmoothing(0);
       // dialogs pin the body; pause smoothing while they are open
-      const lockWatch = new MutationObserver(() =>
+      lockWatch = new MutationObserver(() =>
         document.body.classList.contains("locked") ? lenis.stop() : lenis.start());
       lockWatch.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-      document.addEventListener("click", event => {
+      onAnchorClick = event => {
         const link = event.target.closest('a[href^="#"]');
         const target = link && link.getAttribute("href").length > 1 && document.querySelector(link.getAttribute("href"));
         if (!target || event.defaultPrevented || event.metaKey || event.ctrlKey) return;
@@ -40,7 +42,8 @@
         const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) || 64;
         lenis.scrollTo(target, { offset: -(nav + 12), duration: 1.4 });
         history.pushState(null, "", link.getAttribute("href"));
-      });
+      };
+      document.addEventListener("click", onAnchorClick);
     }
 
     /* ---------- hero ---------- */
@@ -57,16 +60,18 @@
     };
     // portrait layers drift toward the pointer at different depths
     const visual = $(".hero-visual");
+    let onPointerMove;
     if (visual) {
       const layers = [[visual.querySelector("img"), 10], [visual.querySelector(".hero-art"), 22]]
         .filter(([el]) => el).map(([el, depth]) => [gsap.quickTo(el, "x", { duration: .9, ease: "power3" }),
           gsap.quickTo(el, "y", { duration: .9, ease: "power3" }), depth]);
-      $("#home").addEventListener("pointermove", event => {
+      onPointerMove = event => {
         if (event.pointerType !== "mouse" || !fine.matches) return;
         const box = visual.getBoundingClientRect();
         const x = (event.clientX - box.left) / box.width - .5, y = (event.clientY - box.top) / box.height - .5;
         layers.forEach(([qx, qy, depth]) => { qx(x * depth); qy(y * depth); });
-      });
+      };
+      $("#home").addEventListener("pointermove", onPointerMove);
       gsap.to(".hero-portrait", { yPercent: -8, ease: "none",
         scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true } });
     }
@@ -124,7 +129,7 @@
       requestAnimationFrame(play); // after the page re-renders, before it paints
     };
     function play() {
-      if (!flipState) return;
+      if (!active || !flipState) return;
       const { scope, state } = flipState; flipState = null;
       const targets = gsap.utils.toArray(scope);
       targets.forEach(el => seen.add(el.dataset.flipId));
@@ -150,12 +155,26 @@
     syncAmbient();
 
     /* the inline script renders after fetching data; react to each render */
-    const run = () => { heroIn(); heatIn(); cardsIn(); placements.forEach(place => place()); };
+    const run = () => { if (active) { heroIn(); heatIn(); cardsIn(); placements.forEach(place => place()); } };
     const watch = new MutationObserver(() => requestAnimationFrame(run));
     ["kin", "heat", "launchGrid", "bento"].forEach(id => { const el = document.getElementById(id); if (el) watch.observe(el, { childList: true }); });
     run();
-    addEventListener("load", () => ScrollTrigger.refresh());
+    const onLoad = () => ScrollTrigger.refresh();
+    addEventListener("load", onLoad);
 
-    return () => { lenis?.destroy(); watch.disconnect(); document.removeEventListener("click", capture, true); document.removeEventListener("change", capture, true); };
+    return () => {
+      active = false;
+      if (raf) gsap.ticker.remove(raf);
+      lockWatch?.disconnect();
+      if (onAnchorClick) document.removeEventListener("click", onAnchorClick);
+      lenis?.destroy();
+      if (onPointerMove) $("#home").removeEventListener("pointermove", onPointerMove);
+      placements.forEach(place => ScrollTrigger.removeEventListener("refresh", place));
+      ambient.length = 0;
+      watch.disconnect();
+      removeEventListener("load", onLoad);
+      document.removeEventListener("click", capture, true);
+      document.removeEventListener("change", capture, true);
+    };
   });
 })();

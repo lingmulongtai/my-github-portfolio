@@ -45,3 +45,58 @@ test('reduced motion skips smooth scrolling and entrances', () => {
   }));
   assert.deepEqual(added.map(entry => entry.query), ['(prefers-reduced-motion: no-preference)']);
 });
+
+test('changing reduced motion removes smooth navigation and restores it only once', () => {
+  const listeners = new Map();
+  const ticking = new Set();
+  const observers = [];
+  const scrolls = [];
+  let setup;
+  const target = {};
+  const document = {
+    documentElement: { dataset: {} }, body: { classList: { contains: () => false } },
+    querySelector: selector => selector === '#work' ? target : null,
+    querySelectorAll: () => [], getElementById: () => null,
+    addEventListener(type, fn) { if (!listeners.has(type)) listeners.set(type, new Set()); listeners.get(type).add(fn); },
+    removeEventListener(type, fn) { listeners.get(type)?.delete(fn); },
+  };
+  const gsap = {
+    registerPlugin() {}, matchMedia: () => ({ add: (query, callback) => { setup = callback; } }),
+    ticker: { add: fn => ticking.add(fn), remove: fn => ticking.delete(fn), lagSmoothing() {} },
+    utils: { toArray: () => [] }, from() {},
+  };
+  class Observer {
+    constructor() { this.disconnected = false; observers.push(this); }
+    observe() {}
+    disconnect() { this.disconnected = true; }
+  }
+  class Lenis {
+    on() {} raf() {} stop() {} start() {} destroy() { this.destroyed = true; }
+    scrollTo() { scrolls.push('scroll'); }
+  }
+  const context = createContext({
+    window: { gsap, ScrollTrigger: { update() {}, refresh() {} }, Lenis }, document,
+    matchMedia: () => ({ matches: false }), MutationObserver: Observer,
+    requestAnimationFrame() {}, addEventListener() {}, removeEventListener() {},
+    getComputedStyle: () => ({ getPropertyValue: () => '64' }), history: { pushState() {} },
+  });
+  new Script(code).runInContext(context);
+  const click = () => {
+    let prevented = false;
+    const event = { target: { closest: () => ({ getAttribute: () => '#work' }) }, preventDefault: () => { prevented = true; } };
+    for (const listener of listeners.get('click') || []) listener(event);
+    return prevented;
+  };
+  let cleanup = setup();
+  assert.equal(click(), true);
+  assert.equal(scrolls.length, 1);
+  cleanup();
+  assert.equal(ticking.size, 0);
+  assert.equal(observers[1].disconnected, true);
+  assert.equal(click(), false);
+  cleanup = setup();
+  assert.equal(click(), true);
+  assert.equal(scrolls.length, 2);
+  cleanup();
+  assert.equal(ticking.size, 0);
+});
