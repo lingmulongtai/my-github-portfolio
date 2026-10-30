@@ -80,8 +80,9 @@
     const placements = [];
     // drawn beside the heading, not inside it: translations rewrite the heading's text
     document.querySelectorAll(".sechead h2, .pulse-head h2").forEach(heading => {
-      if (heading.nextElementSibling?.classList.contains("scribble")) return;
-      heading.insertAdjacentHTML("afterend", '<svg class="scribble" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12 q50 -10 100 0 t100 0 t100 0 t100 0"/></svg>');
+      if (!heading.nextElementSibling?.classList.contains("scribble")) {
+        heading.insertAdjacentHTML("afterend", '<svg class="scribble" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12 q50 -10 100 0 t100 0 t100 0 t100 0"/></svg>');
+      }
       const svg = heading.nextElementSibling, path = svg.querySelector("path"), length = path.getTotalLength();
       const place = () => { svg.style.top = `${heading.offsetTop + heading.offsetHeight - 2}px`;
         svg.style.left = `${heading.offsetLeft}px`; svg.style.width = `${Math.min(heading.offsetWidth * .85, 380)}px`; };
