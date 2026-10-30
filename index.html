@@ -13,6 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="./assets/hero-motion.js?v=3" defer></script>
 <script src="./assets/page-motion.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="./assets/sketch-motion.js" defer></script>
 <style>
 :root{
   --ink:#356E69; --acid:#F3D69B; --paper:#FAF8F3; --black:#303632;
@@ -26,6 +31,9 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-height) + 20px); scrollbar-gutter:stable}
+html.lenis,html.lenis body{height:auto}
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:hidden}
 body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body);
   overflow-x:hidden; -webkit-font-smoothing:antialiased;
   transition:background .7s cubic-bezier(.16,1,.3,1), color .7s cubic-bezier(.16,1,.3,1)}
@@ -92,7 +100,7 @@ header{display:flex; flex-direction:column; gap:16px;
   align-items:center; gap:clamp(24px,4vw,64px); width:100%; max-width:1600px; margin:0 auto}
 .hero-copy{min-width:0; container-type:inline-size}
 .hero-portrait{width:min(100%,600px); margin:0; justify-self:center}
-.hero-portrait img{display:block; width:86%; height:auto; mix-blend-mode:multiply}
+.hero-portrait img{display:block; width:86%; height:auto; filter:drop-shadow(0 14px 18px rgba(48,54,50,.12))}
 .meta{display:flex; flex-wrap:wrap; gap:8px 24px; font-family:var(--display); font-size:11px;
   font-weight:300; opacity:.72; margin-bottom:28px}
 .kin{font-family:var(--display); font-weight:800; line-height:.98; letter-spacing:-.055em;
@@ -121,14 +129,15 @@ header{display:flex; flex-direction:column; gap:16px;
 }
 
 /* marquee */
-.marq{border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:13px 0;
-  background:var(--mint);
-  overflow:hidden; white-space:nowrap}
-.marq-inner{max-width:var(--content); margin:0 auto; overflow:hidden}
-.track{display:inline-block; font-family:var(--display); font-weight:300;
-  font-size:clamp(21px,4vw,44px); letter-spacing:-.025em; will-change:transform}
+/* the tilted band is clipped by its wrapper so it never widens the page */
+.marq{position:relative; z-index:2; padding:clamp(16px,2.6vw,30px) 0; overflow:hidden}
+.marq-inner{width:calc(100% + 48px); margin-left:-24px; padding:15px 0;
+  background:var(--ink); color:var(--paper); transform:rotate(-1.4deg);
+  box-shadow:0 10px 0 -4px var(--acid); overflow:hidden; white-space:nowrap}
+.track{display:inline-block; font-family:var(--display); font-weight:500;
+  font-size:clamp(21px,3.6vw,40px); letter-spacing:-.025em; will-change:transform}
 .track span{padding:0 24px}
-.track em{font-style:normal; color:var(--accent); font-weight:800}
+.track em{font-style:normal; color:var(--acid); font-weight:800}
 
 /* pulse */
 .sites{padding:clamp(44px,6vw,80px) var(--gutter); border-bottom:1px solid var(--line); background:var(--paper)}
@@ -136,16 +145,28 @@ header{display:flex; flex-direction:column; gap:16px;
 .site-fbtn{min-height:44px; padding:10px 16px; border:1px solid var(--line); border-radius:99px; font-size:12px}
 .site-fbtn.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
 .site-fbtn:disabled{opacity:.5; cursor:default}
-.launch-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
-.launch-card{display:flex; flex-direction:column; min-width:0; padding:20px; background:#fff;
-  border:1px solid var(--line); border-radius:18px; transition:border-color .2s,background .2s}
-.launch-card:hover,.launch-card:focus-visible{border-color:var(--ink); background:var(--mint)}
+.launch-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px 24px; padding-top:10px}
+.launch-card{position:relative; display:flex; flex-direction:column; min-width:0; padding:14px 14px 18px; background:#fff;
+  border:1px solid var(--line); border-radius:18px;
+  box-shadow:0 2px 0 var(--line),0 22px 40px -26px rgba(48,54,50,.35);
+  transition:border-color .2s,transform .35s cubic-bezier(.175,.885,.32,1.275),box-shadow .35s}
+.launch-card:nth-child(3n+1)::before{content:""; position:absolute; top:-11px; left:50%; width:78px; height:22px;
+  background:rgba(243,214,155,.75); transform:translateX(-50%) rotate(-3deg); z-index:2}
+.launch-card:nth-child(3n+2)::before{content:""; position:absolute; top:-9px; right:28px; width:58px; height:20px;
+  background:rgba(225,236,229,.95); transform:rotate(4deg); z-index:2}
+.launch-card:hover,.launch-card:focus-visible{border-color:var(--ink); transform:translateY(-6px) rotate(-.8deg);
+  box-shadow:0 2px 0 var(--line),0 30px 50px -28px rgba(48,54,50,.45)}
+/* Screens are 16:10 captures: show them whole. Other shapes sit on a mat instead of being cropped. */
 .launch-media{position:relative; width:100%; aspect-ratio:16/10; overflow:hidden; border:1px solid var(--line);
-  border-radius:10px; background:var(--mint)}
+  border-radius:12px; background:var(--mint)}
 .launch-media img{display:block; width:100%; height:100%; object-fit:contain}
+.launch-media.tall img{padding:5% 0; filter:drop-shadow(0 8px 14px rgba(48,54,50,.22))}
+.launch-media.tall img.launch-preview{border-radius:0}
 .launch-media img[hidden]{display:none}
 .launch-media .launch-art{mix-blend-mode:multiply}
-.preview-note{display:block; margin-top:8px; font-size:10px; line-height:1.5; opacity:.7}
+.preview-note{align-self:flex-start; display:block; margin-top:-12px; margin-left:10px; position:relative; z-index:1;
+  font-size:10px; line-height:1.5; padding:3px 10px; border-radius:99px; background:var(--acid); color:var(--black);
+  transform:rotate(-2deg)}
 .launch-card h3{font-family:var(--display); margin:14px 0 8px; font-size:clamp(18px,1.6vw,24px); overflow-wrap:anywhere}
 .launch-card p{font-size:13px; line-height:1.75; margin:0 0 18px; flex:1}
 .launch-action{display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:14px;
@@ -188,6 +209,10 @@ header{display:flex; flex-direction:column; gap:16px;
 .sechead{display:flex; align-items:flex-end; gap:20px; margin-bottom:26px; flex-wrap:wrap}
 .sechead h2{font-family:var(--display); font-weight:500; font-size:clamp(26px,4.2vw,46px);
   letter-spacing:-.045em; margin:0}
+.sechead,.pulse-head{position:relative}
+.scribble{position:absolute; height:14px; overflow:visible; pointer-events:none}
+.scribble path{fill:none; stroke:var(--acid); stroke-width:8; stroke-linecap:round}
+.pulse-head .scribble{height:10px}
 .sechead p{margin:0 0 7px auto; font-size:13px; opacity:.7; max-width:34ch}
 .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; font-family:var(--display); font-size:11px}
 .fbtn{border:1px solid var(--line); border-radius:99px; padding:6px 14px; opacity:.85; transition:.25s}
@@ -220,11 +245,14 @@ header{display:flex; flex-direction:column; gap:16px;
 .filter-hint{display:none}
 
 .bento{display:grid; gap:12px; grid-template-columns:repeat(6,minmax(0,1fr))}
-.tile{position:relative; overflow:hidden; border:2px solid var(--line); border-radius:12px;
-  padding:20px; display:flex; flex-direction:column; min-width:0; min-height:250px;
-  transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .42s cubic-bezier(.16,1,.3,1),
-    opacity .3s}
-.tile:hover,.tile:focus-within{background:var(--mint); color:var(--black); transform:translate(-5px,-5px)}
+.tile{position:relative; overflow:hidden; border:1px solid var(--line); border-radius:18px;
+  padding:20px; display:flex; flex-direction:column; min-width:0; min-height:250px; background:#fff;
+  box-shadow:0 2px 0 var(--line),0 22px 40px -28px rgba(48,54,50,.35);
+  transition:background .42s cubic-bezier(.16,1,.3,1), color .42s, transform .45s cubic-bezier(.175,.885,.32,1.275),
+    box-shadow .45s, opacity .3s}
+.tile:hover,.tile:focus-within{background:var(--mint); color:var(--black); transform:translateY(-6px) rotate(-.6deg);
+  box-shadow:0 2px 0 var(--line),0 30px 50px -28px rgba(48,54,50,.45)}
+.bento>.tile:nth-child(4n+2):hover,.bento>.tile:nth-child(4n+2):focus-within{transform:translateY(-6px) rotate(.6deg)}
 .tile[hidden]{display:none}
 .tile-more{display:flex; align-items:center; justify-content:space-between; gap:8px;
   color:var(--ink); margin-top:16px; font-size:12px; font-weight:700}
@@ -239,7 +267,7 @@ header{display:flex; flex-direction:column; gap:16px;
 .tile .st{position:static; align-self:flex-start; max-width:100%; margin:12px 0 24px;
   font-family:var(--display); font-size:10px; line-height:1.4;
   border:1px solid transparent; border-radius:99px; padding:3px 10px; background:var(--acid); color:var(--black);
-  z-index:0; pointer-events:none}
+  z-index:0; pointer-events:none; transform:rotate(-2deg)}
 .tile:hover .st,.tile:focus-within .st{border-color:currentColor}
 .tile .site{position:absolute; top:14px; right:14px; z-index:3; display:flex; align-items:center; gap:10px;
   min-height:44px; max-width:132px; font-size:12px; font-weight:700; line-height:1.4;
@@ -304,6 +332,9 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 .footer-intro .section-art{width:clamp(80px,28vw,340px); flex:none}
 .fbig{font-family:var(--display); font-weight:800; font-size:clamp(44px,9vw,146px); line-height:.82;
   letter-spacing:-.065em; margin:0}
+.fbig .l{display:inline-block}
+.footer-wave{display:block; width:min(100%,560px); height:26px; margin:18px 0 0; overflow:hidden}
+.footer-wave path{fill:none; stroke:var(--ink); stroke-width:5; stroke-linecap:round}
 .frow{display:flex; flex-wrap:wrap; gap:14px 28px; font-family:var(--display); font-size:11.5px;
   font-weight:300; opacity:.72}
 .frow a{border-bottom:1px solid transparent; transition:border-color .2s}
@@ -514,7 +545,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
     <figure class="hero-portrait">
       <div class="hero-visual">
         <div class="hero-art" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
-        <img src="./assets/portrait.webp" width="1024" height="1024"
+        <img src="./assets/portrait.webp?v=2" width="1024" height="1024"
           alt="鈴木竜太（Ryuta Suzuki）のイラスト" fetchpriority="high" decoding="async">
       </div>
       <figcaption class="touch-hint" id="touchHint" hidden data-i18n="hero.touch"></figcaption>
@@ -580,7 +611,8 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
 
 <footer>
   <div class="footer-intro">
-    <p class="fbig">LET'S<br>BUILD</p>
+    <div><p class="fbig">LET'S<br>BUILD</p>
+    <svg class="footer-wave" viewBox="0 0 560 26" preserveAspectRatio="none" aria-hidden="true"><path d="M5 13 q35 -12 70 0 t70 0 t70 0 t70 0 t70 0 t70 0 t70 0 t70 0 t70 0 t70 0"/></svg></div>
     <img class="section-art" src="./assets/illustrations/contact.webp" alt="" aria-hidden="true"
       loading="lazy" decoding="async" width="720" height="480">
   </div>
@@ -588,7 +620,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   <p class="note" id="footNote"></p>
 </footer>
 
-<dialog id="sheet" aria-labelledby="sTitle">
+<dialog id="sheet" aria-labelledby="sTitle" data-lenis-prevent>
   <div class="sbar">
     <span class="idx" id="sIdx"></span><span id="sYear" style="opacity:.5"></span>
     <div class="nav">
@@ -625,7 +657,7 @@ footer{padding:66px var(--gutter) 26px; border-top:1px solid var(--line); backgr
   <div class="slinks" id="sLinks"></div>
 </dialog>
 
-<dialog id="pal" aria-label="Search">
+<dialog id="pal" aria-label="Search" data-lenis-prevent>
   <div class="palbox">
     <div class="palhead"><input id="palin" type="search" enterkeyhint="search" aria-label="Search projects" autocomplete="off">
       <button class="palclose" id="palClose" aria-label="検索を閉じる">×</button></div>
@@ -2414,7 +2446,7 @@ function renderSites(){
     const preview=previewPath(p.sitePreview,href), artwork=artworkPath(p.image);
     const kind=['demo','development','repository'].includes(p.sitePreview?.kind)?p.sitePreview.kind:'screen';
     return `
-    <a class="launch-card" href="${esc(href)}" target="_blank" rel="noopener"
+    <a class="launch-card" data-flip-id="site-${esc(p.slug)}" href="${esc(href)}" target="_blank" rel="noopener"
       aria-label="${esc((shared?.name||p.name)+' — '+siteAction(p)+' ('+t('site.newTab')+')')}">
       ${preview||artwork?`<span class="launch-media">
         ${preview?`<img class="launch-preview" src="${esc(preview)}" alt="" aria-hidden="true" loading="lazy" decoding="async">`:''}
@@ -2437,11 +2469,11 @@ function renderTiles(){
     const site=project||entries.map(({p})=>webUrl(p.g.site)).find(Boolean);
     const label=project?'GitHub Project':t('site.action.guide');
     const art=entries.map(({p})=>artworkPath(p.image)).find(Boolean);
-    return `<section class="project-group" aria-labelledby="group-${esc(group.id)}">
+    return `<section class="project-group" data-flip-id="group-${esc(group.id)}" aria-labelledby="group-${esc(group.id)}">
       ${art?`<img class="group-art" src="${esc(art)}" alt="" aria-hidden="true" loading="lazy" decoding="async" width="1280" height="853">`:''}
       <div class="group-heading"><small>${entries.length} ${t('group.repositories')}</small>
         <h3 id="group-${esc(group.id)}">${esc(group.name)}</h3><p>${esc(tx(group.summary))}</p></div>
-      <div class="group-grid">${entries.map(({p,i})=>`<article class="tile group-member" data-f="${esc(p.filter)}">
+      <div class="group-grid">${entries.map(({p,i})=>`<article class="tile group-member" data-f="${esc(p.filter)}" data-flip-id="${esc(p.slug)}">
         <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button><h4>${esc(p.name)}</h4>
         ${p.g.site?`<a class="site" href="${esc(p.g.site)}" target="_blank" rel="noopener"
           aria-label="${esc(p.name+' — '+siteAction(p)+' ('+t('site.newTab')+')')}"><span aria-hidden="true">↗</span></a>`:''}
@@ -2453,7 +2485,7 @@ function renderTiles(){
 }
 function tileMarkup(p,i,rank){
   return `
-    <article class="tile s-std${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}">
+    <article class="tile s-std${artworkPath(p.image)?' has-image':''}" data-f="${esc(p.filter)}" data-flip-id="${esc(p.slug)}">
       <button class="tile-open" data-i="${i}" aria-label="${esc(p.name)}"></button>
       <span class="no">${String(rank+1).padStart(2,'0')} — ${esc(tx(p.tag))}</span>
       <span class="st">${esc(tx(p.status))}</span>
@@ -2598,6 +2630,10 @@ addEventListener('popstate',(event={})=>{
 $('projectSort').addEventListener('change',e=>setSort(e.target.value));
 $('bento').addEventListener('error',e=>{
   if(e.target.classList.contains('tile-art')) e.target.hidden=true;
+},true);
+$('launchGrid').addEventListener('load',e=>{
+  const img=e.target;
+  if(img.classList?.contains('launch-preview'))img.parentElement.classList.toggle('tall',img.naturalHeight>img.naturalWidth);
 },true);
 $('launchGrid').addEventListener('error',e=>{
   if(!e.target.classList.contains('launch-preview'))return;
